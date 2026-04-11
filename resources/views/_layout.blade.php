@@ -974,6 +974,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="/commandesFournisseurs" class="{{ request()->is('commandesFournisseurs*') ? 'active' : '' }}">
+                            <div class="nav-icon-box"><i class="bi bi-person-lines-fill"></i></div>
+                            <span>Commandes Fournisseurs</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/categories" class="{{ request()->is('categories*') ? 'active' : '' }}">
                             <div class="nav-icon-box"><i class="bi bi-filter-circle-fill"></i></div>
                             <span>Categories les produits</span>
