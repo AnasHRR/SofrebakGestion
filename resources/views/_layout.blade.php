@@ -15,7 +15,7 @@
 
     <style>
         :root {
-            --sidebar-width: 272px;
+            --sidebar-width: 290px;
             --blue-900: #0a1740;
             --blue-800: #0e2266;
             --blue-700: #1e3a8a;
@@ -39,6 +39,15 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: #f0f4ff;
+            transition: all 0.3s ease;
+        }
+        
+        body.sidebar-collapsed .sidebar {
+            transform: translateX(-100%);
+        }
+
+        body.sidebar-collapsed .main-content {
+            margin-left: 0;
         }
 
         /* ═══════════════════════════════
@@ -55,6 +64,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Top gradient line */
@@ -491,6 +501,7 @@
             margin-left: var(--sidebar-width);
             min-height: 100vh;
             background: #f0f4ff;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ── Top Bar ── */
@@ -975,7 +986,7 @@
                     </li>
                     <li>
                         <a href="/commandes-fournisseurs" class="{{ request()->is('commandes-fournisseurs*') ? 'active' : '' }}">
-                            <div class="nav-icon-box"><i class="bi bi-person-lines-fill"></i></div>
+                            <div class="nav-icon-box"><i class="bi bi-bag"></i></div>
                             <span>Commandes Fournisseurs</span>
                         </a>
                     </li>
@@ -1042,6 +1053,9 @@
 
         <div class="top-bar">
             <div class="top-bar-left">
+                <button class="top-bar-btn" id="sidebarToggle" onclick="toggleSidebar()" style="margin-right: 0.8rem;" title="Masquer/Afficher le menu">
+                    <i class="bi bi-list" style="font-size: 1.3rem;"></i>
+                </button>
                 <h5>@yield('title', 'Dashboard')</h5>
                 <div class="top-bar-badge">
                     <i class="bi bi-circle-fill" style="color:#4ade80; font-size:0.45rem;"></i>
@@ -1136,6 +1150,11 @@
     </div>
 
     <script>
+        // Toggle Sidebar
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+        }
+
         function toggleSection(label) {
             const submenu = label.nextElementSibling;
             if (submenu.classList.contains('hide')) {
