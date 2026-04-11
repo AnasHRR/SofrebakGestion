@@ -16,6 +16,7 @@
     <style>
         :root {
             --sidebar-width: 290px;
+            --sidebar-collapsed-width: 84px;
             --blue-900: #0a1740;
             --blue-800: #0e2266;
             --blue-700: #1e3a8a;
@@ -43,11 +44,63 @@
         }
         
         body.sidebar-collapsed .sidebar {
-            transform: translateX(-100%);
+            width: var(--sidebar-collapsed-width);
         }
 
         body.sidebar-collapsed .main-content {
-            margin-left: 0;
+            margin-left: var(--sidebar-collapsed-width);
+        }
+
+        /* ── Collapsed Sidebar Elements ── */
+        body.sidebar-collapsed .brand-name,
+        body.sidebar-collapsed .brand-sub,
+        body.sidebar-collapsed .nav-label-left span:last-child,
+        body.sidebar-collapsed .nav-arrow,
+        body.sidebar-collapsed .nav-submenu li a span,
+        body.sidebar-collapsed .footer-info,
+        body.sidebar-collapsed .footer-copy,
+        body.sidebar-collapsed .nav-divider {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .brand {
+            padding: 1.6rem 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        body.sidebar-collapsed .nav-label-left {
+            justify-content: center;
+            width: 100%;
+        }
+
+        body.sidebar-collapsed .nav-label-line {
+            width: 24px;
+        }
+
+        body.sidebar-collapsed .nav-submenu li a {
+            justify-content: center;
+            padding: 0.6rem 0;
+        }
+
+        body.sidebar-collapsed .nav-submenu li a::after {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .nav-links {
+            padding: 0.4rem;
+        }
+
+        body.sidebar-collapsed .footer-card {
+            padding: 0.8rem 0;
+            background: transparent;
+            border: none;
+        }
+
+        body.sidebar-collapsed .footer-user {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
         }
 
         /* ═══════════════════════════════
@@ -64,7 +117,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Top gradient line */
