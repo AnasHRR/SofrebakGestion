@@ -34,6 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('/fournisseurs', FournisseursController::class);
     Route::resource('/categories', CategoriesProduitsController::class);
     Route::resource('/commandes', CommandeClientController::class);
-    Route::resource('/commandesFournisseurs', CommandesFournisseursController::class);
+    Route::resource('/commandes-fournisseurs', CommandesFournisseursController::class)->names('commandesFournisseurs');
     Route::resource('/factures', FacturesController::class);
 });

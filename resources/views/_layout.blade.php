@@ -923,7 +923,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/commandes" class="{{ request()->is('commandes*') ? 'active' : '' }}">
+                        <a href="/commandes" class="{{ (request()->is('commandes') || request()->is('commandes/*')) ? 'active' : '' }}">
                             <div class="nav-icon-box"><i class="bi bi-bag-plus-fill"></i></div>
                             <span>Commandes</span>
                         </a>
@@ -974,7 +974,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/commandesFournisseurs" class="{{ request()->is('commandesFournisseurs*') ? 'active' : '' }}">
+                        <a href="/commandes-fournisseurs" class="{{ request()->is('commandes-fournisseurs*') ? 'active' : '' }}">
                             <div class="nav-icon-box"><i class="bi bi-person-lines-fill"></i></div>
                             <span>Commandes Fournisseurs</span>
                         </a>
