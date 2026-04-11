@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Models\Produits;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
@@ -12,7 +13,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $stocks = Stock::all();
+        $stocks = Stock::with('produits')->orderBy('id', 'desc')->simplePaginate(10);
         return view('stock.index', compact('stocks'));
     }
 
@@ -21,7 +22,8 @@ class StockController extends Controller
      */
     public function create()
     {
-        //
+        $produits = Produits::all();
+        return view('stock.create', compact('produits'));
     }
 
     /**
@@ -29,7 +31,18 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'produit_id' => 'required|exists:produits,id',
+            'type_mouvement' => 'required|in:Entrée,Sortie,Ajustement',
+            'quantite' => 'required|integer|min:1',
+            'date_mouvement' => 'required|date',
+            'reference_id' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
+        ]);
+
+        Stock::create($request->all());
+
+        return redirect()->route('stock.index')->with('success', 'Mouvement de stock ajouté avec succès.');
     }
 
     /**
@@ -37,7 +50,7 @@ class StockController extends Controller
      */
     public function show(Stock $stock)
     {
-        //
+        return view('stock.show', compact('stock'));
     }
 
     /**
@@ -45,7 +58,8 @@ class StockController extends Controller
      */
     public function edit(Stock $stock)
     {
-        //
+        $produits = Produits::all();
+        return view('stock.edit', compact('stock', 'produits'));
     }
 
     /**
@@ -53,7 +67,18 @@ class StockController extends Controller
      */
     public function update(Request $request, Stock $stock)
     {
-        //
+        $request->validate([
+            'produit_id' => 'required|exists:produits,id',
+            'type_mouvement' => 'required|in:Entrée,Sortie,Ajustement',
+            'quantite' => 'required|integer|min:1',
+            'date_mouvement' => 'required|date',
+            'reference_id' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
+        ]);
+
+        $stock->update($request->all());
+
+        return redirect()->route('stock.index')->with('success', 'Mouvement de stock mis à jour avec succès.');
     }
 
     /**
@@ -61,6 +86,7 @@ class StockController extends Controller
      */
     public function destroy(Stock $stock)
     {
-        //
+        $stock->delete();
+        return redirect()->route('stock.index')->with('success', 'Mouvement de stock supprimé avec succès.');
     }
 }
