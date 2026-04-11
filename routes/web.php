@@ -26,7 +26,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 
 // ── Protected Routes (auth required) ──
 Route::middleware('auth')->group(function () {
-    Route::view('/dashboard', '_layout');
+    Route::view('/dashboard', 'daschboard.index');
     Route::resource('/clients', ClientsController::class);
     Route::resource('/stock', StockController::class);
     Route::resource('/produits', ProduitsController::class);

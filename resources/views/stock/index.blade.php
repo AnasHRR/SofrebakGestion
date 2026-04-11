@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Stock</h1>
-    <table class="table">
+    <table class="table table-dark table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -20,7 +20,7 @@
             @foreach ($stocks as $stock)
                 <tr>
                     <td>{{ $stock->id }}</td>
-                    <td>{{ $stock->produit_id }}</td>
+                    <td>{{ $stock->produits->nom_produit }}</td>
                     <td>{{ $stock->type_mouvement }}</td>
                     <td>{{ $stock->quantite }}</td>
                     <td>{{ $stock->date_mouvement }}</td>

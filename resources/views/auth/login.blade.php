@@ -238,17 +238,18 @@
             align-items: center;
         }
 
-        .form-input-wrapper i {
+        .form-input-wrapper > i {
             position: absolute;
             left: 14px;
             color: #94a3b8;
             font-size: 1rem;
             transition: color 0.3s ease;
+            pointer-events: none;
         }
 
         .form-input {
             width: 100%;
-            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            padding: 0.85rem 2.8rem 0.85rem 2.8rem;
             background: #f8fafc;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
@@ -271,7 +272,7 @@
         }
 
         .form-input:focus + i,
-        .form-input-wrapper:focus-within i {
+        .form-input-wrapper:focus-within > i {
             color: #2563eb;
         }
 
@@ -520,7 +521,7 @@
                     <label class="form-label" for="password">Mot de passe</label>
                     <div class="form-input-wrapper">
                         <input type="password" class="form-input" id="password" name="password"
-                               placeholder="••••••••" required>
+                            placeholder="•••••••••" required>
                         <i class="bi bi-lock"></i>
                         <button type="button" class="toggle-password" onclick="togglePassword('password', this)">
                             <i class="bi bi-eye"></i>

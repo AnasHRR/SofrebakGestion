@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sofrebak — Gestion Intelligente pour Matériaux de Construction</title>
-    <meta name="description" content="Sofrebak : la plateforme de gestion tout-en-un pour les entreprises de matériaux de construction. Commandes, stock, factures et clients en un seul endroit.">
+    <title>Sofrebak — Plateforme de Gestion Interne | Sté Sofrebak</title>
+    <meta name="description"
+        content="Plateforme de gestion interne de Sté Sofrebak — importation et distribution de matériaux de construction. Commandes, stock, factures et clients. Développée par Nexora.">
     <link rel="icon" type="image/gif" href="{{ asset('logo_page.gif') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         /* ═══════════════════════════════
            RESET & BASE
         ═══════════════════════════════ */
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         :root {
             --blue-950: #06102b;
@@ -25,7 +34,7 @@
             --blue-300: #60a5fa;
             --blue-200: #93c5fd;
             --blue-100: #bfdbfe;
-            --blue-50:  #eff6ff;
+            --blue-50: #eff6ff;
             --slate-900: #0f172a;
             --slate-800: #1e293b;
             --slate-700: #334155;
@@ -35,7 +44,7 @@
             --slate-300: #cbd5e1;
             --slate-200: #e2e8f0;
             --slate-100: #f1f5f9;
-            --slate-50:  #f8fafc;
+            --slate-50: #f8fafc;
             --white: #ffffff;
             --amber-500: #f59e0b;
             --green-500: #22c55e;
@@ -43,7 +52,9 @@
             --red-500: #ef4444;
         }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -53,9 +64,20 @@
             background: var(--white);
         }
 
-        a { text-decoration: none; color: inherit; }
-        ul, ol { list-style: none; }
-        img { max-width: 100%; display: block; }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul,
+        ol {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
 
         .container {
             max-width: 1200px;
@@ -68,18 +90,20 @@
         ═══════════════════════════════ */
         .navbar {
             position: fixed;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
             padding: 1rem 0;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .navbar.scrolled {
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(226,232,240,0.6);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
             padding: 0.7rem 0;
         }
 
@@ -96,17 +120,25 @@
         }
 
         .nav-logo-icon {
-            width: 44px; height: 44px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
             border-radius: 13px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
             transition: transform 0.3s ease;
         }
 
-        .nav-logo:hover .nav-logo-icon { transform: rotate(-5deg) scale(1.05); }
+        .nav-logo:hover .nav-logo-icon {
+            transform: rotate(-5deg) scale(1.05);
+        }
 
-        .nav-logo-icon i { color: var(--white); font-size: 1.3rem; }
+        .nav-logo-icon i {
+            color: var(--white);
+            font-size: 1.3rem;
+        }
 
         .nav-logo-text {
             font-size: 1.4rem;
@@ -116,7 +148,9 @@
             transition: color 0.3s ease;
         }
 
-        .navbar.scrolled .nav-logo-text { color: var(--slate-900); }
+        .navbar.scrolled .nav-logo-text {
+            color: var(--slate-900);
+        }
 
         .nav-links {
             display: flex;
@@ -128,17 +162,20 @@
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
             font-weight: 600;
-            color: rgba(255,255,255,0.75);
+            color: rgba(255, 255, 255, 0.75);
             border-radius: 10px;
             transition: all 0.25s ease;
         }
 
         .nav-links a:hover {
             color: var(--white);
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .navbar.scrolled .nav-links a { color: var(--slate-600); }
+        .navbar.scrolled .nav-links a {
+            color: var(--slate-600);
+        }
+
         .navbar.scrolled .nav-links a:hover {
             color: var(--blue-600);
             background: var(--blue-50);
@@ -166,13 +203,13 @@
 
         .nav-btn-ghost {
             background: transparent;
-            color: rgba(255,255,255,0.85);
-            border: 1.5px solid rgba(255,255,255,0.25);
+            color: rgba(255, 255, 255, 0.85);
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
         }
 
         .nav-btn-ghost:hover {
-            background: rgba(255,255,255,0.12);
-            border-color: rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.5);
             color: var(--white);
         }
 
@@ -189,12 +226,12 @@
         .nav-btn-primary {
             background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
             color: var(--white);
-            box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
         }
 
         .nav-btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(37,99,235,0.5);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
         }
 
         /* Mobile Menu */
@@ -209,17 +246,28 @@
         }
 
         .nav-hamburger span {
-            width: 24px; height: 2.5px;
+            width: 24px;
+            height: 2.5px;
             background: var(--white);
             border-radius: 3px;
             transition: all 0.3s ease;
         }
 
-        .navbar.scrolled .nav-hamburger span { background: var(--slate-700); }
+        .navbar.scrolled .nav-hamburger span {
+            background: var(--slate-700);
+        }
 
-        .nav-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .nav-hamburger.active span:nth-child(2) { opacity: 0; }
-        .nav-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .nav-hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .nav-hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
 
         /* ═══════════════════════════════
            HERO SECTION
@@ -239,8 +287,8 @@
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(rgba(59,130,246,0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px);
+                linear-gradient(rgba(59, 130, 246, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.06) 1px, transparent 1px);
             background-size: 60px 60px;
             mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 75%);
             -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 75%);
@@ -255,30 +303,46 @@
         }
 
         .hero-orb-1 {
-            width: 500px; height: 500px;
+            width: 500px;
+            height: 500px;
             background: var(--blue-600);
-            top: -150px; right: -100px;
+            top: -150px;
+            right: -100px;
             animation: orb-float 8s ease-in-out infinite;
         }
 
         .hero-orb-2 {
-            width: 350px; height: 350px;
+            width: 350px;
+            height: 350px;
             background: var(--blue-500);
-            bottom: -80px; left: -80px;
+            bottom: -80px;
+            left: -80px;
             animation: orb-float 10s ease-in-out infinite reverse;
         }
 
         .hero-orb-3 {
-            width: 200px; height: 200px;
-            background: rgba(96,165,250,0.3);
-            top: 40%; left: 30%;
+            width: 200px;
+            height: 200px;
+            background: rgba(96, 165, 250, 0.3);
+            top: 40%;
+            left: 30%;
             animation: orb-float 6s ease-in-out infinite 2s;
         }
 
         @keyframes orb-float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -20px) scale(1.05); }
-            66% { transform: translate(-20px, 15px) scale(0.95); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -20px) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-20px, 15px) scale(0.95);
+            }
         }
 
         .hero .container {
@@ -296,8 +360,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(59,130,246,0.15);
-            border: 1px solid rgba(96,165,250,0.25);
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(96, 165, 250, 0.25);
             padding: 0.45rem 1.2rem;
             border-radius: 50px;
             font-size: 0.78rem;
@@ -309,19 +373,31 @@
             backdrop-filter: blur(10px);
         }
 
-        .hero-badge i { font-size: 0.7rem; }
+        .hero-badge i {
+            font-size: 0.7rem;
+        }
 
         .hero-badge .dot {
-            width: 6px; height: 6px;
+            width: 6px;
+            height: 6px;
             background: var(--green-400);
             border-radius: 50%;
-            box-shadow: 0 0 8px rgba(74,222,128,0.6);
+            box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
             animation: pulse-dot 2s ease-in-out infinite;
         }
 
         @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.3); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.3);
+            }
         }
 
         .hero h1 {
@@ -342,7 +418,7 @@
 
         .hero-desc {
             font-size: 1.15rem;
-            color: rgba(255,255,255,0.55);
+            color: rgba(255, 255, 255, 0.55);
             max-width: 600px;
             margin: 0 auto 2.5rem;
             line-height: 1.8;
@@ -374,23 +450,23 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
             color: var(--white);
-            box-shadow: 0 8px 30px rgba(37,99,235,0.4);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(37,99,235,0.55);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.55);
         }
 
         .btn-outline-light {
             background: transparent;
-            color: rgba(255,255,255,0.85);
-            border: 2px solid rgba(255,255,255,0.2);
+            color: rgba(255, 255, 255, 0.85);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .btn-outline-light:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
             color: var(--white);
             transform: translateY(-2px);
         }
@@ -406,10 +482,10 @@
             background: var(--slate-900);
             border-radius: 16px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow:
-                0 40px 80px rgba(0,0,0,0.4),
-                0 0 0 1px rgba(255,255,255,0.05) inset;
+                0 40px 80px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.05) inset;
             transform: rotateX(4deg);
             transition: transform 0.5s ease;
         }
@@ -423,24 +499,33 @@
             align-items: center;
             gap: 8px;
             padding: 0.8rem 1.2rem;
-            background: rgba(0,0,0,0.3);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .preview-dot {
-            width: 10px; height: 10px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
         }
 
-        .preview-dot-red { background: #ef4444; }
-        .preview-dot-yellow { background: #f59e0b; }
-        .preview-dot-green { background: #22c55e; }
+        .preview-dot-red {
+            background: #ef4444;
+        }
+
+        .preview-dot-yellow {
+            background: #f59e0b;
+        }
+
+        .preview-dot-green {
+            background: #22c55e;
+        }
 
         .preview-url {
             flex: 1;
             text-align: center;
             font-size: 0.72rem;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255, 255, 255, 0.3);
             font-weight: 600;
         }
 
@@ -453,7 +538,7 @@
         .preview-sidebar {
             background: var(--blue-900);
             padding: 1.2rem 0.8rem;
-            border-right: 1px solid rgba(255,255,255,0.06);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .preview-sidebar-logo {
@@ -465,13 +550,19 @@
         }
 
         .preview-sidebar-logo-box {
-            width: 28px; height: 28px;
+            width: 28px;
+            height: 28px;
             background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
             border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .preview-sidebar-logo-box i { color: var(--white); font-size: 0.7rem; }
+        .preview-sidebar-logo-box i {
+            color: var(--white);
+            font-size: 0.7rem;
+        }
 
         .preview-sidebar-logo span {
             font-size: 0.78rem;
@@ -487,7 +578,7 @@
             border-radius: 8px;
             margin-bottom: 3px;
             font-size: 0.72rem;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
             font-weight: 500;
             transition: all 0.2s ease;
         }
@@ -495,10 +586,12 @@
         .preview-nav-item.active {
             background: linear-gradient(135deg, var(--blue-600), var(--blue-800));
             color: var(--white);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        .preview-nav-item i { font-size: 0.8rem; }
+        .preview-nav-item i {
+            font-size: 0.8rem;
+        }
 
         .preview-main {
             background: #f0f4ff;
@@ -516,7 +609,7 @@
             background: var(--white);
             border-radius: 10px;
             padding: 0.9rem;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         .preview-stat-label {
@@ -541,7 +634,9 @@
             margin-top: 3px;
         }
 
-        .preview-stat-change.up { color: var(--green-500); }
+        .preview-stat-change.up {
+            color: var(--green-500);
+        }
 
         .preview-chart-area {
             display: grid;
@@ -553,7 +648,7 @@
             background: var(--white);
             border-radius: 10px;
             padding: 1rem;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         .preview-chart-title {
@@ -580,8 +675,13 @@
         }
 
         @keyframes bar-grow {
-            from { transform: scaleY(0); }
-            to { transform: scaleY(1); }
+            from {
+                transform: scaleY(0);
+            }
+
+            to {
+                transform: scaleY(1);
+            }
         }
 
         .preview-list-item {
@@ -592,10 +692,13 @@
             border-bottom: 1px solid var(--slate-100);
         }
 
-        .preview-list-item:last-child { border-bottom: none; }
+        .preview-list-item:last-child {
+            border-bottom: none;
+        }
 
         .preview-list-dot {
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             flex-shrink: 0;
         }
@@ -650,7 +753,9 @@
             cursor: default;
         }
 
-        .client-logo:hover { color: var(--blue-500); }
+        .client-logo:hover {
+            color: var(--blue-500);
+        }
 
         /* ═══════════════════════════════
            FEATURES SECTION
@@ -673,10 +778,13 @@
         }
 
         .section-label i {
-            width: 22px; height: 22px;
+            width: 22px;
+            height: 22px;
             background: var(--blue-50);
             border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 0.7rem;
         }
 
@@ -701,7 +809,9 @@
             margin-bottom: 4rem;
         }
 
-        .features-header .section-desc { margin: 0 auto; }
+        .features-header .section-desc {
+            margin: 0 auto;
+        }
 
         .features-grid {
             display: grid;
@@ -722,7 +832,9 @@
         .feature-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 3px;
             background: linear-gradient(90deg, var(--blue-400), var(--blue-600));
             transform: scaleX(0);
@@ -733,28 +845,58 @@
         .feature-card:hover {
             border-color: var(--blue-200);
             transform: translateY(-6px);
-            box-shadow: 0 16px 50px rgba(37,99,235,0.1);
+            box-shadow: 0 16px 50px rgba(37, 99, 235, 0.1);
         }
 
-        .feature-card:hover::before { transform: scaleX(1); }
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
 
         .feature-icon {
-            width: 56px; height: 56px;
+            width: 56px;
+            height: 56px;
             border-radius: 15px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.4rem;
             margin-bottom: 1.4rem;
             transition: all 0.3s ease;
         }
 
-        .feature-card:hover .feature-icon { transform: scale(1.1) rotate(-3deg); }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(-3deg);
+        }
 
-        .feature-icon.blue { background: var(--blue-50); color: var(--blue-500); }
-        .feature-icon.amber { background: #fffbeb; color: var(--amber-500); }
-        .feature-icon.green { background: #f0fdf4; color: var(--green-500); }
-        .feature-icon.red { background: #fef2f2; color: var(--red-500); }
-        .feature-icon.purple { background: #faf5ff; color: #8b5cf6; }
-        .feature-icon.cyan { background: #ecfeff; color: #06b6d4; }
+        .feature-icon.blue {
+            background: var(--blue-50);
+            color: var(--blue-500);
+        }
+
+        .feature-icon.amber {
+            background: #fffbeb;
+            color: var(--amber-500);
+        }
+
+        .feature-icon.green {
+            background: #f0fdf4;
+            color: var(--green-500);
+        }
+
+        .feature-icon.red {
+            background: #fef2f2;
+            color: var(--red-500);
+        }
+
+        .feature-icon.purple {
+            background: #faf5ff;
+            color: #8b5cf6;
+        }
+
+        .feature-icon.cyan {
+            background: #ecfeff;
+            color: #06b6d4;
+        }
 
         .feature-title {
             font-size: 1.15rem;
@@ -783,7 +925,9 @@
             margin-bottom: 4rem;
         }
 
-        .how-header .section-desc { margin: 0 auto; }
+        .how-header .section-desc {
+            margin: 0 auto;
+        }
 
         .steps-grid {
             display: grid;
@@ -810,22 +954,25 @@
         }
 
         .step-number {
-            width: 56px; height: 56px;
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
             border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 0 auto 1.3rem;
             font-size: 1.2rem;
             font-weight: 900;
             color: var(--white);
-            box-shadow: 0 8px 25px rgba(37,99,235,0.35);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
             border: 4px solid var(--slate-50);
             transition: all 0.3s ease;
         }
 
         .step-card:hover .step-number {
             transform: scale(1.1) rotate(-5deg);
-            box-shadow: 0 12px 35px rgba(37,99,235,0.45);
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.45);
         }
 
         .step-title {
@@ -856,8 +1003,8 @@
             position: absolute;
             inset: 0;
             background-image:
-                radial-gradient(circle at 20% 50%, rgba(59,130,246,0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(96,165,250,0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
         }
 
         .stats .container {
@@ -885,11 +1032,13 @@
             margin-bottom: 0.5rem;
         }
 
-        .stat-value span { color: var(--blue-300); }
+        .stat-value span {
+            color: var(--blue-300);
+        }
 
         .stat-label {
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -917,18 +1066,22 @@
         .cta-wrapper::before {
             content: '';
             position: absolute;
-            top: -50%; right: -20%;
-            width: 400px; height: 400px;
-            background: rgba(255,255,255,0.05);
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 50%;
         }
 
         .cta-wrapper::after {
             content: '';
             position: absolute;
-            bottom: -40%; left: -15%;
-            width: 300px; height: 300px;
-            background: rgba(255,255,255,0.04);
+            bottom: -40%;
+            left: -15%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 50%;
         }
 
@@ -947,7 +1100,7 @@
 
         .cta-content p {
             font-size: 1.05rem;
-            color: rgba(255,255,255,0.65);
+            color: rgba(255, 255, 255, 0.65);
             margin-bottom: 2rem;
             line-height: 1.7;
         }
@@ -955,17 +1108,17 @@
         .btn-white {
             background: var(--white);
             color: var(--blue-700);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         }
 
         .btn-white:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
         }
 
         .cta-note {
             font-size: 0.78rem;
-            color: rgba(255,255,255,0.45);
+            color: rgba(255, 255, 255, 0.45);
             margin-top: 1rem;
             display: flex;
             align-items: center;
@@ -986,7 +1139,7 @@
             grid-template-columns: 1.5fr 1fr 1fr 1fr;
             gap: 3rem;
             padding-bottom: 3rem;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .footer-brand-text {
@@ -997,14 +1150,20 @@
         }
 
         .footer-brand-icon {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
             border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
         }
 
-        .footer-brand-icon i { color: var(--white); font-size: 1.1rem; }
+        .footer-brand-icon i {
+            color: var(--white);
+            font-size: 1.1rem;
+        }
 
         .footer-brand-name {
             font-size: 1.3rem;
@@ -1014,7 +1173,7 @@
 
         .footer-brand p {
             font-size: 0.88rem;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255, 255, 255, 0.4);
             line-height: 1.7;
             margin-bottom: 1.5rem;
         }
@@ -1025,12 +1184,15 @@
         }
 
         .footer-socials a {
-            width: 38px; height: 38px;
-            display: flex; align-items: center; justify-content: center;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 10px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.4);
             transition: all 0.3s ease;
             font-size: 1rem;
         }
@@ -1051,11 +1213,13 @@
             margin-bottom: 1.3rem;
         }
 
-        .footer-col ul li { margin-bottom: 0.6rem; }
+        .footer-col ul li {
+            margin-bottom: 0.6rem;
+        }
 
         .footer-col ul li a {
             font-size: 0.88rem;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255, 255, 255, 0.4);
             transition: all 0.2s ease;
             font-weight: 500;
         }
@@ -1076,7 +1240,7 @@
 
         .footer-bottom p {
             font-size: 0.8rem;
-            color: rgba(255,255,255,0.25);
+            color: rgba(255, 255, 255, 0.25);
             font-weight: 500;
         }
 
@@ -1087,28 +1251,34 @@
 
         .footer-bottom-links a {
             font-size: 0.8rem;
-            color: rgba(255,255,255,0.25);
+            color: rgba(255, 255, 255, 0.25);
             font-weight: 500;
             transition: color 0.2s ease;
         }
 
-        .footer-bottom-links a:hover { color: rgba(255,255,255,0.6); }
+        .footer-bottom-links a:hover {
+            color: rgba(255, 255, 255, 0.6);
+        }
 
         /* ═══════════════════════════════
            SCROLL TO TOP
         ═══════════════════════════════ */
         .scroll-top {
             position: fixed;
-            bottom: 2rem; right: 2rem;
-            width: 46px; height: 46px;
+            bottom: 2rem;
+            right: 2rem;
+            width: 46px;
+            height: 46px;
             background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
             border: none;
             border-radius: 13px;
             color: var(--white);
             font-size: 1.1rem;
             cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 25px rgba(37,99,235,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.3s ease;
@@ -1122,7 +1292,7 @@
 
         .scroll-top:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(37,99,235,0.5);
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.5);
         }
 
         /* ═══════════════════════════════
@@ -1143,27 +1313,65 @@
            RESPONSIVE
         ═══════════════════════════════ */
         @media (max-width: 1024px) {
-            .hero h1 { font-size: 3.2rem; }
-            .section-title { font-size: 2.3rem; }
-            .features-grid { grid-template-columns: repeat(2, 1fr); }
-            .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-            .steps-grid::before { display: none; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .footer-grid { grid-template-columns: repeat(2, 1fr); }
-            .preview-body { grid-template-columns: 160px 1fr; }
-            .preview-stats { grid-template-columns: repeat(2, 1fr); }
-            .preview-chart-area { grid-template-columns: 1fr; }
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+
+            .section-title {
+                font-size: 2.3rem;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .steps-grid::before {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .preview-body {
+                grid-template-columns: 160px 1fr;
+            }
+
+            .preview-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .preview-chart-area {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .nav-hamburger { display: flex; }
+            .nav-links {
+                display: none;
+            }
+
+            .nav-hamburger {
+                display: flex;
+            }
 
             .nav-links.mobile-active {
                 display: flex;
                 flex-direction: column;
                 position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
                 background: var(--slate-900);
                 justify-content: center;
                 align-items: center;
@@ -1172,59 +1380,587 @@
             }
 
             .nav-links.mobile-active a {
-                color: rgba(255,255,255,0.7);
+                color: rgba(255, 255, 255, 0.7);
                 font-size: 1.2rem;
                 padding: 0.8rem 2rem;
             }
 
             .nav-links.mobile-active a:hover {
                 color: var(--white);
-                background: rgba(255,255,255,0.08);
+                background: rgba(255, 255, 255, 0.08);
             }
 
-            .nav-actions { gap: 0.5rem; }
+            .nav-actions {
+                gap: 0.5rem;
+            }
 
             .nav-btn-ghost {
                 display: none;
             }
 
-            .hero { padding: 8rem 0 4rem; }
-            .hero h1 { font-size: 2.5rem; }
-            .hero-desc { font-size: 1rem; }
+            .hero {
+                padding: 8rem 0 4rem;
+            }
 
-            .preview-body { display: none; }
-            .preview-topbar { justify-content: center; }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-desc {
+                font-size: 1rem;
+            }
+
+            .preview-body {
+                display: none;
+            }
+
+            .preview-topbar {
+                justify-content: center;
+            }
+
             .hero-preview-window {
                 transform: none;
                 min-height: 60px;
             }
 
-            .features-grid { grid-template-columns: 1fr; }
-            .steps-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-            .stat-value { font-size: 2.2rem; }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
 
-            .cta-wrapper { padding: 3rem 1.5rem; border-radius: 20px; }
-            .cta-content h2 { font-size: 1.7rem; }
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
 
-            .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
-            .footer-socials { justify-content: center; }
-            .footer-bottom { justify-content: center; text-align: center; }
-            .footer-bottom-links { justify-content: center; }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-value {
+                font-size: 2.2rem;
+            }
+
+            .cta-wrapper {
+                padding: 3rem 1.5rem;
+                border-radius: 20px;
+            }
+
+            .cta-content h2 {
+                font-size: 1.7rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .footer-socials {
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .footer-bottom-links {
+                justify-content: center;
+            }
         }
 
         @media (max-width: 480px) {
-            .hero h1 { font-size: 2rem; }
-            .hero-buttons { flex-direction: column; align-items: center; }
-            .btn { width: 100%; justify-content: center; }
-            .section-title { font-size: 1.8rem; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .stat-card { padding: 1rem; }
-            .clients-logos { gap: 2rem; }
-            .client-logo { font-size: 1rem; }
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .clients-logos {
+                gap: 2rem;
+            }
+
+            .client-logo {
+                font-size: 1rem;
+            }
+        }
+
+        /* ═══════════════════════════════
+   ABOUT SOFREBAK SECTION
+═══════════════════════════════ */
+        .about-sofrebak {
+            padding: 7rem 0;
+            background: linear-gradient(180deg, var(--white), var(--slate-50));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--slate-900);
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text h2 .highlight {
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-800));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-text p {
+            font-size: 1.05rem;
+            color: var(--slate-500);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .about-highlight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .about-highlight-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue-600);
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .about-highlight-text h4 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--slate-900);
+            margin-bottom: 0.3rem;
+        }
+
+        .about-highlight-text p {
+            font-size: 0.88rem;
+            color: var(--slate-500);
+            margin: 0;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image-main {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, var(--blue-100), var(--blue-200));
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+            position: relative;
+        }
+
+        .about-image-main::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none" stroke="%231d4ed8" stroke-width="1" opacity="0.1"/></svg>');
+            background-size: 50px 50px;
+        }
+
+        .about-badge {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-badge-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--blue-600);
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+
+        .about-badge-label {
+            font-size: 0.85rem;
+            color: var(--slate-500);
+            font-weight: 600;
+        }
+
+        /* ═══════════════════════════════
+   PRODUCTS SHOWCASE SECTION
+═══════════════════════════════ */
+        .products-showcase {
+            padding: 7rem 0;
+            background: var(--white);
+        }
+
+        .products-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-category {
+            background: var(--white);
+            border: 1px solid var(--slate-200);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blue-500), var(--blue-700));
+            transform: scaleX(0);
+            transition: transform 0.35s ease;
+        }
+
+        .product-category:hover {
+            transform: translateY(-8px);
+            border-color: var(--blue-200);
+            box-shadow: 0 16px 50px rgba(37, 99, 235, 0.12);
+        }
+
+        .product-category:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+            font-size: 2rem;
+            color: var(--blue-600);
+            transition: all 0.3s ease;
+        }
+
+        .product-category:hover .product-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--slate-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-desc {
+            font-size: 0.85rem;
+            color: var(--slate-500);
+            line-height: 1.6;
+        }
+
+        .products-cta {
+            text-align: center;
+        }
+
+        /* ═══════════════════════════════
+   WHY CHOOSE SOFREBAK
+═══════════════════════════════ */
+        .why-choose {
+            padding: 7rem 0;
+            background: linear-gradient(135deg, var(--blue-950), var(--blue-900), var(--blue-800));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-choose::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 15% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 70%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+        }
+
+        .why-choose .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .why-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .why-header .section-label {
+            color: var(--blue-200);
+        }
+
+        .why-header .section-label i {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--blue-200);
+        }
+
+        .why-header h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+
+        .why-header p {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .why-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .why-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+        }
+
+        .why-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .why-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 0.8rem;
+        }
+
+        .why-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.7;
+        }
+
+        /* ═══════════════════════════════
+   TESTIMONIALS / PARTNERS
+═══════════════════════════════ */
+        .testimonials {
+            padding: 7rem 0;
+            background: var(--slate-50);
+        }
+
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border: 1px solid var(--slate-200);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.08);
+            border-color: var(--blue-200);
+        }
+
+        .testimonial-quote {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 4rem;
+            color: var(--blue-100);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 1.05rem;
+            color: var(--slate-600);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--blue-100), var(--blue-200));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--blue-600);
+            font-weight: 800;
+        }
+
+        .testimonial-info h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--slate-900);
+            margin-bottom: 0.2rem;
+        }
+
+        .testimonial-info p {
+            font-size: 0.85rem;
+            color: var(--slate-500);
+            margin: 0;
+        }
+
+        .testimonial-stars {
+            color: var(--amber-500);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* ═══════════════════════════════
+   RESPONSIVE FOR NEW SECTIONS
+═══════════════════════════════ */
+        @media (max-width: 1024px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .about-image {
+                order: -1;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-text h2 {
+                font-size: 2rem;
+            }
+
+            .about-highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image-main {
+                height: 350px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .why-header h2 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- ════════ NAVBAR ════════ -->
@@ -1273,17 +2009,17 @@
             <div class="hero-content fade-up">
                 <div class="hero-badge">
                     <span class="dot"></span>
-                    Plateforme de gestion #1 au Maroc
+                    Plateforme de gestion interne — Sté Sofrebak
                 </div>
 
                 <h1>
-                    Gérez votre entreprise<br>
-                    <span class="gradient-text">en toute simplicité</span>
+                    Votre espace de gestion<br>
+                    <span class="gradient-text">Sté Sofrebak</span>
                 </h1>
 
                 <p class="hero-desc">
                     Commandes, stock, factures et clients — tout centralisé dans une plateforme
-                    intelligente conçue pour les entreprises de matériaux de construction.
+                    intelligente dédiée aux employés de Sté Sofrebak.
                 </p>
 
                 <div class="hero-buttons">
@@ -1292,8 +2028,8 @@
                             <i class="bi bi-grid-1x2-fill"></i> Accéder au Dashboard
                         </a>
                     @else
-                        <a href="/register" class="btn btn-primary">
-                            Créer un compte gratuit <i class="bi bi-arrow-right"></i>
+                        <a href="/login" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Se connecter
                         </a>
                         <a href="#features" class="btn btn-outline-light">
                             <i class="bi bi-play-circle"></i> Découvrir
@@ -1413,13 +2149,90 @@
     <!-- ════════ CLIENTS BAR ════════ -->
     <section class="clients">
         <div class="container">
-            <div class="clients-label">Fait confiance par les leaders du secteur</div>
+            <div class="clients-label">Modules de gestion intégrés</div>
             <div class="clients-logos">
-                <span class="client-logo">Ciment du Maroc</span>
-                <span class="client-logo">LafargeHolcim</span>
-                <span class="client-logo">SONASID</span>
-                <span class="client-logo">Super Cérame</span>
-                <span class="client-logo">Médi1</span>
+                <span class="client-logo"><i class="bi bi-bag-plus-fill" style="margin-right:6px;"></i>Commandes</span>
+                <span class="client-logo"><i class="bi bi-clipboard2-data-fill"
+                        style="margin-right:6px;"></i>Stock</span>
+                <span class="client-logo"><i class="bi bi-receipt-cutoff" style="margin-right:6px;"></i>Factures</span>
+                <span class="client-logo"><i class="bi bi-people-fill" style="margin-right:6px;"></i>Clients</span>
+                <span class="client-logo"><i class="bi bi-box-seam-fill" style="margin-right:6px;"></i>Produits</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ À PROPOS DE SOFREBAK ════════ -->
+    <section class="about-sofrebak" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text fade-up">
+                    <div class="section-label">
+                        <i class="bi bi-building"></i>
+                        À propos de nous
+                    </div>
+                    <h2>Leader en <span class="highlight">importation et distribution</span> de matériaux de
+                        construction</h2>
+                    <p>
+                        Depuis notre création, <strong>Sofrebak</strong> s'est imposée comme un acteur majeur dans le
+                        secteur de l'importation et de la distribution de matériaux de construction au Maroc.
+                    </p>
+                    <p>
+                        Basée à Fès, notre entreprise accompagne les professionnels du bâtiment en leur proposant une
+                        gamme complète de produits de qualité supérieure, importés des meilleurs fabricants
+                        internationaux.
+                    </p>
+
+                    <div class="about-highlights">
+                        <div class="about-highlight-item">
+                            <div class="about-highlight-icon">
+                                <i class="bi bi-award-fill"></i>
+                            </div>
+                            <div class="about-highlight-text">
+                                <h4>Qualité Garantie</h4>
+                                <p>Produits certifiés et conformes aux normes internationales</p>
+                            </div>
+                        </div>
+
+                        <div class="about-highlight-item">
+                            <div class="about-highlight-icon">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <div class="about-highlight-text">
+                                <h4>Livraison Rapide</h4>
+                                <p>Service de livraison fiable partout au Maroc</p>
+                            </div>
+                        </div>
+
+                        <div class="about-highlight-item">
+                            <div class="about-highlight-icon">
+                                <i class="bi bi-headset"></i>
+                            </div>
+                            <div class="about-highlight-text">
+                                <h4>Support Expert</h4>
+                                <p>Équipe dédiée pour vous conseiller</p>
+                            </div>
+                        </div>
+
+                        <div class="about-highlight-item">
+                            <div class="about-highlight-icon">
+                                <i class="bi bi-graph-up-arrow"></i>
+                            </div>
+                            <div class="about-highlight-text">
+                                <h4>Prix Compétitifs</h4>
+                                <p>Meilleur rapport qualité-prix du marché</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-image fade-up" style="transition-delay: 0.2s;">
+                    <div class="about-image-main">
+                        <div class="about-badge">
+                            <div class="about-badge-value">15+</div>
+                            <div class="about-badge-label">Années d'expérience</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1432,10 +2245,10 @@
                     <i class="bi bi-lightning-charge-fill"></i>
                     Fonctionnalités
                 </div>
-                <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+                <h2 class="section-title">Tout ce dont Sofrebak a besoin</h2>
                 <p class="section-desc">
-                    Une suite complète d'outils de gestion pour piloter votre activité
-                    de matériaux de construction de A à Z.
+                    Une suite complète d'outils de gestion pour piloter l'activité
+                    d'importation et de distribution de matériaux de construction.
                 </p>
             </div>
 
@@ -1446,7 +2259,8 @@
                     </div>
                     <h3 class="feature-title">Gestion des Commandes</h3>
                     <p class="feature-desc">
-                        Créez, suivez et gérez toutes vos commandes clients avec un tableau de bord intuitif et des notifications en temps réel.
+                        Créez, suivez et gérez toutes vos commandes clients avec un tableau de bord intuitif et des
+                        notifications en temps réel.
                     </p>
                 </div>
 
@@ -1456,7 +2270,8 @@
                     </div>
                     <h3 class="feature-title">Suivi du Stock</h3>
                     <p class="feature-desc">
-                        Surveillez vos niveaux de stock en temps réel, recevez des alertes automatiques et optimisez votre approvisionnement.
+                        Surveillez vos niveaux de stock en temps réel, recevez des alertes automatiques et optimisez
+                        votre approvisionnement.
                     </p>
                 </div>
 
@@ -1466,7 +2281,8 @@
                     </div>
                     <h3 class="feature-title">Facturation Rapide</h3>
                     <p class="feature-desc">
-                        Générez des factures professionnelles en quelques clics, suivez les paiements et gérez votre trésorerie efficacement.
+                        Générez des factures professionnelles en quelques clics, suivez les paiements et gérez votre
+                        trésorerie efficacement.
                     </p>
                 </div>
 
@@ -1476,7 +2292,8 @@
                     </div>
                     <h3 class="feature-title">Base Clients</h3>
                     <p class="feature-desc">
-                        Centralisez toutes les informations de vos clients, historique des commandes et préférences pour un service personnalisé.
+                        Centralisez toutes les informations de vos clients, historique des commandes et préférences pour
+                        un service personnalisé.
                     </p>
                 </div>
 
@@ -1486,7 +2303,8 @@
                     </div>
                     <h3 class="feature-title">Catalogue Produits</h3>
                     <p class="feature-desc">
-                        Organisez vos produits par catégories, gérez les prix et les descriptions avec un système de recherche avancé.
+                        Organisez vos produits par catégories, gérez les prix et les descriptions avec un système de
+                        recherche avancé.
                     </p>
                 </div>
 
@@ -1496,9 +2314,98 @@
                     </div>
                     <h3 class="feature-title">Gestion Fournisseurs</h3>
                     <p class="feature-desc">
-                        Gérez vos relations fournisseurs, comparez les prix et optimisez vos achats pour maximiser vos marges.
+                        Gérez vos relations fournisseurs, comparez les prix et optimisez vos achats pour maximiser vos
+                        marges.
                     </p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ NOS PRODUITS ════════ -->
+    <section class="products-showcase" id="products">
+        <div class="container">
+            <div class="products-header">
+                <div class="section-label">
+                    <i class="bi bi-box-seam"></i>
+                    Nos Produits
+                </div>
+                <h2 class="section-title">Large gamme de matériaux de construction</h2>
+                <p style="text-align: center;">
+                    Des produits de haute qualité pour tous vos projets <br> de construction et de rénovation
+                </p>
+            </div>
+
+            <div class="products-grid">
+                <div class="product-category fade-up">
+                    <div class="product-icon">
+                        <i class="bi bi-bricks"></i>
+                    </div>
+                    <h3 class="product-name">Ciment & Béton</h3>
+                    <p class="product-desc">Ciments de toutes catégories, béton prêt à l'emploi et mortiers</p>
+                </div>
+
+                <div class="product-category fade-up" style="transition-delay: 0.1s;">
+                    <div class="product-icon">
+                        <i class="bi bi-grid-3x3-gap"></i>
+                    </div>
+                    <h3 class="product-name">Carrelage & Faïence</h3>
+                    <p class="product-desc">Carrelages pour sols et murs, faïence sanitaire de qualité</p>
+                </div>
+
+                <div class="product-category fade-up" style="transition-delay: 0.2s;">
+                    <div class="product-icon">
+                        <i class="bi bi-gear-wide-connected"></i>
+                    </div>
+                    <h3 class="product-name">Quincaillerie</h3>
+                    <p class="product-desc">Outils, fixations, serrurerie et accessoires de construction</p>
+                </div>
+
+                <div class="product-category fade-up" style="transition-delay: 0.3s;">
+                    <div class="product-icon">
+                        <i class="bi bi-paint-bucket"></i>
+                    </div>
+                    <h3 class="product-name">Peinture & Finitions</h3>
+                    <p class="product-desc">Peintures intérieures/extérieures et produits de finition</p>
+                </div>
+
+                <div class="product-category fade-up" style="transition-delay: 0.4s;">
+                    <div class="product-icon">
+                        <i class="bi bi-water"></i>
+                    </div>
+                    <h3 class="product-name">Plomberie</h3>
+                    <p class="product-desc">Tuyauterie, robinetterie et équipements sanitaires</p>
+                </div>
+
+                <div class="product-category fade-up" style="transition-delay: 0.5s;">
+                    <div class="product-icon">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h3 class="product-name">Électricité</h3>
+                    <p class="product-desc">Câblage, tableaux électriques et appareillage</p>
+                </div>
+
+                <div class="product-category fade-up" style="transition-delay: 0.6s;">
+                    <div class="product-icon">
+                        <i class="bi bi-window"></i>
+                    </div>
+                    <h3 class="product-name">Menuiserie</h3>
+                    <p class="product-desc">Portes, fenêtres, bois et accessoires de menuiserie</p>
+                </div>
+
+                <div class="product-category fade-up" style="transition-delay: 0.7s;">
+                    <div class="product-icon">
+                        <i class="bi bi-thermometer-sun"></i>
+                    </div>
+                    <h3 class="product-name">Isolation</h3>
+                    <p class="product-desc">Matériaux d'isolation thermique et acoustique</p>
+                </div>
+            </div>
+
+            <div class="products-cta fade-up" style="transition-delay: 0.8s;">
+                <a href="#contact" class="btn btn-primary">
+                    <i class="bi bi-telephone-fill"></i> Demander un devis
+                </a>
             </div>
         </div>
     </section>
@@ -1511,32 +2418,226 @@
                     <i class="bi bi-rocket-takeoff-fill"></i>
                     Comment ça marche
                 </div>
-                <h2 class="section-title">Commencez en 4 étapes simples</h2>
+                <h2 class="section-title">Simple et efficace</h2>
                 <p class="section-desc">
-                    De l'inscription à la gestion complète de votre entreprise, tout est conçu pour être simple et rapide.
+                    Connectez-vous et accédez à tous les outils de gestion de Sté Sofrebak en quelques clics.
                 </p>
             </div>
 
             <div class="steps-grid">
                 <div class="step-card fade-up">
                     <div class="step-number">1</div>
-                    <h3 class="step-title">Créez votre compte</h3>
-                    <p class="step-desc">Inscription rapide et gratuite en moins de 30 secondes. Aucune carte bancaire requise.</p>
+                    <h3 class="step-title">Connectez-vous</h3>
+                    <p class="step-desc">Accédez à votre espace avec vos identifiants employé Sofrebak.</p>
                 </div>
                 <div class="step-card fade-up" style="transition-delay: 0.15s;">
                     <div class="step-number">2</div>
-                    <h3 class="step-title">Configurez vos données</h3>
-                    <p class="step-desc">Importez vos produits, clients et fournisseurs ou commencez de zéro.</p>
+                    <h3 class="step-title">Gérez les commandes</h3>
+                    <p class="step-desc">Créez et suivez les commandes clients, de la réception à la livraison.</p>
                 </div>
                 <div class="step-card fade-up" style="transition-delay: 0.3s;">
                     <div class="step-number">3</div>
-                    <h3 class="step-title">Gérez vos opérations</h3>
-                    <p class="step-desc">Créez des commandes, suivez le stock et générez des factures en quelques clics.</p>
+                    <h3 class="step-title">Suivez le stock & factures</h3>
+                    <p class="step-desc">Contrôlez les niveaux de stock et générez les factures en quelques clics.</p>
                 </div>
                 <div class="step-card fade-up" style="transition-delay: 0.45s;">
                     <div class="step-number">4</div>
-                    <h3 class="step-title">Analysez et optimisez</h3>
-                    <p class="step-desc">Consultez vos tableaux de bord et améliorez la performance de votre entreprise.</p>
+                    <h3 class="step-title">Consultez le Dashboard</h3>
+                    <p class="step-desc">Visualisez les indicateurs clés et la performance de Sofrebak en temps réel.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ POURQUOI CHOISIR SOFREBAK ════════ -->
+    <section class="why-choose">
+        <div class="container">
+            <div class="why-header">
+                <div class="section-label">
+                    <i class="bi bi-star-fill"></i>
+                    Nos Avantages
+                </div>
+                <h2>Pourquoi choisir Sofrebak ?</h2>
+                <p>
+                    Nous nous engageons à fournir les meilleurs produits et services pour garantir le succès de vos
+                    projets
+                </p>
+            </div>
+
+            <div class="why-grid">
+                <div class="why-card fade-up">
+                    <div class="why-icon">
+                        <i class="bi bi-globe"></i>
+                    </div>
+                    <h3 class="why-title">Importation Directe</h3>
+                    <p class="why-desc">
+                        Nous importons directement depuis les meilleurs fabricants européens et asiatiques, garantissant
+                        qualité et prix compétitifs.
+                    </p>
+                </div>
+
+                <div class="why-card fade-up" style="transition-delay: 0.1s;">
+                    <div class="why-icon">
+                        <i class="bi bi-box-seam-fill"></i>
+                    </div>
+                    <h3 class="why-title">Stock Permanent</h3>
+                    <p class="why-desc">
+                        Un stock important et constamment renouvelé pour répondre immédiatement à tous vos besoins en
+                        matériaux.
+                    </p>
+                </div>
+
+                <div class="why-card fade-up" style="transition-delay: 0.2s;">
+                    <div class="why-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="why-title">Garantie Qualité</h3>
+                    <p class="why-desc">
+                        Tous nos produits sont certifiés et conformes aux normes marocaines et internationales de
+                        qualité.
+                    </p>
+                </div>
+
+                <div class="why-card fade-up" style="transition-delay: 0.3s;">
+                    <div class="why-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3 class="why-title">Équipe Professionnelle</h3>
+                    <p class="why-desc">
+                        Notre équipe expérimentée vous accompagne et vous conseille pour choisir les matériaux adaptés à
+                        vos besoins.
+                    </p>
+                </div>
+
+                <div class="why-card fade-up" style="transition-delay: 0.4s;">
+                    <div class="why-icon">
+                        <i class="bi bi-cash-coin"></i>
+                    </div>
+                    <h3 class="why-title">Prix Avantageux</h3>
+                    <p class="why-desc">
+                        Grâce à notre importation directe et notre volume d'achat, nous proposons les meilleurs prix du
+                        marché.
+                    </p>
+                </div>
+
+                <div class="why-card fade-up" style="transition-delay: 0.5s;">
+                    <div class="why-icon">
+                        <i class="bi bi-truck-flatbed"></i>
+                    </div>
+                    <h3 class="why-title">Livraison Fiable</h3>
+                    <p class="why-desc">
+                        Service de livraison rapide et sécurisé dans tout le Maroc avec suivi en temps réel de vos
+                        commandes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════ TÉMOIGNAGES ════════ -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="testimonials-header">
+                <div class="section-label">
+                    <i class="bi bi-chat-quote-fill"></i>
+                    Témoignages
+                </div>
+                <h2 class="section-title">Ils nous font confiance</h2>
+                <p style="text-align: center;">
+                    Découvrez ce que nos clients disent <br> de nous et de nos services
+                </p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-up">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        Sofrebak est notre fournisseur principal depuis 5 ans. La qualité des produits, la réactivité de
+                        l'équipe et les prix compétitifs font de cette entreprise un partenaire incontournable pour nos
+                        chantiers.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MK</div>
+                        <div class="testimonial-info">
+                            <h4>Mohamed Karimi</h4>
+                            <p>Directeur — Entreprise BTP Karimi</p>
+                            <div class="testimonial-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-up" style="transition-delay: 0.15s;">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        Service irréprochable ! Les livraisons sont toujours ponctuelles et les produits conformes à nos
+                        attentes. L'équipe commerciale est très professionnelle et à l'écoute. Je recommande vivement
+                        Sofrebak.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">AB</div>
+                        <div class="testimonial-info">
+                            <h4>Aziz Benjelloun</h4>
+                            <p>Gérant — Atlas Construction</p>
+                            <div class="testimonial-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-up" style="transition-delay: 0.3s;">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        Excellent rapport qualité-prix et large choix de produits. La plateforme de gestion en ligne
+                        facilite grandement nos commandes. Sofrebak a vraiment digitalisé notre relation fournisseur.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">LE</div>
+                        <div class="testimonial-info">
+                            <h4>Laila El Amrani</h4>
+                            <p>Acheteuse — Société Immobilière Fès</p>
+                            <div class="testimonial-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-up" style="transition-delay: 0.45s;">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        Partenaire de confiance pour tous nos projets. Stock toujours disponible, conseils techniques
+                        pertinents et service après-vente réactif. Sofrebak a contribué au succès de nombreux chantiers.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">YT</div>
+                        <div class="testimonial-info">
+                            <h4>Youssef Tazi</h4>
+                            <p>Chef de projet — Promotion Immobilière</p>
+                            <div class="testimonial-stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1547,12 +2648,12 @@
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-card fade-up">
-                    <div class="stat-value">500<span>+</span></div>
-                    <div class="stat-label">Entreprises actives</div>
+                    <div class="stat-value">6<span>+</span></div>
+                    <div class="stat-label">Modules de gestion</div>
                 </div>
                 <div class="stat-card fade-up" style="transition-delay: 0.1s;">
-                    <div class="stat-value">50K<span>+</span></div>
-                    <div class="stat-label">Commandes traitées</div>
+                    <div class="stat-value">100<span>%</span></div>
+                    <div class="stat-label">Dédié à Sofrebak</div>
                 </div>
                 <div class="stat-card fade-up" style="transition-delay: 0.2s;">
                     <div class="stat-value">99.9<span>%</span></div>
@@ -1560,7 +2661,7 @@
                 </div>
                 <div class="stat-card fade-up" style="transition-delay: 0.3s;">
                     <div class="stat-value">24<span>/7</span></div>
-                    <div class="stat-label">Support technique</div>
+                    <div class="stat-label">Accès en ligne</div>
                 </div>
             </div>
         </div>
@@ -1571,19 +2672,20 @@
         <div class="container">
             <div class="cta-wrapper fade-up">
                 <div class="cta-content">
-                    <h2>Prêt à transformer votre gestion ?</h2>
-                    <p>Rejoignez des centaines d'entreprises qui utilisent Sofrebak pour optimiser leurs opérations au quotidien.</p>
+                    <h2>Accédez à votre espace de gestion</h2>
+                    <p>Connectez-vous pour gérer les commandes, le stock, les factures et les clients de Sté Sofrebak.
+                    </p>
                     @auth
                         <a href="/dashboard" class="btn btn-white">
                             <i class="bi bi-grid-1x2-fill"></i> Accéder au Dashboard
                         </a>
                     @else
-                        <a href="/register" class="btn btn-white">
-                            Créer un compte gratuit <i class="bi bi-arrow-right"></i>
+                        <a href="/login" class="btn btn-white">
+                            <i class="bi bi-box-arrow-in-right"></i> Se connecter
                         </a>
                     @endauth
                     <div class="cta-note">
-                        <i class="bi bi-shield-check"></i> Inscription gratuite — Aucune carte bancaire requise
+                        <i class="bi bi-shield-check"></i> Plateforme sécurisée — Réservée aux employés de Sté Sofrebak
                     </div>
                 </div>
             </div>
@@ -1601,7 +2703,10 @@
                         </div>
                         <span class="footer-brand-name">Sofrebak</span>
                     </div>
-                    <p>La plateforme de gestion tout-en-un pour les entreprises de matériaux de construction au Maroc.</p>
+                    <p>Plateforme de gestion interne pour <strong
+                            style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Sté
+                            Sofrebak</strong> — importation et distribution des matériaux de construction au Maroc.
+                        Développée par <strong>Nexora</strong>.</p>
                     <div class="footer-socials">
                         <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
                         <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
@@ -1634,15 +2739,16 @@
                     <h4>Contact</h4>
                     <ul>
                         <li><a href="#">contact@sofrebak.com</a></li>
-                        <li><a href="#">+212 5XX-XXXXXX</a></li>
-                        <li><a href="#">Casablanca, Maroc</a></li>
+                        <li><a href="#">+212 6 61 38 18 18</a></li>
+                        <li><a href="#">Fès, Maroc</a></li>
                         <li><a href="#">Lun — Sam: 9h — 19h</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} Sofrebak. Tous droits réservés.</p>
+                <p>&copy; {{ date('Y') }} Sté Sofrebak — Tous droits réservés. Développé par <a href="#"
+                        style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Nexora</a></p>
                 <div class="footer-bottom-links">
                     <a href="#">Confidentialité</a>
                     <a href="#">Conditions</a>
@@ -1710,7 +2816,7 @@
 
         // ===== SMOOTH SCROLL =====
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
                 if (href !== '#') {
                     e.preventDefault();
@@ -1725,4 +2831,5 @@
         });
     </script>
 </body>
+
 </html>
