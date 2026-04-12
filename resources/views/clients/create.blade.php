@@ -1,138 +1,803 @@
 @extends('_layout')
 
-@section('title', 'Ajouter un Client')
+@section('title', 'Nouveau Client - Sofrebak')
 
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-9 col-lg-8">
-            <!-- Breadcrumb equivalent or Back button -->
-            <div class="mb-4 d-flex align-items-center justify-content-between">
-                <div>
-                    <h4 class="mb-1">Nouveau Client</h4>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="/clients"
-                                    class="text-decoration-none text-muted">Clients</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Création</li>
-                        </ol>
-                    </nav>
-                </div>
-                <a href="{{ route('clients.index') }}"
-                    class="btn btn-secondary btn-sm d-flex align-items-center gap-1">
-                    <i class="bi bi-arrow-left"></i>
-                    <span>Retour à la liste</span>
-                </a>
-            </div>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-            <div class="card shadow-sm border-0 rounded-3">
-                <div class="card-header bg-dark border-bottom py-3">
-                    <h5 class="card-title mb-0 text-white">
-                        <i class="bi bi-person-badge me-2"></i>Détails du Client
-                    </h5>
-                </div>
-                <div class="card-body p-4">
-                    <form action="{{ route('clients.store') }}" method="POST">
-                        @csrf
+    :root {
+        --bg-page: #f5f6fa;
+        --bg-white: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --text-muted: #94a3b8;
+        --accent: #6366f1;
+        --accent-2: #8b5cf6;
+        --accent-3: #06b6d4;
+        --green: #10b981;
+        --orange: #f59e0b;
+        --red: #ef4444;
+        --border: #e2e8f0;
+        --input-bg: #f8fafc;
+        --input-focus: #eef2ff;
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+        --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+        --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
+        --radius-sm: 12px;
+        --radius-md: 16px;
+        --radius-lg: 24px;
+    }
 
-                        <div class="row g-4">
-                            <!-- Left Column -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="personne_contact" class="form-label fw-semibold">Nom du Contact <span
-                                            class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-dark border-end-0"><i
-                                                class="bi bi-person text-white"></i></span>
-                                        <input type="text" id="personne_contact" name="personne_contact"
-                                            class="form-control border-start-0 shadow-none @error('personne_contact') is-invalid @enderror"
-                                            placeholder="Nom Complet" required>
-                                    </div>
-                                    @error('personne_contact')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                    @enderror
-                                </div>
+    * { font-family: 'Inter', sans-serif; }
 
-                                <div class="form-group mb-3">
-                                    <label for="telephone" class="form-label fw-semibold">Téléphone</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-dark border-end-0"><i
-                                                class="bi bi-telephone text-white"></i></span>
-                                        <input type="text" id="telephone" name="telephone"
-                                            class="form-control border-start-0 shadow-none @error('telephone') is-invalid @enderror"
-                                            maxlength="14" placeholder="+212 6123456789 ">
-                                    </div>
-                                </div>
+    /* ═══════════════════════════════
+       HERO HEADER
+    ═══════════════════════════════ */
+    .create-hero {
+        background: linear-gradient(160deg, #0f172a 0%, #1e293b 35%, #1e3a6e 65%, #1d4ed8 100%);
+        padding: 2rem 0 5rem;
+        position: relative;
+        overflow: hidden;
+    }
 
-                                <div class="form-group mb-3">
-                                    <label for="region_id" class="form-label fw-semibold">Région</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-dark border-end-0"><i
-                                                class="bi bi-geo-alt text-white"></i></span>
-                                        <select name="region_id" id="region_id"
-                                            class="form-select border-start-0 shadow-none">
-                                            <option value="" selected disabled>Choisir une région...</option>
-                                            @foreach ($region as $rg)
-                                                <option value="{{ $rg->id }}">{{ $rg->nom }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+    .create-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 500px 350px at 75% 20%, rgba(59,130,246,0.2), transparent),
+            radial-gradient(ellipse 350px 250px at 25% 75%, rgba(99,102,241,0.15), transparent),
+            radial-gradient(ellipse 250px 250px at 50% 50%, rgba(29,78,216,0.1), transparent);
+    }
 
-                            <!-- Right Column -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="nom_entreprise" class="form-label fw-semibold">Entreprise</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-dark border-end-0"><i
-                                                class="bi bi-building text-white"></i></span>
-                                        <input type="text" id="nom_entreprise" name="nom_entreprise"
-                                            class="form-control border-start-0 shadow-none" placeholder="Raison Sociale">
-                                    </div>
-                                </div>
+    .create-hero::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            radial-gradient(circle 1px at 15% 25%, rgba(255,255,255,0.12), transparent),
+            radial-gradient(circle 1px at 35% 65%, rgba(255,255,255,0.08), transparent),
+            radial-gradient(circle 1px at 55% 15%, rgba(255,255,255,0.1), transparent),
+            radial-gradient(circle 1px at 75% 55%, rgba(255,255,255,0.06), transparent),
+            radial-gradient(circle 1px at 85% 35%, rgba(255,255,255,0.1), transparent);
+    }
 
-                                <div class="form-group mb-3">
-                                    <label for="email" class="form-label fw-semibold">Email</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-dark border-end-0"><i
-                                                class="bi bi-envelope text-white"></i></span>
-                                        <input type="email" id="email" name="email"
-                                            class="form-control border-start-0 shadow-none @error('email') is-invalid @enderror"
-                                            placeholder="client@example.com">
-                                    </div>
-                                </div>
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        animation: orbDrift 10s ease-in-out infinite;
+        z-index: 0;
+    }
+    .orb-1 { width: 280px; height: 280px; background: rgba(59,130,246,0.12); top: -80px; right: -40px; }
+    .orb-2 { width: 180px; height: 180px; background: rgba(99,102,241,0.1); bottom: -40px; left: 15%; animation-delay: 4s; }
+    .orb-3 { width: 120px; height: 120px; background: rgba(29,78,216,0.12); top: 30%; left: 55%; animation-delay: 7s; }
 
-                                <div class="form-group mb-3">
-                                    <label for="plafond_credit" class="form-label fw-semibold">Plafond de Crédit</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-dark border-end-0"><i
-                                                class="bi bi-currency-dollar text-white"></i></span>
-                                        <input type="number" step="0.01" id="plafond_credit" name="plafond_credit"
-                                            class="form-control border-start-0 shadow-none" placeholder="0.00">
-                                        <span class="input-group-text bg-primary text-white">DH</span>
-                                    </div>
-                                </div>
-                            </div>
+    @keyframes orbDrift {
+        0%, 100% { transform: translate(0,0) scale(1); }
+        33%       { transform: translate(15px,-15px) scale(1.04); }
+        66%       { transform: translate(-10px,10px) scale(0.96); }
+    }
 
-                            <!-- Full Width Column -->
-                            <div class="col-12 mt-2">
-                                <div class="form-group mb-3">
-                                    <label for="adresse" class="form-label fw-semibold">Adresse</label>
-                                    <textarea id="adresse" name="adresse" class="form-control shadow-none" rows="3"
-                                        placeholder="Ex: 134 lots bassma Massira Fès..."></textarea>
-                                </div>
+    /* Glass nav */
+    .btn-glass {
+        background: rgba(255,255,255,0.07);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: rgba(255,255,255,0.85);
+        border-radius: var(--radius-sm);
+        padding: 0.5rem 1.1rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .btn-glass:hover {
+        background: rgba(255,255,255,0.15);
+        border-color: rgba(255,255,255,0.25);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .bc-glass { display: flex; align-items: center; gap: 0.5rem; font-size: 0.76rem; }
+    .bc-glass a { color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.3s; }
+    .bc-glass a:hover { color: rgba(255,255,255,0.85); }
+    .bc-glass .sep { color: rgba(255,255,255,0.2); font-size: 0.55rem; }
+    .bc-glass .current { color: rgba(255,255,255,0.8); font-weight: 600; }
+
+    /* Hero text */
+    .hero-inner { position: relative; z-index: 10; }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(99,102,241,0.25));
+        border: 1px solid rgba(59,130,246,0.35);
+        color: #bfdbfe;
+        border-radius: 50px;
+        padding: 0.25rem 0.8rem;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.5px;
+        margin: 0.6rem 0 0.25rem;
+    }
+
+    .hero-sub { color: rgba(255,255,255,0.45); font-size: 0.82rem; }
+    .hero-sub strong { color: rgba(255,255,255,0.65); }
+
+    /* ═══════════════════════════════
+       FORM AREA
+    ═══════════════════════════════ */
+    .form-area {
+        margin-top: -3rem;
+        padding-bottom: 3rem;
+        position: relative;
+        z-index: 20;
+    }
+
+    .form-card {
+        background: var(--bg-white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border);
+        overflow: hidden;
+    }
+
+    .form-section {
+        padding: 1.75rem 2rem;
+        border-bottom: 1px solid var(--border);
+    }
+    .form-section:last-of-type { border-bottom: none; }
+
+    .section-label { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
+
+    .section-icon {
+        width: 40px; height: 40px;
+        border-radius: var(--radius-sm);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1rem; flex-shrink: 0;
+    }
+    .section-icon.teal   { background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #1d4ed8; }
+    .section-icon.green  { background: linear-gradient(135deg, #eef2ff, #e0e7ff); color: #4338ca; }
+    .section-icon.orange { background: linear-gradient(135deg, #fffbeb, #fef3c7); color: #d97706; }
+
+    .section-title { font-size: 0.82rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.1rem; }
+    .section-desc  { font-size: 0.72rem; color: var(--text-muted); margin: 0; }
+
+    /* Fields */
+    .field-group { margin-bottom: 0.25rem; }
+
+    .field-label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .field-label i { font-size: 0.75rem; color: var(--text-muted); }
+    .required { color: var(--red); font-weight: 700; }
+
+    .custom-input,
+    .custom-select,
+    .custom-textarea {
+        width: 100%;
+        padding: 0.7rem 1rem;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 0.82rem;
+        color: var(--text-primary);
+        background: var(--input-bg);
+        transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        outline: none;
+        appearance: none;
+    }
+    .custom-textarea { resize: vertical; min-height: 100px; }
+
+    .custom-input:focus, .custom-select:focus, .custom-textarea:focus {
+        border-color: #1d4ed8;
+        background: #eff6ff;
+        box-shadow: 0 0 0 4px rgba(29,78,216,0.08);
+    }
+    .custom-input.is-invalid, .custom-select.is-invalid, .custom-textarea.is-invalid {
+        border-color: var(--red);
+        background: #fef2f2;
+    }
+    .custom-input::placeholder, .custom-textarea::placeholder { color: var(--text-muted); }
+
+    .input-icon-wrap { position: relative; }
+    .input-icon-wrap .input-icon {
+        position: absolute; left: 1rem; top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted); font-size: 0.85rem;
+        transition: color 0.3s; pointer-events: none;
+    }
+    .input-icon-wrap .custom-input { padding-left: 2.75rem; }
+    .input-icon-wrap:focus-within .input-icon { color: #1d4ed8; }
+
+    .input-suffix-wrap { position: relative; }
+    .input-suffix-wrap .custom-input { padding-right: 3.5rem; }
+    .input-suffix {
+        position: absolute; right: 1rem; top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.72rem; font-weight: 700;
+        color: var(--text-muted); pointer-events: none;
+    }
+
+    .field-hint { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.4rem; }
+    .error-text {
+        font-size: 0.7rem; color: var(--red);
+        margin-top: 0.35rem;
+        display: flex; align-items: center; gap: 0.3rem;
+        font-weight: 500;
+    }
+
+    /* ═══════════════════════════════
+       FOOTER ACTIONS
+    ═══════════════════════════════ */
+    .form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+        border-top: 1px solid var(--border);
+    }
+
+    .btn-cancel {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        padding: 0.6rem 1.25rem;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 0.78rem; font-weight: 600;
+        color: var(--text-secondary);
+        background: var(--bg-white);
+        text-decoration: none;
+        transition: all 0.3s; cursor: pointer;
+    }
+    .btn-cancel:hover { border-color: var(--red); color: var(--red); background: #fef2f2; }
+
+    .btn-outline-light {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        padding: 0.6rem 1.25rem;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 0.78rem; font-weight: 600;
+        color: var(--text-secondary);
+        background: var(--bg-white);
+        transition: all 0.3s; cursor: pointer;
+    }
+    .btn-outline-light:hover { border-color: var(--orange); color: var(--orange); background: #fffbeb; }
+
+    .btn-submit {
+        position: relative;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        padding: 0.7rem 1.75rem;
+        background: linear-gradient(135deg, #0f172a, #1e3a6e, #1d4ed8);
+        color: #fff; border: none;
+        border-radius: var(--radius-sm);
+        font-size: 0.82rem; font-weight: 700;
+        cursor: pointer; overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(29,78,216,0.4);
+    }
+    .btn-shine {
+        position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+        transform: skewX(-25deg);
+        animation: shineLoop 4s ease-in-out infinite;
+    }
+    @keyframes shineLoop { 0%,70%,100% { left: -100%; } 90% { left: 150%; } }
+
+    /* ═══════════════════════════════
+       SIDEBAR
+    ═══════════════════════════════ */
+    .summary-card {
+        background: var(--bg-white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        position: sticky;
+        top: 1.5rem;
+    }
+
+    .summary-header {
+        display: flex; align-items: center; gap: 0.65rem;
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(135deg, #eff6ff, #f8fafc);
+        border-bottom: 1px solid var(--border);
+    }
+    .summary-header-icon {
+        width: 32px; height: 32px;
+        background: linear-gradient(135deg, #1d4ed8, #4338ca);
+        border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-size: 0.85rem;
+    }
+    .summary-header h6 { font-size: 0.78rem; font-weight: 700; color: var(--text-primary); margin: 0; }
+
+    .summary-body { padding: 1.25rem 1.5rem; }
+
+    .summary-item {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 0.55rem 0;
+    }
+    .summary-item-label {
+        display: flex; align-items: center; gap: 0.4rem;
+        font-size: 0.71rem; color: var(--text-muted); font-weight: 500;
+    }
+    .summary-item-label i { font-size: 0.7rem; }
+    .summary-item-value { font-size: 0.78rem; font-weight: 700; color: var(--text-primary); max-width: 55%; text-align: right; word-break: break-all; }
+    .summary-divider { height: 1px; background: var(--border); margin: 0.35rem 0; }
+
+    /* Tips */
+    .tips-card {
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        border: 1px solid #bfdbfe;
+        border-radius: var(--radius-md);
+        padding: 1.25rem;
+        margin-top: 1rem;
+    }
+    .tips-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .tips-title { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #1e3a8a; }
+    .tips-list { list-style: none; padding: 0; margin: 0; }
+    .tips-list li {
+        font-size: 0.72rem; color: #1e40af;
+        padding: 0.3rem 0;
+        display: flex; align-items: flex-start; gap: 0.4rem;
+        font-weight: 500;
+    }
+    .tips-list li i { color: #1d4ed8; font-size: 0.6rem; margin-top: 0.2rem; flex-shrink: 0; }
+
+    /* ═══════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════ */
+    .anim-up {
+        opacity: 0;
+        transform: translateY(25px);
+        animation: animUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+    @keyframes animUp { to { opacity: 1; transform: translateY(0); } }
+
+    .delay-1 { animation-delay: 0.05s; }
+    .delay-2 { animation-delay: 0.1s; }
+    .delay-3 { animation-delay: 0.15s; }
+    .delay-4 { animation-delay: 0.2s; }
+    .delay-5 { animation-delay: 0.25s; }
+
+    /* ═══════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════ */
+    @media (max-width: 992px) {
+        .summary-card { position: static; margin-top: 1rem; }
+        .hero-title { font-size: 1.6rem; }
+        .form-section { padding: 1.25rem; }
+        .form-footer { padding: 1.25rem; flex-wrap: wrap; gap: 0.75rem; }
+    }
+
+    @media (max-width: 576px) {
+        .create-hero { padding: 1.5rem 0 4rem; }
+        .hero-title { font-size: 1.35rem; }
+        .form-footer { flex-direction: column; }
+        .form-footer > * { width: 100%; justify-content: center; }
+        .btn-submit { width: 100%; justify-content: center; }
+    }
+</style>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="create-hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="hero-inner">
+
+                    <!-- Nav -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <a href="{{ route('clients.index') }}" class="btn-glass">
+                                <i class="bi bi-arrow-left-short" style="font-size:1.1rem;"></i>
+                                Retour
+                            </a>
+                            <div class="bc-glass d-none d-md-flex">
+                                <a href="{{ route('clients.index') }}"><i class="bi bi-house-fill"></i></a>
+                                <span class="sep"><i class="bi bi-chevron-right"></i></span>
+                                <a href="{{ route('clients.index') }}">Clients</a>
+                                <span class="sep"><i class="bi bi-chevron-right"></i></span>
+                                <span class="current">Nouveau Client</span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="d-flex justify-content-end gap-2 border-top pt-4 mt-4">
-                            <button type="reset" class="btn btn-light px-4 border text-muted">Réinitialiser</button>
-                            <button type="submit" class="btn btn-primary px-5 shadow-sm rounded-pill">
-                                <i class="bi bi-check-circle me-1"></i> Créer le Client
-                            </button>
-                        </div>
-                    </form>
+                    <!-- Title -->
+                    <div class="anim-up delay-1">
+                        <span class="hero-badge">
+                            <i class="bi bi-person-plus-fill"></i>
+                            Création
+                        </span>
+                    </div>
+                    <div class="anim-up delay-2">
+                        <h1 class="hero-title">Nouveau Client</h1>
+                        <p class="hero-sub">
+                            Remplissez les informations pour ajouter un <strong>nouveau client</strong> au système
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- ═══════════ FORM ═══════════ -->
+<div class="form-area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="row g-4">
+
+                    <!-- Left: Form -->
+                    <div class="col-lg-8 anim-up delay-3">
+                        <form action="{{ route('clients.store') }}" method="POST" id="createClientForm">
+                            @csrf
+
+                            <div class="form-card">
+
+                                <!-- Section 1: Contact -->
+                                <div class="form-section">
+                                    <div class="section-label">
+                                        <div class="section-icon teal">
+                                            <i class="bi bi-person-badge-fill"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="section-title">Informations du contact</h6>
+                                            <p class="section-desc">Personne de contact et coordonnées</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- Personne Contact -->
+                                        <div class="col-sm-6">
+                                            <div class="field-group">
+                                                <label class="field-label">
+                                                    <i class="bi bi-person-fill"></i>
+                                                    Nom du contact <span class="required">*</span>
+                                                </label>
+                                                <div class="input-icon-wrap">
+                                                    <i class="bi bi-person input-icon"></i>
+                                                    <input type="text" name="personne_contact" id="personne_contact"
+                                                        value="{{ old('personne_contact') }}"
+                                                        placeholder="Nom complet"
+                                                        class="custom-input @error('personne_contact') is-invalid @enderror"
+                                                        required>
+                                                </div>
+                                                @error('personne_contact')
+                                                    <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <!-- Telephone -->
+                                        <div class="col-sm-6">
+                                            <div class="field-group">
+                                                <label class="field-label">
+                                                    <i class="bi bi-telephone-fill"></i>
+                                                    Téléphone
+                                                </label>
+                                                <div class="input-icon-wrap">
+                                                    <i class="bi bi-telephone input-icon"></i>
+                                                    <input type="text" name="telephone" id="telephone"
+                                                        value="{{ old('telephone') }}"
+                                                        placeholder="+212 6XX XXX XXX" maxlength="14"
+                                                        class="custom-input @error('telephone') is-invalid @enderror">
+                                                </div>
+                                                <div class="field-hint">Format: +212 6123456789</div>
+                                                @error('telephone')
+                                                    <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <!-- Email -->
+                                        <div class="col-sm-6">
+                                            <div class="field-group">
+                                                <label class="field-label">
+                                                    <i class="bi bi-envelope-fill"></i>
+                                                    Email
+                                                </label>
+                                                <div class="input-icon-wrap">
+                                                    <i class="bi bi-envelope input-icon"></i>
+                                                    <input type="email" name="email" id="email"
+                                                        value="{{ old('email') }}"
+                                                        placeholder="client@exemple.com"
+                                                        class="custom-input @error('email') is-invalid @enderror">
+                                                </div>
+                                                @error('email')
+                                                    <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <!-- Région -->
+                                        <div class="col-sm-6">
+                                            <div class="field-group">
+                                                <label class="field-label">
+                                                    <i class="bi bi-geo-alt-fill"></i>
+                                                    Région
+                                                </label>
+                                                <select name="region_id" id="region_id"
+                                                    class="custom-select @error('region_id') is-invalid @enderror">
+                                                    <option value="">Sélectionner une région...</option>
+                                                    @foreach ($region as $rg)
+                                                        <option value="{{ $rg->id }}" {{ old('region_id') == $rg->id ? 'selected' : '' }}>
+                                                            {{ $rg->nom }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('region_id')
+                                                    <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Section 2: Entreprise & Crédit -->
+                                <div class="form-section">
+                                    <div class="section-label">
+                                        <div class="section-icon green">
+                                            <i class="bi bi-building"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="section-title">Entreprise & Crédit</h6>
+                                            <p class="section-desc">Raison sociale et plafond de crédit autorisé</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- Nom Entreprise -->
+                                        <div class="col-sm-6">
+                                            <div class="field-group">
+                                                <label class="field-label">
+                                                    <i class="bi bi-building"></i>
+                                                    Nom de l'entreprise
+                                                </label>
+                                                <div class="input-icon-wrap">
+                                                    <i class="bi bi-building input-icon"></i>
+                                                    <input type="text" name="nom_entreprise" id="nom_entreprise"
+                                                        value="{{ old('nom_entreprise') }}"
+                                                        placeholder="Raison sociale"
+                                                        class="custom-input @error('nom_entreprise') is-invalid @enderror">
+                                                </div>
+                                                @error('nom_entreprise')
+                                                    <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <!-- Plafond Crédit -->
+                                        <div class="col-sm-6">
+                                            <div class="field-group">
+                                                <label class="field-label">
+                                                    <i class="bi bi-cash-stack"></i>
+                                                    Plafond de crédit
+                                                </label>
+                                                <div class="input-suffix-wrap">
+                                                    <input type="number" step="0.01" name="plafond_credit" id="plafond_credit"
+                                                        value="{{ old('plafond_credit') }}"
+                                                        placeholder="0.00"
+                                                        class="custom-input @error('plafond_credit') is-invalid @enderror">
+                                                    <span class="input-suffix">DH</span>
+                                                </div>
+                                                <div class="field-hint">Limite maximale de paiement différé</div>
+                                                @error('plafond_credit')
+                                                    <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Section 3: Adresse -->
+                                <div class="form-section">
+                                    <div class="section-label">
+                                        <div class="section-icon orange">
+                                            <i class="bi bi-pin-map-fill"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="section-title">Adresse</h6>
+                                            <p class="section-desc">Localisation physique du client</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="field-group">
+                                        <label class="field-label">
+                                            <i class="bi bi-geo-alt"></i>
+                                            Adresse complète
+                                        </label>
+                                        <textarea name="adresse" id="adresse" rows="3"
+                                            placeholder="Ex: 134 lots Bassma, Massira, Fès..."
+                                            class="custom-textarea @error('adresse') is-invalid @enderror">{{ old('adresse') }}</textarea>
+                                        @error('adresse')
+                                            <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- Footer Actions -->
+                                <div class="form-footer">
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('clients.index') }}" class="btn-cancel">
+                                            <i class="bi bi-x-lg"></i>
+                                            Annuler
+                                        </a>
+                                        <button type="reset" class="btn-outline-light">
+                                            <i class="bi bi-arrow-counterclockwise"></i>
+                                            Réinitialiser
+                                        </button>
+                                    </div>
+                                    <button type="submit" class="btn-submit">
+                                        <span class="btn-shine"></span>
+                                        <i class="bi bi-check2-circle"></i>
+                                        Créer le Client
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Sidebar -->
+                    <div class="col-lg-4 anim-up delay-4">
+
+                        <!-- Live Summary -->
+                        <div class="summary-card">
+                            <div class="summary-header">
+                                <div class="summary-header-icon">
+                                    <i class="bi bi-person-lines-fill"></i>
+                                </div>
+                                <h6>Aperçu en direct</h6>
+                            </div>
+                            <div class="summary-body">
+                                <div class="summary-item">
+                                    <span class="summary-item-label"><i class="bi bi-person-fill"></i> Contact</span>
+                                    <span class="summary-item-value" id="prevContact" style="color:var(--text-muted);font-style:italic;">—</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-item-label"><i class="bi bi-building"></i> Entreprise</span>
+                                    <span class="summary-item-value" id="prevEntreprise" style="color:var(--text-muted);font-style:italic;">—</span>
+                                </div>
+
+                                <div class="summary-divider"></div>
+
+                                <div class="summary-item">
+                                    <span class="summary-item-label"><i class="bi bi-telephone-fill"></i> Téléphone</span>
+                                    <span class="summary-item-value" id="prevTelephone" style="color:var(--text-muted);font-style:italic;">—</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-item-label"><i class="bi bi-envelope-fill"></i> Email</span>
+                                    <span class="summary-item-value" id="prevEmail" style="color:var(--text-muted);font-style:italic;">—</span>
+                                </div>
+
+                                <div class="summary-divider"></div>
+
+                                <div class="summary-item">
+                                    <span class="summary-item-label"><i class="bi bi-geo-alt-fill"></i> Région</span>
+                                    <span class="summary-item-value" id="prevRegion" style="color:var(--text-muted);font-style:italic;">—</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-item-label"><i class="bi bi-cash-stack"></i> Plafond</span>
+                                    <span class="summary-item-value" id="prevCredit" style="color:var(--green);">0.00 DH</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tips -->
+                        <div class="tips-card anim-up delay-5">
+                            <div class="tips-header">
+                                <span>💡</span>
+                                <span class="tips-title">Conseils</span>
+                            </div>
+                            <ul class="tips-list">
+                                <li><i class="bi bi-check-circle-fill"></i> Le nom du contact est obligatoire</li>
+                                <li><i class="bi bi-check-circle-fill"></i> L'email sera utilisé pour les notifications</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Le plafond définit la limite de crédit accordée</li>
+                                <li><i class="bi bi-check-circle-fill"></i> La région permet de filtrer les clients par zone</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function liveUpdate(inputId, previewId, isSelect) {
+        const el = document.getElementById(inputId);
+        const prev = document.getElementById(previewId);
+        if (!el || !prev) return;
+
+        const handler = function () {
+            let val = isSelect
+                ? (this.value ? this.options[this.selectedIndex].text : '')
+                : this.value.trim();
+
+            if (val) {
+                prev.textContent = val;
+                prev.style.color = 'var(--text-primary)';
+                prev.style.fontStyle = 'normal';
+            } else {
+                prev.textContent = '—';
+                prev.style.color = 'var(--text-muted)';
+                prev.style.fontStyle = 'italic';
+            }
+        };
+
+        el.addEventListener(isSelect ? 'change' : 'input', handler);
+    }
+
+    liveUpdate('personne_contact', 'prevContact');
+    liveUpdate('nom_entreprise',   'prevEntreprise');
+    liveUpdate('telephone',        'prevTelephone');
+    liveUpdate('email',            'prevEmail');
+    liveUpdate('region_id',        'prevRegion', true);
+
+    // Credit live update
+    const creditEl = document.getElementById('plafond_credit');
+    const creditPrev = document.getElementById('prevCredit');
+    if (creditEl && creditPrev) {
+        creditEl.addEventListener('input', function () {
+            const val = parseFloat(this.value) || 0;
+            creditPrev.textContent = val.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' DH';
+            creditPrev.style.color = val > 0 ? 'var(--green)' : 'var(--text-muted)';
+        });
+    }
+
+    // Validation feedback
+    const form = document.getElementById('createClientForm');
+    form.querySelectorAll('.custom-input, .custom-select, .custom-textarea').forEach(el => {
+        el.addEventListener('blur', function () {
+            if (this.hasAttribute('required') && this.value.trim() === '') {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+        el.addEventListener('input', function () { this.classList.remove('is-invalid'); });
+    });
+});
+</script>
 @endsection

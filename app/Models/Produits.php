@@ -67,7 +67,11 @@ class Produits extends Model
     /**
      * Accessor: compute stock dynamically.
      *
-     * Formula: stock = stock_initial + total_purchases - total_sales
+     * Formula: stock = stock_initial
+     *                 + total_purchases (commandes fournisseurs)
+     *                 - total_sales (commandes clients)
+     *                 + stock_entries (mouvements Entrée)
+     *                 - stock_exits (mouvements Sortie)
      *
      * This replaces the old static stock_actuel column.
      * Every time $produit->stock_actuel is accessed, it calculates
@@ -76,9 +80,15 @@ class Produits extends Model
     public function getStockActuelAttribute()
     {
         $stockInitial   = $this->stock_initial ?? 0;
+
+        // From commandes
         $totalAchats    = $this->detailsCommandesFournisseurs()->sum('quantite');
         $totalVentes    = $this->detailsCommandesClients()->sum('quantite');
 
-        return $stockInitial + $totalAchats - $totalVentes;
+        // From stock movements (Entrée / Sortie)
+        $totalEntrees   = $this->stock()->where('type_mouvement', 'Entrée')->sum('quantite');
+        $totalSorties   = $this->stock()->where('type_mouvement', 'Sortie')->sum('quantite');
+
+        return $stockInitial + $totalAchats - $totalVentes + $totalEntrees - $totalSorties;
     }
 }
