@@ -67,6 +67,16 @@ class CommandeClientController extends Controller
             'produits.*.remise' => 'nullable|numeric|min:0',
         ]);
 
+        // ── Stock validation: prevent selling more than available ──
+        foreach ($validatedData['produits'] as $index => $produitData) {
+            $produitModel = Produits::findOrFail($produitData['produit_id']);
+            if ($produitData['quantite'] > $produitModel->stock_actuel) {
+                return back()->withInput()->withErrors([
+                    "produits.{$index}.quantite" => "Stock insuffisant pour \"{$produitModel->nom_produit}\". Disponible: {$produitModel->stock_actuel}, demandé: {$produitData['quantite']}."
+                ]);
+            }
+        }
+
         DB::beginTransaction();
         try {
             $commande = CommandeClient::create([
@@ -148,6 +158,24 @@ class CommandeClientController extends Controller
             'produits.*.prix_unitaire' => 'required|numeric|min:0',
             'produits.*.remise' => 'nullable|numeric|min:0',
         ]);
+
+        // ── Stock validation for update ──
+        // When updating, old detail lines will be deleted first, so we simulate
+        // the stock as if the old order didn't exist, then check the new quantities.
+        $oldDetails = detailsCommandeClients::where('commande_client_id', $commandeClient->id)->get();
+
+        foreach ($validatedData['produits'] as $index => $produitData) {
+            $produitModel = Produits::findOrFail($produitData['produit_id']);
+            // Add back the old quantity for this product (since old lines will be deleted)
+            $oldQty = $oldDetails->where('produit_id', $produitData['produit_id'])->sum('quantite');
+            $availableStock = $produitModel->stock_actuel + $oldQty;
+
+            if ($produitData['quantite'] > $availableStock) {
+                return back()->withInput()->withErrors([
+                    "produits.{$index}.quantite" => "Stock insuffisant pour \"{$produitModel->nom_produit}\". Disponible: {$availableStock}, demandé: {$produitData['quantite']}."
+                ]);
+            }
+        }
 
         DB::beginTransaction();
         try {

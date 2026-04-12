@@ -18,6 +18,6 @@ class detailsCommandeClients extends Model
 
     public function produit()
     {
-        return $this->belongsTo(Produits::class ,'id');
+        return $this->belongsTo(Produits::class, 'produit_id', 'id');
     }
 }

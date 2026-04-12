@@ -24,7 +24,6 @@ class ProduitsController extends Controller
                 $q->where('nom_produit', 'like', "%{$search}%")
                   ->orWhere('prix_achat', 'like', "%{$search}%")
                   ->orWhere('prix_vente', 'like', "%{$search}%")
-                  ->orWhere('stock_actuel', 'like', "%{$search}%")
                   // search in category name
                   ->orWhereHas('categorie', function ($q2) use ($search) {
                       $q2->where('nom', 'like', "%{$search}%");
@@ -38,11 +37,12 @@ class ProduitsController extends Controller
 
         $produits = $query->orderBy('id')->cursorPaginate(5);
 
-        // ── Stats ──
-        $totalProduits = Produits::count();
-        $totalEnStock = Produits::where('stock_actuel', '>', 0)->count();
-        $totalRupture = Produits::where('stock_actuel', '<=', 0)->count();
-        $valeurTotaleStock = Produits::selectRaw('SUM(prix_vente * stock_actuel) as total')->value('total') ?? 0;
+        // ── Stats (computed from the accessor) ──
+        $allProduits = Produits::all();
+        $totalProduits = $allProduits->count();
+        $totalEnStock = $allProduits->filter(fn($p) => $p->stock_actuel > 0)->count();
+        $totalRupture = $allProduits->filter(fn($p) => $p->stock_actuel <= 0)->count();
+        $valeurTotaleStock = $allProduits->sum(fn($p) => $p->prix_vente * $p->stock_actuel);
 
         $fournisseurs = fournisseurs::all();
         $categories = categories_produits::all();
@@ -81,7 +81,7 @@ class ProduitsController extends Controller
             'prix_achat' => 'required|numeric',
             'prix_vente' => 'required|numeric',
             'stock_minimum'=> 'required|numeric',
-            'stock_actuel' => 'required|numeric',
+            'stock_initial' => 'required|numeric',
             'date_expiration' => 'required|date',
         ]);
     
@@ -94,7 +94,7 @@ class ProduitsController extends Controller
             'prix_achat'      => $req->prix_achat,
             'prix_vente'      => $req->prix_vente,
             'stock_minimum'   => $req->stock_minimum,
-            'stock_actuel'    => $req->stock_actuel,
+            'stock_initial'   => $req->stock_initial,
             'date_expiration' => $req->date_expiration,
         ]);
     
@@ -132,7 +132,7 @@ class ProduitsController extends Controller
             'prix_achat' => 'required',
             'prix_vente' => 'required',
             'stock_minimum' => 'required',
-            'stock_actuel' => 'required',
+            'stock_initial' => 'required',
         ]);
 
         $produit->update([
@@ -143,7 +143,7 @@ class ProduitsController extends Controller
             'prix_achat' => $req->prix_achat,
             'prix_vente' => $req->prix_vente,
             'stock_minimum' => $req->stock_minimum,
-            'stock_actuel' => $req->stock_actuel,
+            'stock_initial' => $req->stock_initial,
             'date_expiration' => $req->date_expiration,
         ]);
         return to_route('produits.index')->with('success','Modifier avec success');
@@ -154,6 +154,7 @@ class ProduitsController extends Controller
      */
     public function destroy(Produits $produit)
     {
+        // stock_actuel is now computed via the accessor
         if ($produit->stock_actuel > 0) {
             return to_route('produits.index')->with('alert', 'Échouée de supprimer un produit en stock');
         } else {

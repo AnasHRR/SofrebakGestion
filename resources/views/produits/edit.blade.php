@@ -1258,24 +1258,24 @@
                                             </div>
                                         </div>
 
-                                        <!-- Stock Actuel -->
+                                        <!-- Stock Initial -->
                                         <div class="col-md-4">
                                             <div class="field-group">
                                                 <label class="field-label">
                                                     <i class="bi bi-boxes" style="color:var(--green);"></i>
-                                                    Stock actuel
+                                                    Stock initial
                                                 </label>
                                                 <div class="input-icon-wrap">
                                                     <i class="bi bi-box-seam input-icon"></i>
                                                     <input type="number"
-                                                           name="stock_actuel"
-                                                           id="stockActuel"
-                                                           value="{{ $produit->stock_actuel }}"
+                                                           name="stock_initial"
+                                                           id="stockInitial"
+                                                           value="{{ $produit->stock_initial }}"
                                                            placeholder="0"
-                                                           class="custom-input @error('stock_actuel') is-invalid @enderror">
+                                                           class="custom-input @error('stock_initial') is-invalid @enderror">
                                                 </div>
-                                                <div class="field-hint">Quantité disponible en stock</div>
-                                                @error('stock_actuel')
+                                                <div class="field-hint">Quantité de départ (le stock actuel est calculé automatiquement)</div>
+                                                @error('stock_initial')
                                                     <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
                                                 @enderror
                                             </div>
@@ -1508,7 +1508,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Stock status live update
-    const stockActuel = document.getElementById('stockActuel');
+    const stockActuel = document.getElementById('stockInitial');
     const stockMin = document.getElementById('stockMin');
 
     function updateStockStatus() {

@@ -104,10 +104,10 @@
                                 <input type="number" name="stock_minimum" id="stock_minimum" class="form-control" placeholder="Quantité minimale" required>
                             </div>
 
-                            <!-- Stock Actuel -->
+                            <!-- Stock Initial -->
                             <div class="col-md-6">
-                                <label for="stock_actuel" class="form-label fw-semibold">Stock Actuel</label>
-                                <input type="number" name="stock_actuel" id="stock_actuel" class="form-control" placeholder="Quantité actuelle" required>
+                                <label for="stock_initial" class="form-label fw-semibold">Stock Initial</label>
+                                <input type="number" name="stock_initial" id="stock_initial" class="form-control" placeholder="Quantité initiale" required>
                             </div>
 
                             <!-- Date d'Expiration -->

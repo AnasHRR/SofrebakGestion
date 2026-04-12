@@ -11,10 +11,12 @@ class detailsCommandesFournisseurs extends Model
     protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamps = false;
-    public function fournisseurs(){
-        return $this->hasMany(commandesFournisseurs::class, 'id' , 'commande_fournisseur_id' );
+
+    public function commandeFournisseur(){
+        return $this->belongsTo(commandesFournisseurs::class, 'commande_fournisseur_id', 'id');
     }
-    public function produits(){
-        return $this->hasMany(Produits::class , 'id' , 'produit_id');
+
+    public function produit(){
+        return $this->belongsTo(Produits::class, 'produit_id', 'id');
     }
 }
