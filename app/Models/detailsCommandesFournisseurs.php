@@ -15,6 +15,6 @@ class detailsCommandesFournisseurs extends Model
         return $this->hasMany(commandesFournisseurs::class, 'id' , 'commande_fournisseur_id' );
     }
     public function produits(){
-        return $this->hasMany(Produits::class , 'id' , 'produit_id'); 
+        return $this->hasMany(Produits::class , 'id' , 'produit_id');
     }
 }
