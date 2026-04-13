@@ -131,7 +131,14 @@
             
             <div class="col-md-6 form-group">
                 <label class="form-label">Numéro du Camion</label>
-                <input type="text" name="numero_camion" class="form-control" value="{{ old('numero_camion') }}" placeholder="Ex: 12345|A|1" required>
+                <select name="numero_camion" id="numero_camion">
+                    <option value="">Sélectionner un camion</option>
+                    @foreach($expeditions as $expedition)
+                        <option value="{{ $expedition->numero_camion }}" {{ old('numero_camion') == $expedition->numero_camion ? 'selected' : '' }}>
+                            {{ $expedition->numero_camion }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
