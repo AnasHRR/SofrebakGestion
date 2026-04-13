@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommandeClient;
+use App\Models\employes;
 use App\Models\Expeditions;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,7 @@ class ExpeditionsController extends Controller
      */
     public function index()
     {
-        $expeditions = Expeditions::all();
+        $expeditions = Expeditions::with(['commandeClient', 'employes'])->get();
         return view("expeditions.index", compact("expeditions"));
     }
 
@@ -21,46 +23,112 @@ class ExpeditionsController extends Controller
      */
     public function create()
     {
-        //
+        $commandesClients = \App\Models\CommandeClient::where('statut', '!=', 'Livrée')->get();
+        $chauffeurs = \App\Models\employes::where('poste', 'Chauffeur')->get();
+        // Fallback for chauffeurs if empty
+        if ($chauffeurs->isEmpty()) {
+            $chauffeurs = \App\Models\employes::all();
+        }
+        return view("expeditions.create", compact("commandesClients", "chauffeurs"));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+        $req->validate([
+            'commande_client_id' => 'required',
+            'chauffeur_id' => 'required',
+            'date_expedition' => 'required|date',
+            'numero_camion' => 'required',
+            'statut_livraison' => 'required',
+        ]);
+
+        Expeditions::create([
+            'commande_client_id' => $req->commande_client_id,
+            'chauffeur_id' => $req->chauffeur_id,
+            'date_expedition' => $req->date_expedition,
+            'numero_camion' => $req->numero_camion,
+            'statut_livraison' => $req->statut_livraison,
+            'notes_livraison' => $req->notes_livraison,
+        ]);
+
+        return redirect()->route('expeditions.index')->with('success', 'Expedition ajoutée avec succès.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Expeditions $expeditions)
+    public function show(Expeditions $expedition)
     {
-        //
+        return view('expeditions.show', compact('expedition'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Expeditions $expeditions)
+    public function edit(Expeditions $expedition)
     {
-        //
+        $commandesClients = CommandeClient::all();
+        $chauffeurs = employes::all();
+        return view('expeditions.edit', compact('expedition', 'commandesClients', 'chauffeurs'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Expeditions $expeditions)
+    public function update(Request $req, Expeditions $expedition)
     {
-        //
+        $req->validate([
+            'commande_client_id' => 'required',
+            'chauffeur_id' => 'required',
+            'date_expedition' => 'required|date',
+            'numero_camion' => 'required',
+            'statut_livraison' => 'required',
+        ]);
+
+        $expedition->update([
+            'commande_client_id' => $req->commande_client_id,
+            'chauffeur_id' => $req->chauffeur_id,
+            'date_expedition' => $req->date_expedition,
+            'numero_camion' => $req->numero_camion,
+            'statut_livraison' => $req->statut_livraison,
+            'notes_livraison' => $req->notes_livraison,
+        ]);
+
+        return redirect()->route('expeditions.index')->with('success', 'Expedition modifiée avec succès.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Expeditions $expeditions)
+    public function destroy(Expeditions $expedition)
     {
-        //
+        $expedition->delete();
+        return redirect()->route('expeditions.index')->with('success', 'Expedition supprimée avec succès.');
+    }
+
+    /**
+     * Valider après livrer
+     */
+    public function valider($id)
+    {
+        $expedition = Expeditions::findOrFail($id);
+        
+        $expedition->update([
+            'statut_livraison' => 'Livré'
+        ]);
+
+        if ($expedition->commande_client_id) {
+            $commande = \App\Models\CommandeClient::find($expedition->commande_client_id);
+            if ($commande) {
+                $commande->update([
+                    'statut' => 'Livrée' // or any delivered status you have
+                ]);
+            }
+        }
+
+        return redirect()->route('expeditions.index')->with('success', 'Expedition validée avec succès.');
     }
 }

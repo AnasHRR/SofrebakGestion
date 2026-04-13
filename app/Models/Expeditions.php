@@ -11,11 +11,13 @@ class Expeditions extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
     public $incrementing = false;
-    public function employes(){
-        return $this->belongsTo(employes::class,'id');
+    public function employes()
+    {
+        return $this->belongsTo(employes::class, 'chauffeur_id');
     }
 
-    public function commandesClient(){
-        return $this->hasMany(CommandeClient::class , 'id');
+    public function commandeClient()
+    {
+        return $this->belongsTo(CommandeClient::class, 'commande_client_id');
     }
 }
