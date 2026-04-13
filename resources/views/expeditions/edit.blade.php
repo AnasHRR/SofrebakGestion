@@ -140,8 +140,7 @@
             <div class="col-md-6 form-group">
                 <label class="form-label">Statut de Livraison</label>
                 <select name="statut_livraison" class="form-select" required>
-                    <option value="En préparation" {{ old('statut_livraison', $expedition->statut_livraison) == 'En préparation' ? 'selected' : '' }}>En préparation</option>
-                    <option value="En cours routier" {{ old('statut_livraison', $expedition->statut_livraison) == 'En cours routier' ? 'selected' : '' }}>En cours routier</option>
+                    <option value="En cours" {{ old('statut_livraison', $expedition->statut_livraison) == 'En cours' ? 'selected' : '' }}>En cours</option>
                     <option value="Livré" {{ old('statut_livraison', $expedition->statut_livraison) == 'Livré' ? 'selected' : '' }}>Livré</option>
                 </select>
             </div>

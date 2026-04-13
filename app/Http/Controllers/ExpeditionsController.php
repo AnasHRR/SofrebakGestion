@@ -23,38 +23,32 @@ class ExpeditionsController extends Controller
      */
     public function create()
     {
-        $commandesClients = \App\Models\CommandeClient::where('statut', '!=', 'Livrée')->get();
-        $chauffeurs = \App\Models\employes::where('poste', 'Chauffeur')->get();
+        $commandesClients = CommandeClient::where('statut', '!=', 'Livrée')->get();
+        $chauffeurs = employes::where('poste', 'Chauffeur')->get();
         // Fallback for chauffeurs if empty
         if ($chauffeurs->isEmpty()) {
-            $chauffeurs = \App\Models\employes::all();
+            $chauffeurs = employes::all();
         }
-        return view("expeditions.create", compact("commandesClients", "chauffeurs"));
+        $expeditions = Expeditions::all();
+        return view("expeditions.create", compact("commandesClients", "chauffeurs", "expeditions"));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $req)
+    public function store(Request $req , Expeditions $expedition)
     {
         $req->validate([
             'commande_client_id' => 'required',
             'chauffeur_id' => 'required',
-            'date_expedition' => 'required|date',
+            'date_expedition' => 'required',
             'numero_camion' => 'required',
             'statut_livraison' => 'required',
         ]);
 
-        Expeditions::create([
-            'commande_client_id' => $req->commande_client_id,
-            'chauffeur_id' => $req->chauffeur_id,
-            'date_expedition' => $req->date_expedition,
-            'numero_camion' => $req->numero_camion,
-            'statut_livraison' => $req->statut_livraison,
-            'notes_livraison' => $req->notes_livraison,
-        ]);
+        $expedition->create($req->all());
 
-        return redirect()->route('expeditions.index')->with('success', 'Expedition ajoutée avec succès.');
+        return to_route('expeditions.index')->with('success', 'Expedition ajoutée avec succès.');
     }
 
     /**

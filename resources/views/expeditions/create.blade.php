@@ -131,13 +131,9 @@
             
             <div class="col-md-6 form-group">
                 <label class="form-label">Numéro du Camion</label>
-                <select name="numero_camion" id="numero_camion">
-                    <option value="">Sélectionner un camion</option>
-                    @foreach($expeditions as $expedition)
-                        <option value="{{ $expedition->numero_camion }}" {{ old('numero_camion') == $expedition->numero_camion ? 'selected' : '' }}>
-                            {{ $expedition->numero_camion }}
-                        </option>
-                    @endforeach
+                <select name="numero_camion" id="numero_camion" class="form-select" required>
+                    <option value="21872|A|15" {{ old('numero_camion') == '21872|A|15' ? 'selected' : '' }}>21872|A|15</option>
+                    <option value="64521|B|18" {{ old('numero_camion') == '64521|B|18' ? 'selected' : '' }}>64521|B|18</option>
                 </select>
             </div>
         </div>
@@ -146,8 +142,8 @@
             <div class="col-md-6 form-group">
                 <label class="form-label">Statut de Livraison</label>
                 <select name="statut_livraison" class="form-select" required>
-                    <option value="En préparation" {{ old('statut_livraison') == 'En préparation' ? 'selected' : '' }}>En préparation</option>
-                    <option value="En cours routier" {{ old('statut_livraison') == 'En cours routier' ? 'selected' : '' }}>En cours routier</option>
+                    <option value="En cours" {{ old('statut_livraison') == 'En cours' ? 'selected' : '' }}>En cours</option>
+                    <option value="Livré" {{ old('statut_livraison') == 'Livré' ? 'selected' : '' }}>Livré</option>
                 </select>
             </div>
         </div>
