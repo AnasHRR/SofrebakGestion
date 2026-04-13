@@ -993,6 +993,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="/expeditions" class="{{ (request()->is('expeditions') || request()->is('commandes/*')) ? 'active' : '' }}">
+                            <div class="nav-icon-box"><i class="bi bi-bag-plus-fill"></i></div>
+                            <span>expeditions</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/stock" class="{{ request()->is('stock*') ? 'active' : '' }}">
                             <div class="nav-icon-box"><i class="bi bi-clipboard2-data-fill"></i></div>
                             <span>Stock</span>

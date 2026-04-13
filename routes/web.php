@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriesProduitsController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\CommandeClientController;
 use App\Http\Controllers\CommandesFournisseursController;
+use App\Http\Controllers\ExpeditionsController;
 use App\Http\Controllers\FacturesController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\ProduitsController;
@@ -36,4 +37,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('/commandes', CommandeClientController::class);
     Route::resource('/commandes-fournisseurs', CommandesFournisseursController::class)->names('commandesFournisseurs');
     Route::resource('/factures', FacturesController::class);
+    Route::resource('/expeditions', ExpeditionsController::class);
 });
