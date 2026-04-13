@@ -56,7 +56,7 @@ class ExpeditionsController extends Controller
      */
     public function show(Expeditions $expedition)
     {
-        return view('expeditions.show', compact('expedition'));
+        // return view('expeditions.show', compact('expedition'));
     }
 
     /**
