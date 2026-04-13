@@ -994,7 +994,7 @@
                     </li>
                     <li>
                         <a href="/expeditions" class="{{ (request()->is('expeditions') || request()->is('expeditions/*')) ? 'active' : '' }}">
-                            <div class="nav-icon-box"><i class="bi bi-bag-plus-fill"></i></div>
+                            <div class="nav-icon-box"><i class="bi bi-truck"></i></div>
                             <span>expeditions</span>
                         </a>
                     </li>

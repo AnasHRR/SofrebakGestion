@@ -261,7 +261,6 @@
     @csrf
     <div class="form-card">
         <div class="section-title"><i class="bi bi-info-circle me-2"></i>Informations Générales</div>
-        
         <div class="row">
             <div class="col-md-3 form-group">
                 <label class="form-label" for="numero_commande">N° Commande</label>
