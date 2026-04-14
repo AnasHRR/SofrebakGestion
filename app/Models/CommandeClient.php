@@ -30,4 +30,7 @@ class CommandeClient extends Model
     {
         return $this->hasMany(Factures::class, 'commande_client_id' , 'id');
     }
+    public function expedition(){
+        return $this->belongsTo(Expeditions::class, 'expedition_id' , 'id');
+    }
 }

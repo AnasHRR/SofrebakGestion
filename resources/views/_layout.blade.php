@@ -10,9 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --sidebar-width: 290px;
@@ -882,10 +880,29 @@
             gap: 0.8rem;
             text-decoration: none;
             transition: background 0.2s ease;
+            position: relative;
         }
 
         .notification-item:hover {
             background: #f8fafc;
+        }
+
+        .notification-close-btn {
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: flex-start;
+            transition: color 0.2s ease;
+            line-height: 1;
+        }
+
+        .notification-close-btn:hover {
+            color: #ef4444;
         }
 
         .notification-item:last-child {
@@ -960,14 +977,6 @@
                 </div>
             </a>
         </div>
-
-        {{-- <div class="sidebar-search">
-            <div class="search-box">
-                <i class="bi bi-search"></i>
-                <input type="text" placeholder="Rechercher...">
-                <span class="search-shortcut">⌘K</span>
-            </div>
-        </div> --}}
 
         <ul class="nav-links">
             <!-- ── Menu Principale ── -->
@@ -1141,11 +1150,11 @@
                         <div class="notification-list">
                             @if(isset($expiredFactures) && $expiredFactures->count() > 0)
                                 @foreach($expiredFactures as $facture)
-                                    <a href="/factures/{{ $facture->id }}/edit" class="notification-item">
+                                    <a href="/factures/{{ $facture->id }}/edit" class="notification-item" data-id="{{ $facture->id }}">
                                         <div class="notification-icon">
                                             <i class="bi bi-exclamation-triangle-fill"></i>
                                         </div>
-                                        <div>
+                                        <div style="flex: 1;">
                                             <div class="notification-title">Facture Échue : {{ $facture->numero_facture }}</div>
                                             <div class="notification-desc">Échéance était le
                                                 {{ \Carbon\Carbon::parse($facture->date_echeance)->format('d/m/Y') }}.</div>
@@ -1155,6 +1164,9 @@
                                                 jour(s)
                                             </div>
                                         </div>
+                                        <button class="notification-close-btn" onclick="dismissNotification(event, '{{ $facture->id }}')" title="Supprimer la notification">
+                                            <i class="bi bi-x"></i>
+                                        </button>
                                     </a>
                                 @endforeach
                             @else
@@ -1265,6 +1277,74 @@
             const notifToggle = document.getElementById('notificationDropdownToggle');
             if (notifDropdown && !notifDropdown.contains(event.target) && !notifToggle.contains(event.target)) {
                 notifDropdown.classList.remove('show');
+            }
+        });
+
+        // Notifications local storage management
+        function dismissNotification(event, factureId) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            let dismissed = JSON.parse(localStorage.getItem('dismissedFactures') || '[]');
+            if (!dismissed.includes(factureId.toString())) {
+                dismissed.push(factureId.toString());
+                localStorage.setItem('dismissedFactures', JSON.stringify(dismissed));
+            }
+            
+            const item = event.target.closest('.notification-item');
+            if (item) {
+                item.remove();
+            }
+            
+            updateNotificationCount();
+        }
+
+        function updateNotificationCount() {
+            const list = document.querySelector('.notification-list');
+            if(!list) return;
+
+            const items = list.querySelectorAll('.notification-item');
+            const count = items.length;
+            
+            const badgeIcon = document.querySelector('.notification-badge-icon');
+            const badgeHeader = document.querySelector('.notification-header-badge');
+            
+            if (count > 0) {
+                if(badgeIcon) {
+                    badgeIcon.textContent = count;
+                    badgeIcon.style.display = 'flex';
+                }
+                if(badgeHeader) {
+                    badgeHeader.textContent = count + ' nouvelles';
+                    badgeHeader.style.display = 'inline-block';
+                }
+            } else {
+                if(badgeIcon) badgeIcon.style.display = 'none';
+                if(badgeHeader) badgeHeader.style.display = 'none';
+                list.innerHTML = `
+                    <div class="empty-notifications">
+                        <i class="bi bi-bell-slash"></i>
+                        Aucune notification
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dismissed = JSON.parse(localStorage.getItem('dismissedFactures') || '[]');
+            if(dismissed.length > 0) {
+                const items = document.querySelectorAll('.notification-item');
+                let removedAny = false;
+                items.forEach(item => {
+                    const id = item.getAttribute('data-id');
+                    if (id && dismissed.includes(id)) {
+                        item.remove();
+                        removedAny = true;
+                    }
+                });
+                if (removedAny) {
+                    updateNotificationCount();
+                }
             }
         });
     </script>

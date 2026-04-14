@@ -99,18 +99,6 @@
         
         <div class="row">
             <div class="col-md-6 form-group">
-                <label class="form-label">Commande Client</label>
-                <select name="commande_client_id" class="form-select" required>
-                    <option value="">Sélectionner une commande</option>
-                    @foreach($commandesClients as $commande)
-                        <option value="{{ $commande->id }}" {{ old('commande_client_id') == $commande->id ? 'selected' : '' }}>
-                            {{ $commande->numero_commande ?? '#'.$commande->id }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            
-            <div class="col-md-6 form-group">
                 <label class="form-label">Chauffeur</label>
                 <select name="chauffeur_id" class="form-select" required>
                     <option value="">Sélectionner un chauffeur</option>

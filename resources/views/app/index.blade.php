@@ -1822,8 +1822,8 @@
         }
 
         /* ═══════════════════════════════
-   TESTIMONIALS / PARTNERS
-═══════════════════════════════ */
+           TESTIMONIALS / PARTNERS
+        ═══════════════════════════════ */
         .testimonials {
             padding: 7rem 0;
             background: var(--slate-50);

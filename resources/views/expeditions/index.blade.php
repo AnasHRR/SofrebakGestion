@@ -154,7 +154,6 @@
             <thead>
                 <tr>
                     <th><i class="bi bi-hash me-1"></i> ID</th>
-                    <th><i class="bi bi-bag me-1"></i> Commande</th>
                     <th><i class="bi bi-person me-1"></i> Chauffeur</th>
                     <th><i class="bi bi-calendar3 me-1"></i> Date Expédition</th>
                     <th><i class="bi bi-truck me-1"></i> Camion</th>
@@ -166,7 +165,6 @@
                 @forelse ($expeditions as $exped)
                     <tr>
                         <td><strong>#{{ $exped->id }}</strong></td>
-                        <td>{{ $exped->commandeClient->numero_commande ?? 'N/A' }}</td>
                         <td>{{ $exped->employes->nom_complet ?? 'N/A' }}</td>
                         <td>{{ \Carbon\Carbon::parse($exped->date_expedition)->format('d/m/Y') }}</td>
                         <td>{{ $exped->numero_camion }}</td>
