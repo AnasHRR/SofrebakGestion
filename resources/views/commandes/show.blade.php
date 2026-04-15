@@ -695,6 +695,20 @@
                             <div class="info-field-value">{{ $commandeClient->comptable ? $commandeClient->comptable->nom_complet : 'Non assigné' }}</div>
                         </div>
                     </div>
+                    <div class="info-field">
+                        <div class="info-field-icon"><i class="bi bi-truck-flatbed"></i></div>
+                        <div>
+                            <div class="info-field-label">Expédition / Chauffeur</div>
+                            <div class="info-field-value">
+                                @if($commandeClient->expedition)
+                                    {{ $commandeClient->expedition->employes->nom_complet ?? 'N/A' }} 
+                                    <span style="color:#64748b; font-size: 0.8rem; margin-left: 5px;">- {{ \Carbon\Carbon::parse($commandeClient->expedition->date_expedition)->format('d/m/Y') }}</span>
+                                @else
+                                    <span style="color:#94a3b8;">Non assignée</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     @if($commandeClient->notes)
                         <div class="info-field">
                             <div class="info-field-icon"><i class="bi bi-sticky"></i></div>
@@ -870,6 +884,10 @@
             <div class="po-info-line">
                 <span class="label">Représentant :</span>
                 <span class="value">{{ $commandeClient->comptable ? $commandeClient->comptable->nom_complet : 'Non assigné' }}</span>
+            </div>
+            <div class="po-info-line">
+                <span class="label">Livreur :</span>
+                <span class="value">{{ $commandeClient->expedition->employes->nom_complet ?? 'Non assigné' }}</span>
             </div>
         </div>
     </div>

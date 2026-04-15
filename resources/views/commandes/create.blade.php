@@ -270,13 +270,24 @@
                 <label class="form-label" for="date_commande">Date Commande</label>
                 <input type="date" class="form-control" id="date_commande" name="date_commande" value="{{ old('date_commande') ?? date('Y-m-d') }}" required>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-3 form-group">
                 <label class="form-label" for="client_id">Client</label>
                 <select class="form-select" id="client_id" name="client_id" required>
                     <option value="">Sélectionnez un client</option>
                     @foreach ($clients as $client)
                         <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
                             {{ $client->nom_entreprise }} ({{ $client->personne_contact }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3 form-group">
+                <label class="form-label" for="expedition_id">Expédition</label>
+                <select class="form-select" id="expedition_id" name="expedition_id">
+                    <option value="">Non assignée</option>
+                    @foreach ($expeditions as $exped)
+                        <option value="{{ $exped->id }}" {{ old('expedition_id') == $exped->id ? 'selected' : '' }}>
+                            {{ $exped->employes->nom_complet ?? 'N/A' }} - {{ \Carbon\Carbon::parse($exped->date_expedition)->format('d/m/Y') }}
                         </option>
                     @endforeach
                 </select>

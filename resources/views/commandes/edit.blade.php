@@ -924,7 +924,7 @@
                         <i class="bi bi-people"></i> Client & Responsable
                     </div>
 
-                    <div class="form-row">
+                    <div class="form-row" style="grid-template-columns: repeat(3, 1fr);">
                         <!-- Client -->
                         <div class="form-group">
                             <label for="client_id">
@@ -962,6 +962,26 @@
                                     @foreach ($employes as $emp)
                                         <option value="{{ $emp->id }}" {{ old('comptable_id', $commandeClient->comptable_id) == $emp->id ? 'selected' : '' }}>
                                             {{ $emp->nom_complet }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Expedition -->
+                        <div class="form-group">
+                            <label for="expedition_id">
+                                <i class="bi bi-truck"></i> Expédition
+                            </label>
+                            <div class="custom-input-wrapper">
+                                <div class="custom-input-icon">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                                <select class="custom-select" id="expedition_id" name="expedition_id">
+                                    <option value="">-- Non assignée --</option>
+                                    @foreach ($expeditions as $exped)
+                                        <option value="{{ $exped->id }}" {{ old('expedition_id', $commandeClient->expedition_id) == $exped->id ? 'selected' : '' }}>
+                                            {{ $exped->employes->nom_complet ?? 'N/A' }} - {{ \Carbon\Carbon::parse($exped->date_expedition)->format('d/m/Y') }}
                                         </option>
                                     @endforeach
                                 </select>

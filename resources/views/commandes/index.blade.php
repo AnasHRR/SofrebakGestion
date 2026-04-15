@@ -746,6 +746,7 @@
                     <th><i class="bi bi-calendar3 me-1"></i> Date</th>
                     <th><i class="bi bi-person me-1"></i> Client</th>
                     <th><i class="bi bi-truck me-1"></i> Livraison</th>
+                    <th><i class="bi bi-truck-flatbed me-1"></i> Expédition</th>
                     <th style="text-align:center;"><i class="bi bi-flag me-1"></i> Statut</th>
                     <th style="text-align:center;"><i class="bi bi-wallet2 me-1"></i> Paiement</th>
                     <th style="text-align:right;"><i class="bi bi-cash me-1"></i> Montant</th>
@@ -784,6 +785,18 @@
                         <td>
                             <span style="font-weight:600;color:#64748b;">
                                 {{ $commande->date_livraison ? \Carbon\Carbon::parse($commande->date_livraison)->format('d/m/Y') : '—' }}
+                            </span>
+                        </td>
+
+                        <!-- Expédition -->
+                        <td>
+                            <span style="font-weight:600;color:#1e293b; font-size: 0.8rem;">
+                                @if($commande->expedition)
+                                    {{ $commande->expedition->employes->nom_complet ?? 'N/A' }} <br>
+                                    <span style="color:#64748b; font-size: 0.75rem;">{{ \Carbon\Carbon::parse($commande->expedition->date_expedition)->format('d/m/Y') }}</span>
+                                @else
+                                    —
+                                @endif
                             </span>
                         </td>
 
@@ -851,7 +864,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8">
+                        <td colspan="9">
                             <div class="empty-state">
                                 <div class="empty-state-icon">
                                     <i class="bi bi-bag-x"></i>

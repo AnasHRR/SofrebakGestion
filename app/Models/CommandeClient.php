@@ -8,7 +8,7 @@ class CommandeClient extends Model
 {
     protected $table = "commandes_clients";
     protected $primaryKey = 'id';
-    protected $fillable = ['id' , 'numero_commande' , 'date_commande' , 'client_id' , 'comptable_id' , 'date_livraison' , 'statut' , 'statut_paiement' , 'montant_total' , 'notes'];
+    protected $fillable = ['id' , 'numero_commande' , 'date_commande' , 'client_id' , 'comptable_id' , 'date_livraison' , 'statut' , 'statut_paiement' , 'montant_total' , 'notes', 'expedition_id'];
     public $timestamps = false;
 
     public function client()

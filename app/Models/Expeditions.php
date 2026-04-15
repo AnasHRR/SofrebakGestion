@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Expeditions extends Model
 {
     protected $table = 'expeditions';
-    protected $fillable = ['id' , 'commande_client_id', 'chauffeur_id','date_expedition' , 'numero_camion' , 'statut_livraison' , 'notes_livraison'];
+    protected $fillable = ['id' , 'chauffeur_id','date_expedition' , 'numero_camion' , 'statut_livraison' , 'notes_livraison'];
     protected $primaryKey = 'id';
     public $timestamps = false;
     public $incrementing = true;
@@ -15,8 +15,8 @@ class Expeditions extends Model
     {
         return $this->belongsTo(employes::class, 'chauffeur_id');
     }
-    public function commandeClient()
+    public function commandesClients()
     {
-        return $this->hasMany(CommandeClient::class, 'commande_client_id' , 'id');
+        return $this->hasMany(CommandeClient::class, 'expedition_id' , 'id');
     }
 }

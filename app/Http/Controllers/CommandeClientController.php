@@ -7,6 +7,7 @@ use App\Models\clients;
 use App\Models\Produits;
 use App\Models\detailsCommandeClients;
 use App\Models\employes;
+use App\Models\Expeditions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -42,7 +43,8 @@ class CommandeClientController extends Controller
         $produits = Produits::all();
         $commandeClient = CommandeClient::all();
         $employes = employes::where('poste', 'Comptable')->get();
-        return view('commandes.create', compact('clients', 'produits', 'employes', "commandeClient"));
+        $expeditions = Expeditions::with('employes')->get();
+        return view('commandes.create', compact('clients', 'produits', 'employes', 'commandeClient', 'expeditions'));
     }
 
     /**
@@ -60,6 +62,7 @@ class CommandeClientController extends Controller
             'statut_paiement' => 'nullable|string|max:255',
             'montant_total' => 'nullable|numeric',
             'notes' => 'nullable|string',
+            'expedition_id' => 'nullable|exists:expeditions,id',
             'produits' => 'required|array|min:1',
             'produits.*.produit_id' => 'required|exists:produits,id',
             'produits.*.quantite' => 'required|integer|min:1',
@@ -89,6 +92,7 @@ class CommandeClientController extends Controller
                 'statut_paiement' => $validatedData['statut_paiement'] ?? 'Non payé',
                 'montant_total' => $validatedData['montant_total'] ?? 0,
                 'notes' => $validatedData['notes'] ?? null,
+                'expedition_id' => $validatedData['expedition_id'] ?? null,
             ]);
 
             foreach ($validatedData['produits'] as $produit) {
@@ -132,7 +136,8 @@ class CommandeClientController extends Controller
         $clients = clients::all();
         $produits = Produits::all();
         $employes = employes::where('poste', 'Comptable')->get();
-        return view('commandes.edit', compact('commandeClient', 'clients', 'produits', 'employes'));
+        $expeditions = Expeditions::with('employes')->get();
+        return view('commandes.edit', compact('commandeClient', 'clients', 'produits', 'employes', 'expeditions'));
     }
 
     /**
@@ -152,6 +157,7 @@ class CommandeClientController extends Controller
             'statut_paiement' => 'nullable|string|max:255',
             'montant_total' => 'nullable|numeric',
             'notes' => 'nullable|string',
+            'expedition_id' => 'nullable|exists:expeditions,id',
             'produits' => 'required|array|min:1',
             'produits.*.produit_id' => 'required|exists:produits,id',
             'produits.*.quantite' => 'required|integer|min:1',
@@ -189,6 +195,7 @@ class CommandeClientController extends Controller
                 'statut_paiement' => $validatedData['statut_paiement'] ?? 'Non payé',
                 'montant_total' => $validatedData['montant_total'] ?? 0,
                 'notes' => $validatedData['notes'] ?? null,
+                'expedition_id' => $validatedData['expedition_id'] ?? null,
             ]);
 
             detailsCommandeClients::where('commande_client_id', $commandeClient->id)->delete();

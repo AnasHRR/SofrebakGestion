@@ -41,17 +41,24 @@ class ExpeditionsController extends Controller
 
     public function show(Expeditions $expedition)
     {
-        // return view('expeditions.show', compact('expedition'));
+        $expedition->load('employes', 'commandesClients.client');
+        return view('expeditions.show', compact('expedition'));
     }
 
     public function edit(Expeditions $expedition)
     {
+        if ($expedition->statut_livraison === 'Livré') {
+            return back()->with('error', 'Impossible de modifier une expédition déjà validée.');
+        }
         $chauffeurs = employes::all();
         return view('expeditions.edit', compact('expedition', 'chauffeurs'));
     }
 
     public function update(Request $req, Expeditions $expedition)
     {
+        if ($expedition->statut_livraison === 'Livré') {
+            return back()->with('error', 'Impossible de modifier une expédition déjà validée.');
+        }
         $req->validate([
             'chauffeur_id' => 'required',
             'date_expedition' => 'required|date',
@@ -72,18 +79,21 @@ class ExpeditionsController extends Controller
 
     public function destroy(Expeditions $expedition)
     {
+        if ($expedition->statut_livraison === 'Livré') {
+            return back()->with('error', 'Impossible de supprimer une expédition déjà validée.');
+        }
         $expedition->delete();
         return to_route('expeditions.index')->with('success', 'Expedition supprimée avec succès.');
     }
 
     public function valider($id)
     {
-        $expedition = Expeditions::findOrFail($id);
+        $expedition = Expeditions::with('commandesClients')->findOrFail($id);
         
         $expedition->update([
-            'statut_livraison' => 'Livré'
+            'statut_livraison' => 'Livrée'
         ]);
 
-        return to_route('expeditions.index')->with('success', 'Expedition validée avec succès.');
+        return to_route('expeditions.index')->with('success', 'Expédition et commandes associées validées avec succès.');
     }
 }
