@@ -1014,6 +1014,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="/retours" class="{{ request()->is('retours*') ? 'active' : '' }}">
+                            <div class="nav-icon-box"><i class="bi bi-arrow-return-left"></i></div>
+                            <span>Retours</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/factures" class="{{ request()->is('factures*') ? 'active' : '' }}">
                             <div class="nav-icon-box"><i class="bi bi-receipt-cutoff"></i></div>
                             <span>Factures</span>
