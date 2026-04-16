@@ -522,7 +522,7 @@
                                     {{ number_format($commande->montant_total, 2, ',', ' ') }} <span style="font-size:0.7rem;color:#64748b;font-weight:500;">DH</span>
                                 </td>
                                 <td style="text-align:center;">
-                                    <a href="{{ route('commandes.show', $commande->id) }}" class="sidebar-btn-edit" style="width:auto; padding: 0.35rem 0.6rem; display:inline-flex; align-items:center; border-radius:6px; text-decoration:none;" title="Détails de la commande">
+                                    <a href="{{ route('commandes.show', $commande->id) }}" class="sidebar-btn-edit" style="width:auto; padding: 0.35rem 0.6rem; display:inline-flex; align-items:center; border-radius:6px; text-decoration:none;gap:3px;" title="Détails de la commande">
                                         <i class="bi bi-eye-fill"></i> Détails
                                     </a>
                                 </td>
@@ -562,7 +562,7 @@
                     </span>
                 </div>
                 
-                @if($expedition->statut_livraison !== 'Livré')
+                @if($expedition->statut_livraison !== 'Livré' && $expedition->statut_livraison !== 'Livrée')
                     <form action="{{ route('expeditions.valider', $expedition->id) }}" method="POST"
                           onsubmit="return confirm('Valider cette expédition changera son statut en Livré ainsi que toutes ses commandes. Confirmer ?');"
                           style="margin-top: 1rem; margin-bottom: 1rem;">
@@ -571,6 +571,12 @@
                             <i class="bi bi-check2-circle" style="font-size:1.1rem;"></i> Valider la livraison
                         </button>
                     </form>
+                @else
+                    <div style="margin-top: 1rem; margin-bottom: 1rem;">
+                        <button disabled class="sidebar-btn" style="background: #f8fafc; color: #94a3b8; border: 1.5px solid #e2e8f0; font-weight:700; cursor: not-allowed;">
+                            <i class="bi bi-check-all" style="font-size:1.1rem;"></i> Déjà validée
+                        </button>
+                    </div>
                 @endif
 
                 <div class="summary-box" style="margin-top:1rem;">
