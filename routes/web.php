@@ -9,6 +9,7 @@ use App\Http\Controllers\ExpeditionsController;
 use App\Http\Controllers\FacturesController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\ProduitsController;
+use App\Http\Controllers\RetoursController;
 use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,5 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('/commandes-fournisseurs', CommandesFournisseursController::class)->names('commandesFournisseurs');
     Route::resource('/factures', FacturesController::class);
     Route::post('/expeditions/{id}/valider', [ExpeditionsController::class, 'valider'])->name('expeditions.valider');
+    Route::resource('/retours', RetoursController::class);
     Route::resource('/expeditions', ExpeditionsController::class);
 });
