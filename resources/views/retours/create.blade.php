@@ -1,73 +1,260 @@
 @extends('_layout')
-@section('title', 'Retours')
+
+@section('title', 'Nouveau Retour - Sofrebak')
+
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Ajouter un retour</h3>
+<style>
+    /* ── Page Header ── */
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.6rem;
+    }
+
+    .page-header-left h2 {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #0f1e4a;
+        margin: 0;
+        letter-spacing: -0.4px;
+    }
+
+    .page-header-left p {
+        font-size: 0.82rem;
+        color: #64748b;
+        margin: 0.2rem 0 0;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        background: #fff;
+        color: #64748b;
+        font-size: 0.84rem;
+        font-weight: 700;
+        padding: 0.55rem 1.1rem;
+        border-radius: 10px;
+        text-decoration: none;
+        border: 1.5px solid #e2eaf8;
+        transition: all 0.2s ease;
+    }
+
+    .btn-back:hover {
+        background: #f8fafc;
+        color: var(--blue-600);
+        border-color: var(--blue-200);
+    }
+
+    /* ── Form Card ── */
+    .form-card {
+        background: #ffffff;
+        border: 1px solid #e2eaf8;
+        border-radius: 18px;
+        box-shadow: 0 2px 8px rgba(15,42,110,0.06);
+        padding: 2rem;
+    }
+
+    .form-label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #475569;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control, .form-select {
+        border: 1.5px solid #e2eaf8;
+        border-radius: 10px;
+        padding: 0.65rem 1rem;
+        font-size: 0.88rem;
+        transition: all 0.2s;
+        background-color: #fbfcfe;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--blue-400);
+        background-color: #fff;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .input-group-text {
+        background: #f1f5f9;
+        border: 1.5px solid #e2eaf8;
+        border-right: none;
+        border-radius: 10px 0 0 10px;
+        color: #64748b;
+    }
+
+    .input-group .form-control, .input-group .form-select {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .section-title {
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: var(--blue-600);
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .section-title::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, #e2eaf8, transparent);
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+        color: #fff;
+        font-weight: 700;
+        padding: 0.7rem 2rem;
+        border-radius: 10px;
+        border: none;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 15px rgba(29, 78, 216, 0.35);
+        color: #fff;
+    }
+</style>
+
+<div class="page-header">
+    <div class="page-header-left">
+        <h2><i class="bi bi-plus-circle-fill me-2" style="color:var(--blue-500);"></i>Nouveau Retour</h2>
+        <p>Enregistrez un nouveau retour de marchandise</p>
+    </div>
+    <a href="{{ route('retours.index') }}" class="btn-back">
+        <i class="bi bi-arrow-left me-1"></i> Retour à la liste
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="form-card">
+            <form action="{{ route('retours.store') }}" method="POST">
+                @csrf
+                
+                <div class="row g-4">
+                    <!-- Informations Commande -->
+                    <div class="col-12">
+                        <div class="section-title">
+                            <i class="bi bi-receipt"></i> Détails de la Commande
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form action="{{ route('retours.store') }}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <label for="commande_client_id">Commande Client</label>
-                                <select name="commande_client_id" id="commande_client_id" class="form-control">
-                                    <option value="">Sélectionner une commande</option>
-                                    @foreach ($commandes as $commande)
-                                        <option value="{{ $commande->id }}">{{ $commande->id }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="produit_id">Produit</label>
-                                <select name="produit_id" id="produit_id" class="form-control">
-                                    <option value="">Sélectionner un produit</option>
-                                    @foreach ($produits as $produit)
-                                        <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="quantite">Quantité</label>
-                                <input type="number" name="quantite" id="quantite" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="date_retour">Date Retour</label>
-                                <input type="date" name="date_retour" id="date_retour" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="motif">Motif</label>
-                                <textarea name="motif" id="motif" class="form-control"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="comptable_id">Comptable</label>
-                                <select name="comptable_id" id="comptable_id" class="form-control">
-                                    <option value="">Sélectionner un comptable</option>
-                                    @foreach ($comptables as $comptable)
-                                        <option value="{{ $comptable->id }}">{{ $comptable->nom }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="region_id">Région</label>
-                                <select name="region_id" id="region_id" class="form-control">
-                                    <option value="">Sélectionner une région</option>
-                                    @foreach ($regions as $region)
-                                        <option value="{{ $region->id }}">{{ $region->nom }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="notes">Notes</label>
-                                <textarea name="notes" id="notes" class="form-control"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Ajouter</button>
-                        </form>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Commande Client</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                            <select name="commande_client_id" class="form-select @error('commande_client_id') is-invalid @enderror" required>
+                                <option value="" selected disabled>Sélectionner une commande</option>
+                                @foreach($commandes as $cmd)
+                                    <option value="{{ $cmd->id }}">Commande {{ $cmd->numero_commande ?? '#'.$cmd->id }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('commande_client_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Produit</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-box"></i></span>
+                            <select name="produit_id" class="form-select @error('produit_id') is-invalid @enderror" required>
+                                <option value="" selected disabled>Sélectionner un produit</option>
+                                @foreach($produits as $prod)
+                                    <option value="{{ $prod->id }}">{{ $prod->nom_produit }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('produit_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Quantité</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-123"></i></span>
+                            <input type="number" name="quantite" class="form-control @error('quantite') is-invalid @enderror" placeholder="0" min="1" required>
+                        </div>
+                        @error('quantite') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Date de Retour</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+                            <input type="date" name="date_retour" class="form-control @error('date_retour') is-invalid @enderror" value="{{ date('Y-m-d') }}" required>
+                        </div>
+                        @error('date_retour') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                    </div>
+
+                    <!-- Logistique & Motif -->
+                    <div class="col-12 mt-5">
+                        <div class="section-title">
+                            <i class="bi bi-truck"></i> Logistique & Motif
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Responsable (Comptable)</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            <select name="comptable_id" class="form-select @error('comptable_id') is-invalid @enderror" required>
+                                <option value="" selected disabled>Choisir un responsable</option>
+                                @foreach($employes as $emp)
+                                    <option value="{{ $emp->id }}">{{ $emp->nom_complet }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('comptable_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Région</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                            <select name="region_id" class="form-select @error('region_id') is-invalid @enderror" required>
+                                <option value="" selected disabled>Choisir une région</option>
+                                @foreach($regions as $reg)
+                                    <option value="{{ $reg->id }}">{{ $reg->nom }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('region_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Motif du retour</label>
+                        <textarea name="motif" class="form-control @error('motif') is-invalid @enderror" rows="3" placeholder="Précisez la raison du retour..." required></textarea>
+                        @error('motif') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Notes internes</label>
+                        <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" rows="2" placeholder="Commentaires additionnels (optionnel)"></textarea>
+                    </div>
+
+                    <div class="col-12 mt-4 text-end">
+                        <button type="reset" class="btn btn-light me-2 fw-bold px-4 border">Réinitialiser</button>
+                        <button type="submit" class="btn btn-submit">
+                            <i class="bi bi-check-lg me-1"></i> Créer le Retour
+                        </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 @endsection

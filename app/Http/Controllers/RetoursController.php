@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Retours;
+use App\Models\CommandeClient;
+use App\Models\Produits;
+use App\Models\regions;
+use App\Models\employes;
 use Illuminate\Http\Request;
 
 class RetoursController extends Controller
@@ -10,14 +14,18 @@ class RetoursController extends Controller
     
     public function index()
     {
-        $retours = Retours::all();
+        $retours = Retours::with(['commande_client', 'produit', 'comptable', 'region'])->get();
         return view('retours.index', compact('retours'));
     }
 
     
     public function create()
     {
-        return view('retours.create', compact('retours'));
+        $commandes = CommandeClient::all();
+        $produits = Produits::all();
+        $regions = regions::all();
+        $employes = employes::all();
+        return view('retours.create', compact('commandes', 'produits', 'regions', 'employes'));
     }
 
     public function store(Request $req)
@@ -25,51 +33,56 @@ class RetoursController extends Controller
         $req->validate([
             'commande_client_id' => 'required',
             'produit_id' => 'required',
-            'quantite' => 'required',
-            'date_retour' => 'required',
+            'quantite' => 'required|numeric|min:1',
+            'date_retour' => 'required|date',
             'motif' => 'required',
             'comptable_id' => 'required',
             'region_id' => 'required',
-            'notes' => 'required',
+            'notes' => 'nullable',
         ]);
 
-        $retours = Retours::create($req->all());
+        Retours::create($req->all());
         return to_route('retours.index')->with('success', 'Retour créé avec succès');
     }
 
-    public function show(Retours $retours)
+    public function show(Retours $retour)
     {
-        return view('retours.show', compact('retours'));
+        $retour->load(['commande_client', 'produit', 'comptable', 'region']);
+        return view('retours.show', compact('retour'));
     }
 
     
-    public function edit(Retours $retours)
+    public function edit(Retours $retour)
     {
-        return view('retours.edit', compact('retours'));
+        $commandes = CommandeClient::all();
+        $produits = Produits::all();
+        $regions = regions::all();
+        $employes = employes::all();
+        return view('retours.edit', compact('retour', 'commandes', 'produits', 'regions', 'employes'));
     }
 
 
-    public function update(Request $req, Retours $retours)
+    public function update(Request $req, Retours $retour)
     {
         $req->validate([
             'commande_client_id' => 'required',
             'produit_id' => 'required',
-            'quantite' => 'required',
-            'date_retour' => 'required',
+            'quantite' => 'required|numeric|min:1',
+            'date_retour' => 'required|date',
             'motif' => 'required',
             'comptable_id' => 'required',
             'region_id' => 'required',
-            'notes' => 'required',
+            'notes' => 'nullable',
         ]);
 
-        $retours->update($req->all());
+        $retour->update($req->all());
         return to_route('retours.index')->with('success', 'Retour modifié avec succès');
     }
 
     
-    public function destroy(Retours $retours)
+    public function destroy(Retours $retour)
     {
-        $retours->delete();
+        $retour->delete();
         return to_route('retours.index')->with('success', 'Retour supprimé avec succès');
     }
 }

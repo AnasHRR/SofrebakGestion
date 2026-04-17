@@ -13,18 +13,18 @@ class Retours extends Model
     public $incrementing = true;
 
     public function commande_client(){
-        return $this->HasMany(CommandeClient::class, 'commande_client_id' , 'id');
+        return $this->belongsTo(CommandeClient::class, 'commande_client_id' , 'id');
     }
 
     public function produit(){
-        return $this->hasMany(Produits::class,'produit_id','id');
+        return $this->belongsTo(Produits::class, 'produit_id', 'id');
     }
 
-    public function employes(){
-        return $this->belongsTo(Employes::class,'employes_id','id');
+    public function comptable(){
+        return $this->belongsTo(employes::class, 'comptable_id', 'id');
     }
 
     public function region(){
-        return $this->belongsTo(regions::class,'region_id','id');
+        return $this->belongsTo(regions::class, 'region_id', 'id');
     }
 }
