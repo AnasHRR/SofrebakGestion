@@ -264,7 +264,7 @@
         <div class="row">
             <div class="col-md-3 form-group">
                 <label class="form-label" for="numero_commande">N° Commande</label>
-                <input type="text" class="form-control" id="numero_commande" name="numero_commande" required>
+                <input type="text" class="form-control" id="numero_commande" placeholder="EX: 21872/26" name="numero_commande" required>
             </div>
             <div class="col-md-3 form-group">
                 <label class="form-label" for="date_commande">Date Commande</label>

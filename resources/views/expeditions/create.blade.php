@@ -1,178 +1,213 @@
 @extends('_layout')
 
-@section('title', 'Créer une Expédition - Sofrebak')
+@section('title', 'Nouvelle Expédition')
 
 @section('content')
-<div class="container-fluid py-4">
-    <div class="row justify-content-center">
-        <div class="col-xl-8">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.6rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
 
-            <!-- Header -->
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <div>
-                    <h4 class="mb-1 fw-bold text-dark">
-                        <i class="bi bi-truck text-primary me-2"></i>Nouvelle Expédition
-                    </h4>
-                    <p class="text-muted small mb-0">Remplissez les informations ci-dessous pour créer une expédition.</p>
-                </div>
-                <a href="{{ route('expeditions.index') }}" class="btn btn-outline-secondary btn-sm shadow-sm">
-                    <i class="bi bi-arrow-left me-1"></i> Retour à la liste
-                </a>
-            </div>
+        .page-header-left h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f1e4a;
+            margin: 0;
+            letter-spacing: -0.4px;
+        }
 
-            <!-- Form Card -->
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                <div class="card-body p-4 p-md-5">
-                    @if ($errors->any())
-                        <div class="alert alert-danger bg-danger-subtle text-danger border-0 rounded-3 mb-4">
-                            <ul class="mb-0 ps-3">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+        .page-header-left p {
+            font-size: 0.82rem;
+            color: #64748b;
+            margin: 0.2rem 0 0;
+        }
 
-                    <form action="{{ route('expeditions.store') }}" method="POST">
-                        @csrf
-                        <div class="row g-4">
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: #fff;
+            color: #64748b;
+            font-size: 0.84rem;
+            font-weight: 700;
+            padding: 0.55rem 1.1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            border: 1.5px solid #e2eaf8;
+            transition: all 0.2s ease;
+        }
 
-                            <!-- Informations de l'Expédition -->
-                            <div class="col-12">
-                                <h6 class="text-primary text-uppercase fw-bold small mb-3 border-bottom pb-2">
-                                    <i class="bi bi-info-circle me-2"></i>Informations de l'Expédition
-                                </h6>
-                            </div>
+        .btn-back:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-100);
+            color: var(--blue-600);
+            transform: translateY(-1px);
+        }
 
-                            <!-- Chauffeur -->
-                            <div class="col-md-6">
-                                <label for="chauffeur_id" class="form-label fw-semibold">Chauffeur <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0 text-muted">
-                                        <i class="bi bi-person-badge"></i>
-                                    </span>
-                                    <select name="chauffeur_id" id="chauffeur_id" class="form-select border-start-0" required>
-                                        <option value="" selected disabled>Sélectionner un chauffeur...</option>
-                                        @foreach($chauffeurs as $chauffeur)
-                                            <option value="{{ $chauffeur->id }}" {{ old('chauffeur_id') == $chauffeur->id ? 'selected' : '' }}>
-                                                {{ $chauffeur->nom_complet }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+        .form-card {
+            background: #ffffff;
+            border: 1px solid #e2eaf8;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(15, 42, 110, 0.06);
+            overflow: hidden;
+            padding: 2rem;
+        }
 
-                            <!-- Numéro du Camion -->
-                            <div class="col-md-6">
-                                <label for="numero_camion" class="form-label fw-semibold">Numéro du Camion <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0 text-muted">
-                                        <i class="bi bi-truck-front"></i>
-                                    </span>
-                                    <select name="numero_camion" id="numero_camion" class="form-select border-start-0" required>
-                                        <option value="" disabled selected>Sélectionner un camion...</option>
-                                        <option value="21872|A|15" {{ old('numero_camion') == '21872|A|15' ? 'selected' : '' }}>21872|A|15</option>
-                                        <option value="64521|B|18" {{ old('numero_camion') == '64521|B|18' ? 'selected' : '' }}>64521|B|18</option>
-                                    </select>
-                                </div>
-                            </div>
+        .form-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
 
-                            <!-- Date d'Expédition -->
-                            <div class="col-md-6">
-                                <label for="date_expedition" class="form-label fw-semibold">Date d'Expédition <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0 text-muted">
-                                        <i class="bi bi-calendar-date"></i>
-                                    </span>
-                                    <input type="date" name="date_expedition" id="date_expedition" 
-                                        class="form-control border-start-0" 
-                                        value="{{ old('date_expedition', date('Y-m-d')) }}" required>
-                                </div>
-                            </div>
+        .form-control, .form-select {
+            padding: 0.65rem 1rem;
+            border: 1.5px solid #e2eaf8;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #1e293b;
+            width: 100%;
+            transition: all 0.2s;
+            background-color: #f8fafc;
+        }
 
-                            <!-- Statut de Livraison -->
-                            <div class="col-md-6">
-                                <label for="statut_livraison" class="form-label fw-semibold">Statut de Livraison <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0 text-muted">
-                                        <i class="bi bi-shield-check"></i>
-                                    </span>
-                                    <select name="statut_livraison" id="statut_livraison" class="form-select border-start-0" required>
-                                        <option value="En cours" {{ old('statut_livraison') == 'En cours' ? 'selected' : '' }}>En cours</option>
-                                        <option value="Livré" {{ old('statut_livraison') == 'Livré' ? 'selected' : '' }}>Livré</option>
-                                    </select>
-                                </div>
-                            </div>
+        .form-control:focus, .form-select:focus {
+            border-color: var(--blue-400);
+            background-color: #fff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
 
-                            <!-- Notes de Livraison -->
-                            <div class="col-12">
-                                <label for="notes_livraison" class="form-label fw-semibold">Notes de Livraison</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0 text-muted align-items-start pt-2">
-                                        <i class="bi bi-card-text"></i>
-                                    </span>
-                                    <textarea name="notes_livraison" id="notes_livraison" class="form-control border-start-0" rows="3" placeholder="Informations complémentaires...">{{ old('notes_livraison') }}</textarea>
-                                </div>
-                            </div>
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #0f1e4a;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f1f5fb;
+        }
 
-                            <!-- Buttons -->
-                            <div class="col-12 mt-5">
-                                <hr class="my-4 opacity-10">
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="reset" class="btn btn-light px-4 fw-semibold text-muted">
-                                        Réinitialiser
-                                    </button>
-                                    <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">
-                                        <i class="bi bi-plus-circle me-2"></i>Créer l'Expédition
-                                    </button>
-                                </div>
-                            </div>
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(29, 78, 216, 0.35);
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
 
-                        </div>
-                    </form>
-                </div>
-            </div>
+        .btn-submit:hover {
+            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.5);
+            transform: translateY(-1px);
+        }
 
-            <!-- Info Help -->
-            <div class="mt-4 p-3 bg-white border border-primary border-start-4 rounded shadow-sm">
-                <div class="d-flex">
-                    <i class="bi bi-info-circle-fill text-primary me-3 h4 mb-0"></i>
-                    <div>
-                        <p class="mb-0 small text-dark"><strong>Note:</strong> Assurez-vous que le chauffeur et le camion sélectionnés sont disponibles pour la date prévue.</p>
-                    </div>
-                </div>
-            </div>
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+    </style>
 
+    <div class="page-header">
+        <div class="page-header-left">
+            <h2><i class="bi bi-truck me-2" style="color:var(--blue-500);"></i>Nouvelle Expédition</h2>
+            <p>Créez une nouvelle expédition et assignez un chauffeur</p>
         </div>
+        <a href="{{ route('expeditions.index') }}" class="btn-back">
+            <i class="bi bi-arrow-left"></i> Retour à la liste
+        </a>
     </div>
-</div>
 
-<style>
-    .border-start-4 {
-        border-left-width: 4px !important;
-    }
-    .form-control:focus, .form-select:focus {
-        border-color: #6384ff;
-        box-shadow: 0 0 0 0.25rem rgba(99, 132, 255, 0.1);
-    }
-    .input-group-text {
-        transition: all 0.2s ease;
-    }
-    .input-group:focus-within .input-group-text {
-        color: #6384ff !important;
-        background-color: #fff !important;
-        border-color: #6384ff !important;
-    }
-    .card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .btn-primary {
-        background: linear-gradient(45deg, #1a1d2e, #4a5d99);
-        border: none;
-    }
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(99, 132, 255, 0.3);
-    }
-</style>
+    @if ($errors->any())
+        <div class="alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <div class="form-card">
+        <form action="{{ route('expeditions.store') }}" method="POST">
+            @csrf
+            
+            <div class="section-title">
+                <i class="bi bi-info-circle-fill" style="color:var(--blue-500);"></i>
+                Informations Générales
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label for="chauffeur_id" class="form-label">Chauffeur</label>
+                    <select name="chauffeur_id" id="chauffeur_id" class="form-select" required>
+                        <option value="" selected disabled>Sélectionner un chauffeur...</option>
+                        @foreach($chauffeurs as $chauffeur)
+                            <option value="{{ $chauffeur->id }}" {{ old('chauffeur_id') == $chauffeur->id ? 'selected' : '' }}>
+                                {{ $chauffeur->nom_complet }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="numero_camion" class="form-label">Numéro du Camion</label>
+                    <input type="text" name="numero_camion" id="numero_camion" class="form-control" 
+                           placeholder="Ex: 21872|A|15" value="{{ old('numero_camion') }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="date_expedition" class="form-label">Date d'Expédition</label>
+                    <input type="date" name="date_expedition" id="date_expedition" class="form-control" 
+                           value="{{ old('date_expedition', date('Y-m-d')) }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="statut_livraison" class="form-label">Statut Initial</label>
+                    <select name="statut_livraison" id="statut_livraison" class="form-select" required>
+                        <option value="En cours" {{ old('statut_livraison') == 'En cours' ? 'selected' : '' }}>En cours</option>
+                        <option value="Livré" {{ old('statut_livraison') == 'Livré' ? 'selected' : '' }}>Livré</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label for="notes_livraison" class="form-label">Notes de Livraison</label>
+                    <textarea name="notes_livraison" id="notes_livraison" class="form-control" rows="3" 
+                              placeholder="Informations complémentaires sur la livraison...">{{ old('notes_livraison') }}</textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 2.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                <button type="reset" style="background:none; border:none; color:#64748b; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                    Réinitialiser
+                </button>
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-plus-lg"></i> Créer l'Expédition
+                </button>
+            </div>
+        </form>
+    </div>
 @endsection

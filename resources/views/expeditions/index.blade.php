@@ -160,9 +160,22 @@
             <h2><i class="bi bi-truck me-2" style="color:var(--blue-500);"></i>Expéditions</h2>
             <p>Gérez vos expéditions et suivez les livraisons</p>
         </div>
-        <a href="{{ route('expeditions.create') }}" class="btn-add">
-            <i class="bi bi-plus-lg"></i> Nouvelle Expédition
-        </a>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <form action="{{ route('expeditions.index') }}" method="GET" style="display: flex; gap: 0.5rem; margin: 0;">
+                <input type="text" name="search" placeholder="Rechercher une commande, camion..." value="{{ $search ?? '' }}" style="padding: 0.55rem 1rem; border: 1.5px solid #e2eaf8; border-radius: 10px; font-size: 0.88rem; outline: none; width: 280px; background: #fff; color: #1e293b;">
+                <button type="submit" class="btn-add" style="padding: 0.55rem 0.8rem; margin: 0; border: none; box-shadow: none;">
+                    <i class="bi bi-search"></i>
+                </button>
+                @if(isset($search) && $search)
+                    <a href="{{ route('expeditions.index') }}" class="btn-add" style="padding: 0.55rem 0.8rem; background: #fff5f5; color: #ef4444; border: 1px solid #fecaca; box-shadow: none; margin: 0;">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                @endif
+            </form>
+            <a href="{{ route('expeditions.create') }}" class="btn-add">
+                <i class="bi bi-plus-lg"></i> Nouvelle Expédition
+            </a>
+        </div>
     </div>
 
     @if (session('success'))
@@ -177,10 +190,11 @@
             <table class="custom-table">
                 <thead>
                     <tr>
-                        <th><i class="bi bi-hash me-1"></i> ID</th>
+                        {{-- <th><i class="bi bi-hash me-1"></i> ID</th> --}}
                         <th><i class="bi bi-person me-1"></i> Chauffeur</th>
                         <th><i class="bi bi-calendar3 me-1"></i> Date Expédition</th>
                         <th><i class="bi bi-truck me-1"></i> Camion</th>
+                        <th><i class="bi bi-bag-check me-1"></i> Commandes</th>
                         <th style="text-align:center;"><i class="bi bi-flag me-1"></i> Statut</th>
                         <th style="width:180px;text-align:center;"><i class="bi bi-gear me-1"></i> Actions</th>
                     </tr>
@@ -188,10 +202,26 @@
                 <tbody>
                     @forelse ($expeditions as $exped)
                         <tr>
-                            <td><strong>#{{ $exped->id }}</strong></td>
+                            {{-- <td><strong>#{{ $exped->id }}</strong></td> --}}
                             <td>{{ $exped->employes->nom_complet ?? 'N/A' }}</td>
                             <td>{{ \Carbon\Carbon::parse($exped->date_expedition)->format('d/m/Y') }}</td>
                             <td>{{ $exped->numero_camion }}</td>
+                            <td>
+                                @if($exped->commandesClients->count() > 0)
+                                    <div style="display:flex; flex-wrap:wrap; gap:4px;">
+                                        @foreach($exped->commandesClients->take(3) as $cmd)
+                                            <span style="font-size:0.7rem; background:#f1f5f9; color:#475569; padding:2px 6px; border-radius:4px; border:1px solid #e2e8f0;">
+                                                {{ $cmd->numero_commande ?: '#'.$cmd->id }}
+                                            </span>
+                                        @endforeach
+                                        @if($exped->commandesClients->count() > 3)
+                                            <span style="font-size:0.7rem; color:#94a3b8; padding:2px 6px;">+{{ $exped->commandesClients->count() - 3 }} autres</span>
+                                        @endif
+                                    </div>
+                                @else
+                                    <span style="color:#cbd5e1; font-size:0.8rem;">Aucune</span>
+                                @endif
+                            </td>
                             <td style="text-align:center;">
                                 @if($exped->statut_livraison == 'Livré' || $exped->statut_livraison == 'Livrée')
                                     <span class="badge-statut livre"
@@ -236,7 +266,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" style="text-align:center; padding: 3rem;">
+                            <td colspan="7" style="text-align:center; padding: 3rem;">
                                 <div style="color: #94a3b8;"><i class="bi bi-emoji-frown"
                                         style="font-size: 2rem;"></i><br>Aucune expédition trouvée.</div>
                             </td>

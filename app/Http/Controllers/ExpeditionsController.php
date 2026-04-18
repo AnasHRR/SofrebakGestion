@@ -8,10 +8,26 @@ use Illuminate\Http\Request;
 
 class ExpeditionsController extends Controller
 {
-    public function index()
+    public function index(Request $req)
     {
-        $expeditions = Expeditions::with(['employes'])->get();
-        return view("expeditions.index", compact("expeditions"));
+        $search = $req->input('search');
+        $query = Expeditions::with(['employes', 'commandesClients']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('numero_camion', 'like', "%$search%")
+                    ->orWhereHas('employes', function ($q2) use ($search) {
+                        $q2->where('nom_complet', 'like', "%$search%");
+                    })
+                    ->orWhereHas('commandesClients', function ($q2) use ($search) {
+                        $q2->where('numero_commande', 'like', "%$search%")
+                            ->orWhere('id', 'like', "%$search%");
+                    });
+            });
+        }
+
+        $expeditions = $query->orderBy('id', 'desc')->get();
+        return view("expeditions.index", compact("expeditions", "search"));
     }
 
     public function create()
@@ -39,15 +55,27 @@ class ExpeditionsController extends Controller
         return to_route('expeditions.index')->with('success', 'Expedition ajoutée avec succès.');
     }
 
-    public function show(Expeditions $expedition)
+    public function show(Request $request, Expeditions $expedition)
     {
-        $expedition->load('employes', 'commandesClients.client');
-        return view('expeditions.show', compact('expedition'));
+        $search = $request->input('search');
+        $expedition->load(['employes', 'commandesClients' => function($query) use ($search) {
+            $query->with('client');
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('numero_commande', 'like', "%$search%")
+                      ->orWhereHas('client', function($q2) use ($search) {
+                          $q2->where('nom_entreprise', 'like', "%$search%");
+                      });
+                });
+            }
+        }]);
+        
+        return view('expeditions.show', compact('expedition', 'search'));
     }
 
     public function edit(Expeditions $expedition)
     {
-        if ($expedition->statut_livraison === 'Livré') {
+        if ($expedition->statut_livraison === 'Livré' || $expedition->statut_livraison === 'Livrée') {
             return back()->with('error', 'Impossible de modifier une expédition déjà validée.');
         }
         $chauffeurs = employes::all();
@@ -56,7 +84,7 @@ class ExpeditionsController extends Controller
 
     public function update(Request $req, Expeditions $expedition)
     {
-        if ($expedition->statut_livraison === 'Livré') {
+        if ($expedition->statut_livraison === 'Livré' || $expedition->statut_livraison === 'Livrée') {
             return back()->with('error', 'Impossible de modifier une expédition déjà validée.');
         }
         $req->validate([
@@ -79,7 +107,7 @@ class ExpeditionsController extends Controller
 
     public function destroy(Expeditions $expedition)
     {
-        if ($expedition->statut_livraison === 'Livré') {
+        if ($expedition->statut_livraison === 'Livré' || $expedition->statut_livraison === 'Livrée') {
             return back()->with('error', 'Impossible de supprimer une expédition déjà validée.');
         }
         $expedition->delete();
@@ -89,11 +117,17 @@ class ExpeditionsController extends Controller
     public function valider($id)
     {
         $expedition = Expeditions::with('commandesClients')->findOrFail($id);
-        
+
         $expedition->update([
             'statut_livraison' => 'Livrée'
         ]);
 
+        // Valider aussi les commandes associées
+        foreach ($expedition->commandesClients as $commande) {
+            $commande->update([
+                'statut' => 'Livrée'
+            ]);
+        }
+
         return to_route('expeditions.index')->with('success', 'Expédition et commandes associées validées avec succès.');
-    }
-}
+    }}

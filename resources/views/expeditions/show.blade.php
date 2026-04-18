@@ -405,9 +405,11 @@
         <a href="{{ route('expeditions.index') }}" class="btn-back">
             <i class="bi bi-arrow-left"></i> Retour
         </a>
-        <a href="{{ route('expeditions.edit', $expedition->id) }}" class="btn-edit-main">
-            <i class="bi bi-pencil-fill"></i> Modifier
-        </a>
+        @if($expedition->statut_livraison !== 'Livré' && $expedition->statut_livraison !== 'Livrée')
+            <a href="{{ route('expeditions.edit', $expedition->id) }}" class="btn-edit-main">
+                <i class="bi bi-pencil-fill"></i> Modifier
+            </a>
+        @endif
     </div>
 </div>
 
@@ -474,16 +476,31 @@
 
         <!-- Commandes Clients Table -->
         <div class="products-card">
-            <div class="products-header">
-                <i class="bi bi-bag-check-fill" style="color:var(--blue-500);font-size:1.1rem;"></i>
-                <h3>Commandes associées</h3>
-                <span class="count-badge">{{ count($expedition->commandesClients) }}</span>
+            <div class="products-header" style="justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <i class="bi bi-bag-check-fill" style="color:var(--blue-500);font-size:1.1rem;"></i>
+                    <h3>Commandes associées</h3>
+                    <span class="count-badge">{{ count($expedition->commandesClients) }}</span>
+                </div>
+                
+                <form action="{{ route('expeditions.show', $expedition->id) }}" method="GET" style="display: flex; gap: 0.4rem; margin: 0;">
+                    <input type="text" name="search" placeholder="Filtrer commandes..." value="{{ $search ?? '' }}" 
+                           style="padding: 0.35rem 0.8rem; border: 1.5px solid #e2eaf8; border-radius: 8px; font-size: 0.75rem; outline: none; width: 180px;">
+                    <button type="submit" class="btn-icon" style="width:30px; height:30px; background:var(--blue-500); color:#fff; border:none; border-radius:8px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-search" style="font-size:0.75rem;"></i>
+                    </button>
+                    @if(isset($search) && $search)
+                        <a href="{{ route('expeditions.show', $expedition->id) }}" class="btn-icon" style="width:30px; height:30px; background:#fff5f5; color:#ef4444; border:1.5px solid #fecaca; border-radius:8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-x-lg" style="font-size:0.75rem;"></i>
+                        </a>
+                    @endif
+                </form>
             </div>
             <div style="overflow-x:auto;">
                 <table class="products-table">
                     <thead>
                         <tr>
-                            <th><i class="bi bi-hash me-1"></i> Réf.</th>
+                            <th><i class="bi bi-hash me-1"></i>Réf.</th>
                             <th><i class="bi bi-person me-1"></i> Client</th>
                             <th style="text-align:center;"><i class="bi bi-flag me-1"></i> Statut</th>
                             <th style="text-align:right;"><i class="bi bi-cash me-1"></i> Montant</th>
@@ -587,16 +604,18 @@
                 </div>
 
                 <div class="sidebar-actions">
-                    <a href="{{ route('expeditions.edit', $expedition->id) }}" class="sidebar-btn sidebar-btn-edit">
-                        <i class="bi bi-pencil-fill"></i> Modifier
-                    </a>
-                    <form action="{{ route('expeditions.destroy', $expedition->id) }}" method="POST"
-                          onsubmit="return confirm('Supprimer cette expédition ?');">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="sidebar-btn sidebar-btn-delete">
-                            <i class="bi bi-trash-fill"></i> Supprimer
-                        </button>
-                    </form>
+                    @if($expedition->statut_livraison !== 'Livré' && $expedition->statut_livraison !== 'Livrée')
+                        <a href="{{ route('expeditions.edit', $expedition->id) }}" class="sidebar-btn sidebar-btn-edit">
+                            <i class="bi bi-pencil-fill"></i> Modifier
+                        </a>
+                        <form action="{{ route('expeditions.destroy', $expedition->id) }}" method="POST"
+                            onsubmit="return confirm('Supprimer cette expédition ?');">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="sidebar-btn sidebar-btn-delete">
+                                <i class="bi bi-trash-fill"></i> Supprimer
+                            </button>
+                        </form>
+                    @endif
                     <a href="{{ route('expeditions.index') }}" class="sidebar-btn sidebar-btn-back">
                         <i class="bi bi-arrow-return-left"></i> Retour à la liste
                     </a>

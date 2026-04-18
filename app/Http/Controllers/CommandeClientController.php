@@ -29,9 +29,27 @@ class CommandeClientController extends Controller
             $query->whereDate('date_commande', $request->date_commande);
         }
 
-        $commandeClient = $query->get();
+        // ── Calcul des stats avant de masquer les livrées ──
+        $allResultsForStats = $query->get();
+        $stats = [
+            'total' => $allResultsForStats->count(),
+            'livrees' => $allResultsForStats->whereIn('statut', ['Livrée', 'Livré'])->count(),
+            'en_cours' => $allResultsForStats->whereIn('statut', ['Nouvelle', 'En préparation', 'Expédiée'])->count(),
+            'montant_total' => $allResultsForStats->sum('montant_total'),
+        ];
 
-        return view('commandes.index', compact('commandeClient'));
+        $showValidated = $request->boolean('show_validated');
+        if (!$showValidated) {
+            $query->where(function($q) {
+                $q->where('statut', '!=', 'Livrée')
+                  ->where('statut', '!=', 'Livré')
+                  ->orWhereNull('statut');
+            });
+        }
+
+        $commandeClient = $query->orderBy('id', 'desc')->get();
+
+        return view('commandes.index', compact('commandeClient', 'showValidated', 'stats'));
     }
 
     /**
@@ -82,13 +100,23 @@ class CommandeClientController extends Controller
 
         DB::beginTransaction();
         try {
+            $dateLivraison = $validatedData['date_livraison'] ?? null;
+            $statut = $validatedData['statut'] ?? 'Nouvelle';
+            if (!empty($validatedData['expedition_id'])) {
+                $exped = Expeditions::find($validatedData['expedition_id']);
+                if ($exped) {
+                    $dateLivraison = $exped->date_expedition;
+                    $statut = 'Expédiée';
+                }
+            }
+
             $commande = CommandeClient::create([
                 'numero_commande' => $validatedData['numero_commande'],
                 'date_commande' => $validatedData['date_commande'],
                 'client_id' => $validatedData['client_id'],
                 'comptable_id' => $validatedData['comptable_id'] ?? null,
-                'date_livraison' => $validatedData['date_livraison'] ?? null,
-                'statut' => $validatedData['statut'] ?? 'Nouvelle',
+                'date_livraison' => $dateLivraison,
+                'statut' => $statut,
                 'statut_paiement' => $validatedData['statut_paiement'] ?? 'Non payé',
                 'montant_total' => $validatedData['montant_total'] ?? 0,
                 'notes' => $validatedData['notes'] ?? null,
@@ -133,6 +161,9 @@ class CommandeClientController extends Controller
     public function edit(string $id)
     {
         $commandeClient = CommandeClient::with('details')->findOrFail($id);
+        if ($commandeClient->statut === 'Livrée' || $commandeClient->statut === 'Livré') {
+            return back()->with('error', 'Impossible de modifier une commande déjà livrée.');
+        }
         $clients = clients::all();
         $produits = Produits::all();
         $employes = employes::where('poste', 'Comptable')->get();
@@ -146,6 +177,10 @@ class CommandeClientController extends Controller
     public function update(Request $request, string $id)
     {
         $commandeClient = CommandeClient::findOrFail($id);
+
+        if ($commandeClient->statut === 'Livrée' || $commandeClient->statut === 'Livré') {
+            return back()->with('error', 'Impossible de modifier une commande déjà livrée.');
+        }
 
         $validatedData = $request->validate([
             'numero_commande' => 'required|string|max:255',
@@ -185,13 +220,30 @@ class CommandeClientController extends Controller
 
         DB::beginTransaction();
         try {
+            $dateLivraison = $validatedData['date_livraison'] ?? $commandeClient->date_livraison;
+            $statut = $validatedData['statut'] ?? $commandeClient->statut;
+
+            if (!empty($validatedData['expedition_id'])) {
+                $exped = Expeditions::find($validatedData['expedition_id']);
+                if ($exped) {
+                    $dateLivraison = $exped->date_expedition;
+                    $statut = 'Expédiée';
+                }
+            } else {
+                // Si l'expédition est retirée alors qu'elle existait
+                if ($commandeClient->expedition_id && empty($validatedData['expedition_id'])) {
+                    $statut = 'En préparation';
+                    $dateLivraison = null;
+                }
+            }
+
             $commandeClient->update([
                 'numero_commande' => $validatedData['numero_commande'],
                 'date_commande' => $validatedData['date_commande'],
                 'client_id' => $validatedData['client_id'],
                 'comptable_id' => $validatedData['comptable_id'] ?? null,
-                'date_livraison' => $validatedData['date_livraison'] ?? null,
-                'statut' => $validatedData['statut'] ?? 'Nouvelle',
+                'date_livraison' => $dateLivraison,
+                'statut' => $statut,
                 'statut_paiement' => $validatedData['statut_paiement'] ?? 'Non payé',
                 'montant_total' => $validatedData['montant_total'] ?? 0,
                 'notes' => $validatedData['notes'] ?? null,
@@ -212,8 +264,7 @@ class CommandeClientController extends Controller
                 ]);
             }
 
-            DB::commit();
-        } catch (\Exception $e) {
+            DB::commit();        } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->withErrors(['error' => 'Erreur lors de la mise à jour de la commande: ' . $e->getMessage()]);
         }
@@ -226,8 +277,20 @@ class CommandeClientController extends Controller
      */
     public function destroy(string $id)
     {
-        $commandeClient = CommandeClient::findOrFail($id);
-        $commandeClient->delete();
+        $commandeClient = CommandeClient::with('details')->findOrFail($id);
+        if ($commandeClient->statut === 'Livrée' || $commandeClient->statut === 'Livré') {
+            return back()->with('error', 'Impossible de supprimer une commande déjà livrée.');
+        }
+
+        DB::beginTransaction();
+        try {
+            $commandeClient->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Erreur lors de la suppression: ' . $e->getMessage());
+        }
+
         return to_route('commandes.index')->with('success', 'Commande supprimée avec succès.');
     }
 }

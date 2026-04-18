@@ -611,9 +611,20 @@
         <h2><i class="bi bi-bag-plus-fill me-2" style="color:var(--blue-500);"></i>Commandes</h2>
         <p>Gérez vos commandes clients, statuts et paiements</p>
     </div>
-    <a href="{{ route('commandes.create') }}" class="btn-add">
-        <i class="bi bi-plus-lg"></i> Nouvelle Commande
-    </a>
+    <div style="display: flex; gap: 0.8rem; align-items: center;">
+        @if($showValidated)
+            <a href="{{ route('commandes.index', array_merge(request()->all(), ['show_validated' => 0])) }}" class="btn-back" style="padding: 0.55rem 1rem; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; font-weight: 700; background: #f8fafc; border: 1.5px solid #e2eaf8; color: #64748b;">
+                <i class="bi bi-eye-slash-fill"></i> Masquer livrées
+            </a>
+        @else
+            <a href="{{ route('commandes.index', array_merge(request()->all(), ['show_validated' => 1])) }}" class="btn-back" style="padding: 0.55rem 1rem; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; font-weight: 700; background: #eff6ff; border: 1.5px solid #bfdbfe; color: var(--blue-600);">
+                <i class="bi bi-eye-fill"></i> Afficher livrées
+            </a>
+        @endif
+        <a href="{{ route('commandes.create') }}" class="btn-add">
+            <i class="bi bi-plus-lg"></i> Nouvelle Commande
+        </a>
+    </div>
 </div>
 
 @if (session('success'))
@@ -628,30 +639,28 @@
     <div class="stat-chip">
         <div class="stat-chip-icon blue"><i class="bi bi-bag-fill"></i></div>
         <div>
-            <div class="stat-chip-value">{{ count($commandeClient) }}</div>
+            <div class="stat-chip-value">{{ $stats['total'] }}</div>
             <div class="stat-chip-label">Total Commandes</div>
         </div>
     </div>
     <div class="stat-chip">
         <div class="stat-chip-icon green"><i class="bi bi-check-circle-fill"></i></div>
         <div>
-            @php $livrees = $commandeClient->where('statut', 'Livrée')->count(); @endphp
-            <div class="stat-chip-value">{{ $livrees }}</div>
+            <div class="stat-chip-value">{{ $stats['livrees'] }}</div>
             <div class="stat-chip-label">Livrées</div>
         </div>
     </div>
     <div class="stat-chip">
         <div class="stat-chip-icon orange"><i class="bi bi-clock-history"></i></div>
         <div>
-            @php $enCours = $commandeClient->whereIn('statut', ['Nouvelle', 'En préparation', 'Expédiée'])->count(); @endphp
-            <div class="stat-chip-value">{{ $enCours }}</div>
+            <div class="stat-chip-value">{{ $stats['en_cours'] }}</div>
             <div class="stat-chip-label">En cours</div>
         </div>
     </div>
     <div class="stat-chip">
         <div class="stat-chip-icon indigo"><i class="bi bi-cash-stack"></i></div>
         <div>
-            <div class="stat-chip-value">{{ number_format($commandeClient->sum('montant_total'), 2, ',', ' ') }} <span style="font-size:0.72rem;font-weight:500;color:#64748b;">DH</span></div>
+            <div class="stat-chip-value">{{ number_format($stats['montant_total'], 2, ',', ' ') }} <span style="font-size:0.72rem;font-weight:500;color:#64748b;">DH</span></div>
             <div class="stat-chip-label">Montant Total</div>
         </div>
     </div>
@@ -848,17 +857,19 @@
                                 <a href="{{ route('commandes.show', $commande->id) }}" class="btn-icon btn-icon-view" title="Détails">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
-                                <a href="{{ route('commandes.edit', $commande->id) }}" class="btn-icon btn-icon-edit" title="Modifier">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </a>
-                                <form action="{{ route('commandes.destroy', $commande->id) }}" method="POST"
-                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?');" style="margin:0;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-icon btn-icon-delete" title="Supprimer">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-                                </form>
+                                @if($commande->statut !== 'Livrée' && $commande->statut !== 'Livré')
+                                    <a href="{{ route('commandes.edit', $commande->id) }}" class="btn-icon btn-icon-edit" title="Modifier">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <form action="{{ route('commandes.destroy', $commande->id) }}" method="POST"
+                                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?');" style="margin:0;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-icon btn-icon-delete" title="Supprimer">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </td>
                     </tr>

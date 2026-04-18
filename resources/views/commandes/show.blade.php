@@ -605,9 +605,11 @@
         <button onclick="window.print()" class="btn-print">
             <i class="bi bi-printer-fill"></i> Imprimer
         </button>
-        <a href="{{ route('commandes.edit', $commandeClient->id) }}" class="btn-edit-main">
-            <i class="bi bi-pencil-fill"></i> Modifier
-        </a>
+        @if($commandeClient->statut !== 'Livrée' && $commandeClient->statut !== 'Livré')
+            <a href="{{ route('commandes.edit', $commandeClient->id) }}" class="btn-edit-main">
+                <i class="bi bi-pencil-fill"></i> Modifier
+            </a>
+        @endif
     </div>
 </div>
 
@@ -829,16 +831,18 @@
                 </div>
 
                 <div class="sidebar-actions">
-                    <a href="{{ route('commandes.edit', $commandeClient->id) }}" class="sidebar-btn sidebar-btn-edit">
-                        <i class="bi bi-pencil-fill"></i> Modifier
-                    </a>
-                    <form action="{{ route('commandes.destroy', $commandeClient->id) }}" method="POST"
-                          onsubmit="return confirm('Supprimer cette commande ?');">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="sidebar-btn sidebar-btn-delete">
-                            <i class="bi bi-trash-fill"></i> Supprimer
-                        </button>
-                    </form>
+                    @if($commandeClient->statut !== 'Livrée' && $commandeClient->statut !== 'Livré')
+                        <a href="{{ route('commandes.edit', $commandeClient->id) }}" class="sidebar-btn sidebar-btn-edit">
+                            <i class="bi bi-pencil-fill"></i> Modifier
+                        </a>
+                        <form action="{{ route('commandes.destroy', $commandeClient->id) }}" method="POST"
+                            onsubmit="return confirm('Supprimer cette commande ?');">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="sidebar-btn sidebar-btn-delete">
+                                <i class="bi bi-trash-fill"></i> Supprimer
+                            </button>
+                        </form>
+                    @endif
                     <a href="{{ route('commandes.index') }}" class="sidebar-btn sidebar-btn-back">
                         <i class="bi bi-arrow-return-left"></i> Retour à la liste
                     </a>

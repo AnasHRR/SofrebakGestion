@@ -24,10 +24,6 @@ class Produits extends Model
         'date_expiration'
     ];
 
-    /**
-     * Append the computed stock_actuel attribute to the model.
-     * This ensures $produit->stock_actuel works everywhere (Blade, JSON, etc.)
-     */
     protected $appends = ['stock_actuel'];
 
     // Relation to fournisseur
@@ -46,19 +42,11 @@ class Produits extends Model
         return $this->hasMany(Stock::class , 'produit_id' , 'id');
     }
 
-    /**
-     * Relation: all detail lines from client orders (sales) for this product.
-     * Each detail line has a produit_id and quantite.
-     */
     public function detailsCommandesClients()
     {
         return $this->hasMany(detailsCommandeClients::class, 'produit_id', 'id');
     }
 
-    /**
-     * Relation: all detail lines from supplier orders (purchases) for this product.
-     * Each detail line has a produit_id and quantite.
-     */
     public function detailsCommandesFournisseurs()
     {
         return $this->hasMany(detailsCommandesFournisseurs::class, 'produit_id', 'id');
