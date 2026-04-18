@@ -643,10 +643,9 @@
                                 <select name="statut" id="statut"
                                     class="custom-select @error('statut') is-invalid @enderror" required>
                                     <option value="" disabled>-- Choisir un statut --</option>
-                                    <option value="Impayée" {{ old('statut', $facture->statut) == 'Impayée' ? 'selected' : '' }}>Non payée</option>
+                                    <option value="Non payée" {{ old('statut', $facture->statut) == 'Non payée' || old('statut', $facture->statut) == 'Impayée' ? 'selected' : '' }}>Non payée</option>
                                     <option value="Partiellement payée" {{ old('statut', $facture->statut) == 'Partiellement payée' ? 'selected' : '' }}>Partiellement payée</option>
-                                    <option value="Payée" {{ old('statut', $facture->statut) == 'Payée' ? 'selected' : '' }}>
-                                        Payée</option>
+                                    <option value="Payée" {{ old('statut', $facture->statut) == 'Payée' ? 'selected' : '' }}>Payée</option>
                                 </select>
                             </div>
                             @error('statut')
@@ -674,16 +673,52 @@
             const sousTotal = document.getElementById('sous_total');
             const montantTva = document.getElementById('montant_tva');
             const montantTotal = document.getElementById('montant_total');
+            const montantPaye = document.getElementById('montant_paye');
+            const statutSelect = document.getElementById('statut');
+
+            function updateCalculations() {
+                const st = parseFloat(sousTotal.value) || 0;
+                
+                // Calculate 20% TVA
+                const tva = st * 0.20;
+                montantTva.value = tva.toFixed(2);
+                
+                // Calculate Total
+                const total = st + tva;
+                montantTotal.value = total.toFixed(2);
+
+                updateStatus();
+            }
 
             function calcTotal() {
                 const st = parseFloat(sousTotal.value) || 0;
                 const tva = parseFloat(montantTva.value) || 0;
                 montantTotal.value = (st + tva).toFixed(2);
+                updateStatus();
             }
 
-            if (sousTotal && montantTva && montantTotal) {
-                sousTotal.addEventListener('input', calcTotal);
+            function updateStatus() {
+                const total = parseFloat(montantTotal.value) || 0;
+                const paye = parseFloat(montantPaye.value) || 0;
+
+                if (total === 0) {
+                    statutSelect.value = "Non payée";
+                    return;
+                }
+
+                if (paye <= 0) {
+                    statutSelect.value = "Non payée";
+                } else if (paye < total) {
+                    statutSelect.value = "Partiellement payée";
+                } else {
+                    statutSelect.value = "Payée";
+                }
+            }
+
+            if (sousTotal && montantTva && montantTotal && montantPaye && statutSelect) {
+                sousTotal.addEventListener('input', updateCalculations);
                 montantTva.addEventListener('input', calcTotal);
+                montantPaye.addEventListener('input', updateStatus);
             }
         });
     </script>

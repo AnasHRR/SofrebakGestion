@@ -525,8 +525,8 @@
                     <th><i class="bi bi-bag me-1"></i> Commande</th>
                     <th><i class="bi bi-calendar3 me-1"></i> Date Facture</th>
                     <th><i class="bi bi-calendar-check me-1"></i> Échéance</th>
-                    <th><i class="bi bi-calculator me-1"></i> Sous Total</th>
-                    <th><i class="bi bi-percent me-1"></i> TVA</th>
+                    {{-- <th><i class="bi bi-calculator me-1"></i> Sous Total</th> --}}
+                    {{-- <th><i class="bi bi-percent me-1"></i> TVA</th> --}}
                     <th><i class="bi bi-cash me-1"></i> Total</th>
                     <th><i class="bi bi-wallet2 me-1"></i> Payé</th>
                     <th style="text-align:center;"><i class="bi bi-flag me-1"></i> Statut</th>
@@ -580,20 +580,20 @@
                         </td>
 
                         <!-- Sous Total -->
-                        <td>
+                        {{-- <td>
                             <span class="badge-montant">
                                 {{ number_format($facture->sous_total, 2, ',', ' ') }}
                                 <span class="currency">DH</span>
                             </span>
-                        </td>
+                        </td> --}}
 
                         <!-- TVA -->
-                        <td>
+                        {{-- <td>
                             <span style="font-weight:600;color:#64748b;">
                                 {{ number_format($facture->montant_tva, 2, ',', ' ') }}
                                 <span style="font-size:0.7rem;font-weight:400;">DH</span>
                             </span>
-                        </td>
+                        </td> --}}
 
                         <!-- Total -->
                         <td>

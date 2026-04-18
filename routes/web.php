@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/commandes-fournisseurs', CommandesFournisseursController::class)->names('commandesFournisseurs');
     Route::resource('/factures', FacturesController::class);
     Route::post('/expeditions/{id}/valider', [ExpeditionsController::class, 'valider'])->name('expeditions.valider');
+    Route::get('/commandes/{commande}/produits', [RetoursController::class, 'getProduits'])->name('commandes.get-produits');
     Route::resource('/retours', RetoursController::class);
     Route::resource('/expeditions', ExpeditionsController::class);
 });

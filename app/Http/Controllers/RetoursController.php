@@ -85,4 +85,21 @@ class RetoursController extends Controller
         $retour->delete();
         return to_route('retours.index')->with('success', 'Retour supprimé avec succès');
     }
+
+    public function getProduits($commandeId)
+    {
+        $commande = CommandeClient::with('details.produit')->find($commandeId);
+        if (!$commande) {
+            return response()->json([]);
+        }
+
+        $produits = $commande->details->map(function ($detail) {
+            return [
+                'id' => $detail->produit->id,
+                'nom_produit' => $detail->produit->nom_produit
+            ];
+        });
+
+        return response()->json($produits);
+    }
 }

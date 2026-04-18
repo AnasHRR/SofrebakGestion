@@ -158,7 +158,7 @@
                         <label class="form-label">Commande Client</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-hash"></i></span>
-                            <select name="commande_client_id" class="form-select @error('commande_client_id') is-invalid @enderror" required>
+                            <select name="commande_client_id" id="commande_client_id" class="form-select @error('commande_client_id') is-invalid @enderror" required>
                                 <option value="" selected disabled>Sélectionner une commande</option>
                                 @foreach($commandes as $cmd)
                                     <option value="{{ $cmd->id }}">Commande {{ $cmd->numero_commande ?? '#'.$cmd->id }}</option>
@@ -172,11 +172,8 @@
                         <label class="form-label">Produit</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-box"></i></span>
-                            <select name="produit_id" class="form-select @error('produit_id') is-invalid @enderror" required>
-                                <option value="" selected disabled>Sélectionner un produit</option>
-                                @foreach($produits as $prod)
-                                    <option value="{{ $prod->id }}">{{ $prod->nom_produit }}</option>
-                                @endforeach
+                            <select name="produit_id" id="produit_id" class="form-select @error('produit_id') is-invalid @enderror" required disabled>
+                                <option value="" selected disabled>Sélectionner d'abord une commande</option>
                             </select>
                         </div>
                         @error('produit_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
@@ -257,4 +254,43 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const commandeSelect = document.getElementById('commande_client_id');
+    const produitSelect = document.getElementById('produit_id');
+
+    commandeSelect.addEventListener('change', function() {
+        const commandeId = this.value;
+        if (!commandeId) return;
+
+        // Reset and disable product select
+        produitSelect.innerHTML = '<option value="" selected disabled>Chargement des produits...</option>';
+        produitSelect.disabled = true;
+
+        // Fetch products for the selected command
+        fetch(`/commandes/${commandeId}/produits`)
+            .then(response => response.json())
+            .then(data => {
+                produitSelect.innerHTML = '<option value="" selected disabled>Sélectionner un produit</option>';
+                
+                if (data.length === 0) {
+                    produitSelect.innerHTML = '<option value="" selected disabled>Aucun produit trouvé</option>';
+                } else {
+                    data.forEach(produit => {
+                        const option = document.createElement('option');
+                        option.value = produit.id;
+                        option.textContent = produit.nom_produit;
+                        produitSelect.appendChild(option);
+                    });
+                    produitSelect.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching products:', error);
+                produitSelect.innerHTML = '<option value="" selected disabled>Erreur lors du chargement</option>';
+            });
+    });
+});
+</script>
 @endsection
