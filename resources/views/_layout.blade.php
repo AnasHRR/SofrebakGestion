@@ -1113,6 +1113,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="/paiements" class="{{ (request()->is('paiements') || request()->is('paiements/*')) ? 'active' : '' }}">
+                            <div class="nav-icon-box"><i class="bi bi-cash"></i></div>
+                            <span>paiements</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/stock" class="{{ request()->is('stock*') ? 'active' : '' }}">
                             <div class="nav-icon-box"><i class="bi bi-clipboard2-data-fill"></i></div>
                             <span>Stock</span>

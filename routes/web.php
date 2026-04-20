@@ -10,6 +10,7 @@ use App\Http\Controllers\ExpeditionsController;
 use App\Http\Controllers\FacturesController;
 use App\Http\Controllers\FournisseursController;
 use App\Http\Controllers\ProduitsController;
+use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\RetoursController;
 use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
@@ -43,4 +44,5 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     Route::get('/commandes/{commande}/produits', [RetoursController::class, 'getProduits'])->name('commandes.get-produits');
     Route::resource('/retours', RetoursController::class);
     Route::resource('/expeditions', ExpeditionsController::class);
+    Route::resource('/paiements', PaiementController::class);
 });

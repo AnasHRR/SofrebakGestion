@@ -13,16 +13,16 @@ class Paiement extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(clients::class, 'client_id' , 'id');
     }
 
     public function comptable()
     {
-        return $this->belongsTo(employes::class);
+        return $this->belongsTo(employes::class , 'comptable_id' , 'id');
     }
 
     public function region()
     {
-        return $this->belongsTo(regions::class);
+        return $this->belongsTo(regions::class , 'region_id' , 'id');
     }
 }
