@@ -959,6 +959,111 @@
             display: block;
             margin-bottom: 0.5rem;
         }
+        /* ── Custom Modal Overlay ── */
+        .custom-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 23, 53, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .custom-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .custom-modal-content {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.9);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+
+        .custom-modal-overlay.active .custom-modal-content {
+            transform: scale(1);
+        }
+
+        .custom-modal-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .custom-modal-icon {
+            width: 64px;
+            height: 64px;
+            background: #fee2e2;
+            color: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1.2rem;
+        }
+
+        .custom-modal-header h4 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .custom-modal-body p {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .custom-modal-footer {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .btn-confirm {
+            background: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-confirm:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
+        }
     </style>
 </head>
 
@@ -1109,7 +1214,7 @@
                             <span>En ligne</span>
                         </div>
                     </div>
-                    <form method="POST" action="/logout" style="margin:0;">
+                    <form method="POST" action="/logout" style="margin:0;" onsubmit="handleLogout(event)">
                         @csrf
                         <button type="submit" class="footer-logout" title="Déconnexion"
                             style="border:none; background:none; cursor:pointer;">
@@ -1208,7 +1313,7 @@
                             <span>Paramètres</span>
                         </a>
                         <div class="dropdown-divider"></div>
-                        <form method="POST" action="/logout" id="logoutForm">
+                        <form method="POST" action="/logout" id="logoutForm" onsubmit="handleLogout(event)">
                             @csrf
                             <button type="submit" class="dropdown-item-link logout-link">
                                 <i class="bi bi-box-arrow-right"></i>
@@ -1352,6 +1457,52 @@
                     updateNotificationCount();
                 }
             }
+        });
+    </script>
+    <!-- ════════ CUSTOM LOGOUT MODAL ════════ -->
+    <div class="custom-modal-overlay" id="logoutModal">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <div class="custom-modal-icon">
+                    <i class="bi bi-box-arrow-right"></i>
+                </div>
+                <h4>Déconnexion</h4>
+            </div>
+            <div class="custom-modal-body">
+                <p>Êtes-vous sûr de vouloir vous déconnecter de votre session ?</p>
+            </div>
+            <div class="custom-modal-footer">
+                <button class="modal-btn btn-cancel" onclick="closeLogoutModal()">Annuler</button>
+                <button class="modal-btn btn-confirm" onclick="confirmLogout()">Déconnexion</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let formToSubmit = null;
+
+        function handleLogout(event, formId) {
+            event.preventDefault();
+            formToSubmit = document.getElementById(formId) || event.target.closest('form');
+            document.getElementById('logoutModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('active');
+            document.body.style.overflow = '';
+            formToSubmit = null;
+        }
+
+        function confirmLogout() {
+            if (formToSubmit) {
+                formToSubmit.submit();
+            }
+        }
+
+        // Close on overlay click
+        document.getElementById('logoutModal').addEventListener('click', function(e) {
+            if (e.target === this) closeLogoutModal();
         });
     </script>
 </body>

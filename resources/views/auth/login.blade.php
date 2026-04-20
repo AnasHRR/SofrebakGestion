@@ -498,6 +498,13 @@
                 <p>Connectez-vous à votre compte pour continuer</p>
             </div>
 
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; padding: 0.75rem 1rem; border-radius: 10px; margin-bottom: 1.3rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 0.6rem;">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="form-error">
                     <i class="bi bi-exclamation-circle-fill"></i>
@@ -549,6 +556,14 @@
     </div>
 
     <script>
+        // Prevent back history after logout
+        (function () {
+            window.history.pushState(null, null, window.location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, null, window.location.href);
+            };
+        })();
+
         function togglePassword(inputId, btn) {
             const input = document.getElementById(inputId);
             const icon = btn.querySelector('i');
