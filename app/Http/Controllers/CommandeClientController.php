@@ -61,7 +61,10 @@ class CommandeClientController extends Controller
         $produits = Produits::all();
         $commandeClient = CommandeClient::all();
         $employes = employes::where('poste', 'Comptable')->get();
-        $expeditions = Expeditions::with('employes')->get();
+        // Just the expeditions not validated
+        $expeditions = Expeditions::with('employes')
+            ->whereNotIn('statut_livraison', ['Livré', 'Livrée'])
+            ->get();
         return view('commandes.create', compact('clients', 'produits', 'employes', 'commandeClient', 'expeditions'));
     }
 
@@ -167,7 +170,12 @@ class CommandeClientController extends Controller
         $clients = clients::all();
         $produits = Produits::all();
         $employes = employes::where('poste', 'Comptable')->get();
-        $expeditions = Expeditions::with('employes')->get();
+        
+        $expeditions = Expeditions::with('employes')
+            ->whereNotIn('statut_livraison', ['Livré', 'Livrée'])
+            ->orWhere('id', $commandeClient->expedition_id)
+            ->get();
+            
         return view('commandes.edit', compact('commandeClient', 'clients', 'produits', 'employes', 'expeditions'));
     }
 

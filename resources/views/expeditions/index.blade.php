@@ -163,10 +163,15 @@
         <div style="display: flex; gap: 1rem; align-items: center;">
             <form action="{{ route('expeditions.index') }}" method="GET" style="display: flex; gap: 0.5rem; margin: 0;">
                 <input type="text" name="search" placeholder="Rechercher une commande, camion..." value="{{ $search ?? '' }}" style="padding: 0.55rem 1rem; border: 1.5px solid #e2eaf8; border-radius: 10px; font-size: 0.88rem; outline: none; width: 280px; background: #fff; color: #1e293b;">
+                <select name="statut" onchange="this.form.submit()" style="padding: 0.55rem 1rem; border: 1.5px solid #e2eaf8; border-radius: 10px; font-size: 0.88rem; outline: none; background: #fff; color: #1e293b; cursor: pointer;">
+                    <option value="">Tous les statuts</option>
+                    <option value="Livrée" {{ (isset($statut) && $statut == 'Livrée') ? 'selected' : '' }}>Livrée</option>
+                    <option value="Non Livrée" {{ (isset($statut) && $statut == 'Non Livrée') ? 'selected' : '' }}>Non Livrée</option>
+                </select>
                 <button type="submit" class="btn-add" style="padding: 0.55rem 0.8rem; margin: 0; border: none; box-shadow: none;">
                     <i class="bi bi-search"></i>
                 </button>
-                @if(isset($search) && $search)
+                @if((isset($search) && $search) || (isset($statut) && $statut))
                     <a href="{{ route('expeditions.index') }}" class="btn-add" style="padding: 0.55rem 0.8rem; background: #fff5f5; color: #ef4444; border: 1px solid #fecaca; box-shadow: none; margin: 0;">
                         <i class="bi bi-x-lg"></i>
                     </a>

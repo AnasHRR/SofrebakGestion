@@ -11,6 +11,7 @@ class ExpeditionsController extends Controller
     public function index(Request $req)
     {
         $search = $req->input('search');
+        $statut = $req->input('statut');
         $query = Expeditions::with(['employes', 'commandesClients']);
 
         if ($search) {
@@ -26,8 +27,16 @@ class ExpeditionsController extends Controller
             });
         }
 
+        if ($statut) {
+            if ($statut === 'Livrée') {
+                $query->whereIn('statut_livraison', ['Livré', 'Livrée']);
+            } elseif ($statut === 'Non Livrée') {
+                $query->whereNotIn('statut_livraison', ['Livré', 'Livrée']);
+            }
+        }
+
         $expeditions = $query->orderBy('id', 'desc')->get();
-        return view("expeditions.index", compact("expeditions", "search"));
+        return view("expeditions.index", compact("expeditions", "search", "statut"));
     }
 
     public function create()
