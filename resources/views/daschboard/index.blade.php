@@ -2,24 +2,6 @@
 @section('title', 'Dashboard - Sofrebak')
 @section('content')
 
-    @php
-        use Carbon\Carbon;
-
-        $totalCA = \App\Models\Factures::sum('montant_total') ?? 0;
-        $totalCommandes = \App\Models\CommandeClient::count();
-        $totalClients = \App\Models\clients::count();
-        $totalProduits = \App\Models\Produits::count();
-        $totalDepenses = \App\Models\commandesFournisseurs::sum('montant_total') ?? 0;
-        $benefice = $totalCA - $totalDepenses;
-
-        $recentCommandes = \App\Models\CommandeClient::with('client')
-            ->orderBy('date_commande', 'desc')
-            ->take(7)
-            ->get();
-
-        $maxBar = max($totalCA, $totalDepenses, 1);
-    @endphp
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -37,6 +19,69 @@
             margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
+        }
+        
+        /* ... existing styles ... */
+        
+        .chart-panel {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            gap: 10px;
+            padding-top: 20px;
+        }
+
+        .chart-bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        .chart-bar {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            transition: height 1s ease, background 0.3s;
+            position: relative;
+            min-height: 2px;
+        }
+
+        .chart-bar:hover {
+            filter: brightness(1.1);
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #1e293b;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .chart-bar:hover .chart-value {
+            opacity: 1;
+        }
+
+        .chart-label {
+            margin-top: 8px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #94a3b8;
         }
 
         .db-hero::before {
@@ -748,6 +793,38 @@
 
         {{-- Left column --}}
         <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+            {{-- Monthly Sales Chart --}}
+            <div class="panel d1">
+                <div class="panel-head">
+                    <h3 class="panel-title"><i class="bi bi-calendar-check-fill me-2" style="color:#3b82f6;"></i>Ventes Mensuelles ({{ date('Y') }})</h3>
+                </div>
+                <div class="panel-body">
+                    @php
+                        $maxMonthly = 0;
+                        foreach($monthlyData as $data) {
+                            if($data['total'] > $maxMonthly) $maxMonthly = $data['total'];
+                        }
+                        $maxMonthly = $maxMonthly > 0 ? $maxMonthly : 1;
+                        
+                        $monthColors = [
+                            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', 
+                            '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', 
+                            '#84cc16', '#6366f1', '#14b8a6', '#475569'
+                        ];
+                    @endphp
+                    <div class="chart-container">
+                        @foreach($monthlyData as $index => $data)
+                            <div class="chart-bar-wrapper">
+                                <div class="chart-bar" style="height: {{ ($data['total'] / $maxMonthly) * 100 }}%; background: {{ $monthColors[$index] ?? '#3b82f6' }};">
+                                    <div class="chart-value">{{ number_format($data['total'], 0, ',', ' ') }} Dh</div>
+                                </div>
+                                <div class="chart-label">{{ $data['month'] }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
 
             {{-- Finance summary --}}
             <div class="panel d1">

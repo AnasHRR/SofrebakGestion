@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriesProduitsController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\CommandeClientController;
 use App\Http\Controllers\CommandesFournisseursController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpeditionsController;
 use App\Http\Controllers\FacturesController;
 use App\Http\Controllers\FournisseursController;
@@ -29,7 +30,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 
 // ── Protected Routes (auth required) ──
 Route::middleware('auth')->group(function () {
-    Route::view('/dashboard', 'daschboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/clients', ClientsController::class);
     Route::resource('/stock', StockController::class);
     Route::resource('/produits', ProduitsController::class);
