@@ -61,7 +61,7 @@
                                         <option value="" selected disabled>Type...</option>
                                         <option value="Entrée">Entrée (Ajout)</option>
                                         <option value="Sortie">Sortie (Retrait)</option>
-                                        <option value="Ajustement">Ajustement</option>
+                                        <option value="Retour">Retour (Avoir)</option>
                                     </select>
                                 </div>
                             </div>

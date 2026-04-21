@@ -57,7 +57,7 @@ class StockController extends Controller
      */
     public function show(Stock $stock)
     {
-        // return view('stock.show', compact('stock'));
+        return view('stock.show', compact('stock'));
     }
 
     /**

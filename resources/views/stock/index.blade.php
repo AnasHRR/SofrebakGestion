@@ -303,6 +303,10 @@
                             </td>
                             <td>
                                 <div class="action-buttons justify-content-center">
+                                    <a href="{{ route('stock.show', $stock->id) }}" class="btn-icon btn-icon-view"
+                                        title="Voir">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
                                     <a href="{{ route('stock.edit', $stock->id) }}" class="btn-icon btn-icon-edit"
                                         title="Modifier">
                                         <i class="bi bi-pencil-fill"></i>

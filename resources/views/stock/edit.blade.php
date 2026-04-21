@@ -63,7 +63,7 @@
                                     <select name="type_mouvement" id="type_mouvement" class="form-select border-start-0" required>
                                         <option value="Entrée" {{ $stock->type_mouvement == 'Entrée' ? 'selected' : '' }}>Entrée (Ajout)</option>
                                         <option value="Sortie" {{ $stock->type_mouvement == 'Sortie' ? 'selected' : '' }}>Sortie (Retrait)</option>
-                                        <option value="Ajustement" {{ $stock->type_mouvement == 'Ajustement' ? 'selected' : '' }}>Ajustement</option>
+                                        <option value="Retour" {{ $stock->type_mouvement == 'Retour' ? 'selected' : '' }}>Retour (Avoir)</option>
                                     </select>
                                 </div>
                             </div>
