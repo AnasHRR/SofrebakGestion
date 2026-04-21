@@ -42,6 +42,11 @@ class Produits extends Model
         return $this->hasMany(Stock::class , 'produit_id' , 'id');
     }
 
+    public function retours()
+    {
+        return $this->hasMany(Retours::class, 'produit_id', 'id');
+    }
+
     public function detailsCommandesClients()
     {
         return $this->hasMany(detailsCommandeClients::class, 'produit_id', 'id');
@@ -58,6 +63,7 @@ class Produits extends Model
      * Formula: stock = stock_initial
      *                 + total_purchases (commandes fournisseurs)
      *                 - total_sales (commandes clients)
+     *                 + total_returns (retours clients)
      *                 + stock_entries (mouvements Entrée)
      *                 - stock_exits (mouvements Sortie)
      *
@@ -72,11 +78,12 @@ class Produits extends Model
         // From commandes
         $totalAchats    = $this->detailsCommandesFournisseurs()->sum('quantite');
         $totalVentes    = $this->detailsCommandesClients()->sum('quantite');
+        $totalRetours   = $this->retours()->sum('quantite');
 
         // From stock movements (Entrée / Sortie)
         $totalEntrees   = $this->stock()->where('type_mouvement', 'Entrée')->sum('quantite');
         $totalSorties   = $this->stock()->where('type_mouvement', 'Sortie')->sum('quantite');
 
-        return $stockInitial + $totalAchats - $totalVentes + $totalEntrees - $totalSorties;
+        return $stockInitial + $totalAchats - $totalVentes + $totalRetours + $totalEntrees - $totalSorties;
     }
 }

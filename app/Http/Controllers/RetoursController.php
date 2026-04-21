@@ -7,7 +7,10 @@ use App\Models\CommandeClient;
 use App\Models\Produits;
 use App\Models\regions;
 use App\Models\employes;
+use App\Models\Stock;
+use App\Models\detailsCommandeClients;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RetoursController extends Controller
 {
@@ -42,11 +45,11 @@ class RetoursController extends Controller
             'produits.*.notes' => 'nullable',
         ]);
 
-        \Illuminate\Support\Facades\DB::beginTransaction();
+        DB::beginTransaction();
         try {
             foreach ($req->produits as $index => $prod) {
                 // Find the detail in the command
-                $detail = \App\Models\detailsCommandeClients::where('commande_client_id', $req->commande_client_id)
+                $detail = detailsCommandeClients::where('commande_client_id', $req->commande_client_id)
                     ->where('produit_id', $prod['produit_id'])
                     ->first();
 
@@ -54,8 +57,13 @@ class RetoursController extends Controller
                     throw new \Exception("Le produit ID " . $prod['produit_id'] . " n'existe pas dans cette commande.");
                 }
 
-                if ($prod['quantite'] > $detail->quantite) {
-                    throw new \Exception("La quantité retournée (" . $prod['quantite'] . ") pour le produit " . ($detail->produit->nom_produit ?? $prod['produit_id']) . " est supérieure à la quantité commandée (" . $detail->quantite . ").");
+                // Calculate total quantity already returned for this product in this command
+                $dejaRetourne = Retours::where('commande_client_id', $req->commande_client_id)
+                    ->where('produit_id', $prod['produit_id'])
+                    ->sum('quantite');
+
+                if (($prod['quantite'] + $dejaRetourne) > $detail->quantite) {
+                    throw new \Exception("La quantité totale retournée (" . ($prod['quantite'] + $dejaRetourne) . ") pour le produit " . ($detail->produit->nom_produit ?? $prod['produit_id']) . " est supérieure à la quantité commandée (" . $detail->quantite . ").");
                 }
 
                 // Create the return record
@@ -70,28 +78,24 @@ class RetoursController extends Controller
                     'notes' => $prod['notes'],
                 ]);
 
-                // Update command details
-                if ($prod['quantite'] == $detail->quantite) {
-                    $detail->delete();
-                } else {
-                    $detail->quantite -= $prod['quantite'];
-                    // Recalculate prix_total for the detail row
-                    // prix_total = (qty * unit_price) * (1 - remise/100)
-                    $detail->prix_total = ($detail->quantite * $detail->prix_unitaire) * (1 - ($detail->remise ?? 0) / 100);
-                    $detail->save();
-                }
+                // Create stock movement for visibility and history
+                Stock::create([
+                    'produit_id' => $prod['produit_id'],
+                    'type_mouvement' => 'Entrée',
+                    'quantite' => $prod['quantite'],
+                    'date_mouvement' => $req->date_retour,
+                    'reference_id' => 'RETOUR-' . $req->commande_client_id,
+                    'notes' => 'Retour Client - Commande #' . $req->commande_client_id . ' - Motif: ' . $prod['motif']
+                ]);
             }
 
-            // Recalculate total amount of the command
-            $commande = CommandeClient::find($req->commande_client_id);
-            $newTotal = $commande->details()->sum('prix_total');
-            $commande->montant_total = $newTotal;
-            $commande->save();
+            // Update command total amount
+            $this->updateCommandeTotal($req->commande_client_id);
 
-            \Illuminate\Support\Facades\DB::commit();
-            return to_route('retours.index')->with('success', 'Retours enregistrés et commande mise à jour avec succès');
+            DB::commit();
+            return to_route('retours.index')->with('success', 'Retours enregistrés et stock mis à jour avec succès');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\DB::rollBack();
+            DB::rollBack();
             return back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
     }
@@ -126,15 +130,61 @@ class RetoursController extends Controller
             'notes' => 'nullable',
         ]);
 
-        $retour->update($req->all());
-        return to_route('retours.index')->with('success', 'Retour modifié avec succès');
+        DB::beginTransaction();
+        try {
+            // Update associated stock movement if it exists
+            $stock = Stock::where('reference_id', 'RETOUR-' . $retour->commande_client_id)
+                ->where('produit_id', $retour->produit_id)
+                ->where('quantite', $retour->quantite)
+                ->where('date_mouvement', $retour->date_retour)
+                ->first();
+
+            if ($stock) {
+                $stock->update([
+                    'produit_id' => $req->produit_id,
+                    'quantite' => $req->quantite,
+                    'date_mouvement' => $req->date_retour,
+                    'notes' => 'Retour Client (Modifié) - Commande #' . $req->commande_client_id . ' - Motif: ' . $req->motif
+                ]);
+            }
+
+            $retour->update($req->all());
+            
+            // Update command total
+            $this->updateCommandeTotal($retour->commande_client_id);
+
+            DB::commit();
+            return to_route('retours.index')->with('success', 'Retour modifié avec succès');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => $e->getMessage()])->withInput();
+        }
     }
 
     
     public function destroy(Retours $retour)
     {
-        $retour->delete();
-        return to_route('retours.index')->with('success', 'Retour supprimé avec succès');
+        DB::beginTransaction();
+        try {
+            // Delete associated stock movement
+            Stock::where('reference_id', 'RETOUR-' . $retour->commande_client_id)
+                ->where('produit_id', $retour->produit_id)
+                ->where('quantite', $retour->quantite)
+                ->where('date_mouvement', $retour->date_retour)
+                ->delete();
+
+            $commandeId = $retour->commande_client_id;
+            $retour->delete();
+
+            // Update command total
+            $this->updateCommandeTotal($commandeId);
+
+            DB::commit();
+            return to_route('retours.index')->with('success', 'Retour supprimé avec succès');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     public function getProduits($commandeId)
@@ -152,5 +202,30 @@ class RetoursController extends Controller
         });
 
         return response()->json($produits);
+    }
+
+    /**
+     * Helper to update the total amount of a command based on its details and returns.
+     */
+    private function updateCommandeTotal($commandeId)
+    {
+        $commande = CommandeClient::with('details')->find($commandeId);
+        if (!$commande) return;
+
+        $totalOriginal = $commande->details->sum('prix_total');
+        
+        $totalRetours = 0;
+        $allRetours = Retours::where('commande_client_id', $commandeId)->get();
+        
+        foreach ($allRetours as $r) {
+            $detail = $commande->details->where('produit_id', $r->produit_id)->first();
+            if ($detail) {
+                $prixUnitaireNet = $detail->prix_unitaire * (1 - ($detail->remise ?? 0) / 100);
+                $totalRetours += $r->quantite * $prixUnitaireNet;
+            }
+        }
+
+        $commande->montant_total = $totalOriginal - $totalRetours;
+        $commande->save();
     }
 }

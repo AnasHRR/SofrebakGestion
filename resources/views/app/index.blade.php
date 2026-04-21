@@ -2706,7 +2706,8 @@
                     <p>Plateforme de gestion interne pour <strong
                             style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Sté
                             Sofrebak</strong> — importation et distribution des matériaux de construction au Maroc.
-                        Développée par <strong>Nexora</strong>.</p>
+                        Développée par <a href="https://anaslagziri.com"
+                            style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Anas Lagziri</a>.</p>
                     <div class="footer-socials">
                         <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
                         <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
@@ -2748,7 +2749,7 @@
 
             <div class="footer-bottom">
                 <p>&copy; {{ date('Y') }} Sté Sofrebak — Tous droits réservés. Développé par <a href="#"
-                        style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Nexora</a></p>
+                        style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Anas Lagziri</a></p>
                 <div class="footer-bottom-links">
                     <a href="#">Confidentialité</a>
                     <a href="#">Conditions</a>
