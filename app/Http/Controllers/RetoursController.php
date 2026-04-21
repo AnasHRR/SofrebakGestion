@@ -81,7 +81,7 @@ class RetoursController extends Controller
                 // Create stock movement for visibility and history
                 Stock::create([
                     'produit_id' => $prod['produit_id'],
-                    'type_mouvement' => 'Entrée',
+                    'type_mouvement' => 'Retour',
                     'quantite' => $prod['quantite'],
                     'date_mouvement' => $req->date_retour,
                     'reference_id' => 'RETOUR-' . $req->commande_client_id,

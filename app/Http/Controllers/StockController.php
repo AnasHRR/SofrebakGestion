@@ -80,8 +80,8 @@ class StockController extends Controller
             'type_mouvement' => 'required|in:Entrée,Sortie,Ajustement',
             'quantite' => 'required|integer|min:1',
             'date_mouvement' => 'required|date',
-            'reference_id' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
+            'reference_id' => 'nullable|string|max:100',
+            'notes' => 'nullable|string|max:255',
         ]);
 
         $stock->update($req->all());
