@@ -153,6 +153,60 @@
             font-size: 0.88rem;
             font-weight: 600;
         }
+
+        /* ── Status Filter Select ── */
+        .filter-select-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .filter-select-icon {
+            position: absolute;
+            left: 0.75rem;
+            color: var(--blue-500);
+            font-size: 0.85rem;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .filter-select {
+            appearance: none;
+            -webkit-appearance: none;
+            padding: 0.55rem 2.4rem 0.55rem 2.1rem;
+            border: 1.5px solid #e2eaf8;
+            border-radius: 10px;
+            font-size: 0.845rem;
+            font-weight: 600;
+            outline: none;
+            background: #fff;
+            color: #1e293b;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            min-width: 175px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+        }
+
+        .filter-select:hover {
+            border-color: var(--blue-400, #60a5fa);
+            background-color: #f8fbff;
+        }
+
+        .filter-select:focus {
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            background-color: #fff;
+        }
+
+        /* Active filter pill (when a status is selected) */
+        .filter-select.is-active {
+            border-color: var(--blue-500);
+            background-color: #eff6ff;
+            color: var(--blue-700, #1d4ed8);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
     </style>
 
     <div class="page-header">
@@ -163,11 +217,19 @@
         <div style="display: flex; gap: 1rem; align-items: center;">
             <form action="{{ route('expeditions.index') }}" method="GET" style="display: flex; gap: 0.5rem; margin: 0;">
                 <input type="text" name="search" placeholder="Rechercher une commande, camion..." value="{{ $search ?? '' }}" style="padding: 0.55rem 1rem; border: 1.5px solid #e2eaf8; border-radius: 10px; font-size: 0.88rem; outline: none; width: 280px; background: #fff; color: #1e293b;">
-                <select name="statut" onchange="this.form.submit()" style="padding: 0.55rem 1rem; border: 1.5px solid #e2eaf8; border-radius: 10px; font-size: 0.88rem; outline: none; background: #fff; color: #1e293b; cursor: pointer;">
-                    <option value="">Tous les statuts</option>
-                    <option value="Livrée" {{ (isset($statut) && $statut == 'Livrée') ? 'selected' : '' }}>Livrée</option>
-                    <option value="Non Livrée" {{ (isset($statut) && $statut == 'Non Livrée') ? 'selected' : '' }}>Non Livrée</option>
-                </select>
+<div class="filter-select-wrapper">
+                    <i class="bi bi-funnel-fill filter-select-icon"></i>
+                    <select
+                        name="statut"
+                        id="statut-filter"
+                        class="filter-select {{ (isset($statut) && $statut) ? 'is-active' : '' }}"
+                        onchange="this.form.submit()"
+                    >
+                        <option value="">Tous les statuts</option>
+                        <option value="Livrée"  {{ (isset($statut) && $statut == 'Livrée')     ? 'selected' : '' }}>Livrée</option>
+                        <option value="Non Livrée" {{ (isset($statut) && $statut == 'Non Livrée') ? 'selected' : '' }}>Non Livrée</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn-add" style="padding: 0.55rem 0.8rem; margin: 0; border: none; box-shadow: none;">
                     <i class="bi bi-search"></i>
                 </button>

@@ -128,12 +128,71 @@
         box-shadow: 0 6px 15px rgba(29, 78, 216, 0.35);
         color: #fff;
     }
+
+    /* ── Products Table ── */
+    .products-table-container {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid #e2eaf8;
+    }
+
+    .table-products {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 0.75rem;
+    }
+
+    .table-products th {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        padding: 0 1rem;
+        border: none;
+    }
+
+    .btn-add-row {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1.5px dashed #cbd5e1;
+        border-radius: 10px;
+        padding: 0.6rem;
+        font-weight: 700;
+        font-size: 0.84rem;
+        width: 100%;
+        transition: all 0.2s;
+    }
+
+    .btn-add-row:hover {
+        background: #e2eaf8;
+        border-color: var(--blue-300);
+        color: var(--blue-600);
+    }
+
+    .btn-remove-row {
+        background: #fff1f2;
+        color: #e11d48;
+        border: 1px solid #fecdd3;
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .btn-remove-row:hover {
+        background: #e11d48;
+        color: #fff;
+    }
 </style>
 
 <div class="page-header">
     <div class="page-header-left">
         <h2><i class="bi bi-plus-circle-fill me-2" style="color:var(--blue-500);"></i>Nouveau Retour</h2>
-        <p>Enregistrez un nouveau retour de marchandise</p>
+        <p>Enregistrez un ou plusieurs produits en retour</p>
     </div>
     <a href="{{ route('retours.index') }}" class="btn-back">
         <i class="bi bi-arrow-left me-1"></i> Retour à la liste
@@ -141,67 +200,64 @@
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-lg-10">
+    <div class="col-lg-12">
+        @if ($errors->has('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px; font-weight: 600;">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ $errors->first('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="form-card">
-            <form action="{{ route('retours.store') }}" method="POST">
+            <form action="{{ route('retours.store') }}" method="POST" id="retourForm">
                 @csrf
                 
                 <div class="row g-4">
-                    <!-- Informations Commande -->
+                    <!-- Informations Générales -->
                     <div class="col-12">
                         <div class="section-title">
-                            <i class="bi bi-receipt"></i> Détails de la Commande
+                            <i class="bi bi-receipt"></i> Informations Générales
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">Commande Client</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-hash"></i></span>
                             <select name="commande_client_id" id="commande_client_id" class="form-select @error('commande_client_id') is-invalid @enderror" required>
                                 <option value="" selected disabled>Sélectionner une commande</option>
                                 @foreach($commandes as $cmd)
-                                    <option value="{{ $cmd->id }}">Commande {{ $cmd->numero_commande ?? '#'.$cmd->id }}</option>
+                                    <option value="{{ $cmd->id }}" {{ old('commande_client_id') == $cmd->id ? 'selected' : '' }}>
+                                        Commande {{ $cmd->numero_commande ?? '#'.$cmd->id }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
                         @error('commande_client_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Produit</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-box"></i></span>
-                            <select name="produit_id" id="produit_id" class="form-select @error('produit_id') is-invalid @enderror" required disabled>
-                                <option value="" selected disabled>Sélectionner d'abord une commande</option>
-                            </select>
-                        </div>
-                        @error('produit_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label">Quantité</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-123"></i></span>
-                            <input type="number" name="quantite" class="form-control @error('quantite') is-invalid @enderror" placeholder="0" min="1" required>
-                        </div>
-                        @error('quantite') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">Date de Retour</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
-                            <input type="date" name="date_retour" class="form-control @error('date_retour') is-invalid @enderror" value="{{ date('Y-m-d') }}" required>
+                            <input type="date" name="date_retour" class="form-control @error('date_retour') is-invalid @enderror" value="{{ old('date_retour', date('Y-m-d')) }}" required>
                         </div>
                         @error('date_retour') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                     </div>
 
-                    <!-- Logistique & Motif -->
-                    <div class="col-12 mt-5">
-                        <div class="section-title">
-                            <i class="bi bi-truck"></i> Logistique & Motif
+                    <div class="col-md-4">
+                        <label class="form-label">Région</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                            <select name="region_id" class="form-select @error('region_id') is-invalid @enderror" required>
+                                <option value="" selected disabled>Choisir une région</option>
+                                @foreach($regions as $reg)
+                                    <option value="{{ $reg->id }}" {{ old('region_id') == $reg->id ? 'selected' : '' }}>{{ $reg->nom }}</option>
+                                @endforeach
+                            </select>
                         </div>
+                        @error('region_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="col-md-6">
@@ -211,42 +267,82 @@
                             <select name="comptable_id" class="form-select @error('comptable_id') is-invalid @enderror" required>
                                 <option value="" selected disabled>Choisir un responsable</option>
                                 @foreach($employes as $emp)
-                                    <option value="{{ $emp->id }}">{{ $emp->nom_complet }}</option>
+                                    <option value="{{ $emp->id }}" {{ old('comptable_id') == $emp->id ? 'selected' : '' }}>{{ $emp->nom_complet }}</option>
                                 @endforeach
                             </select>
                         </div>
                         @error('comptable_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Région</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                            <select name="region_id" class="form-select @error('region_id') is-invalid @enderror" required>
-                                <option value="" selected disabled>Choisir une région</option>
-                                @foreach($regions as $reg)
-                                    <option value="{{ $reg->id }}">{{ $reg->nom }}</option>
-                                @endforeach
-                            </select>
+                    <!-- Liste des Produits -->
+                    <div class="col-12 mt-5">
+                        <div class="section-title">
+                            <i class="bi bi-box-seam"></i> Produits à retourner
                         </div>
-                        @error('region_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label">Motif du retour</label>
-                        <textarea name="motif" class="form-control @error('motif') is-invalid @enderror" rows="3" placeholder="Précisez la raison du retour..." required></textarea>
-                        @error('motif') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="col-12">
-                        <label class="form-label">Notes internes</label>
-                        <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" rows="2" placeholder="Commentaires additionnels (optionnel)"></textarea>
+                        <div class="products-table-container">
+                            <table class="table-products" id="productsTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40%;">Produit</th>
+                                        <th style="width: 15%;">Quantité</th>
+                                        <th style="width: 25%;">Motif</th>
+                                        <th style="width: 15%;">Notes</th>
+                                        <th style="width: 50px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsBody">
+                                    @php
+                                        $oldProduits = old('produits', [[]]);
+                                    @endphp
+                                    @foreach($oldProduits as $index => $oldProd)
+                                        <tr class="product-row">
+                                            <td>
+                                                <select name="produits[{{ $index }}][produit_id]" class="form-select produit-select @error('produits.'.$index.'.produit_id') is-invalid @enderror" required disabled>
+                                                    <option value="" selected disabled>Sélectionner un produit</option>
+                                                    @if(isset($oldProd['produit_id']))
+                                                        <option value="{{ $oldProd['produit_id'] }}" selected>Chargement...</option>
+                                                    @endif
+                                                </select>
+                                                @error('produits.'.$index.'.produit_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            </td>
+                                            <td>
+                                                <input type="number" name="produits[{{ $index }}][quantite]" class="form-control @error('produits.'.$index.'.quantite') is-invalid @enderror" placeholder="0" min="1" value="{{ $oldProd['quantite'] ?? '' }}" required>
+                                                @error('produits.'.$index.'.quantite') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            </td>
+                                            <td>
+                                                <select name="produits[{{ $index }}][motif]" class="form-select @error('produits.'.$index.'.motif') is-invalid @enderror" required>
+                                                    <option value="" selected disabled>Motif</option>
+                                                    <option value="Endommagé" {{ (isset($oldProd['motif']) && $oldProd['motif'] == 'Endommagé') ? 'selected' : '' }}>Endommagé</option>
+                                                    <option value="Périmé" {{ (isset($oldProd['motif']) && $oldProd['motif'] == 'Périmé') ? 'selected' : '' }}>Périmé</option>
+                                                    <option value="Non conforme" {{ (isset($oldProd['motif']) && $oldProd['motif'] == 'Non conforme') ? 'selected' : '' }}>Non conforme</option>
+                                                    <option value="Autre" {{ (isset($oldProd['motif']) && $oldProd['motif'] == 'Autre') ? 'selected' : '' }}>Autre</option>
+                                                </select>
+                                                @error('produits.'.$index.'.motif') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            </td>
+                                            <td>
+                                                <input type="text" name="produits[{{ $index }}][notes]" class="form-control" placeholder="Notes (opt.)" value="{{ $oldProd['notes'] ?? '' }}">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn-remove-row" style="{{ count($oldProduits) <= 1 ? 'display: none;' : 'display: flex;' }}"><i class="bi bi-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <button type="button" id="addRow" class="btn-add-row mt-3">
+                                <i class="bi bi-plus-lg me-1"></i> Ajouter un autre produit
+                            </button>
+                        </div>
+                        @error('produits') <div class="alert alert-danger mt-2">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="col-12 mt-4 text-end">
                         <button type="reset" class="btn btn-light me-2 fw-bold px-4 border">Réinitialiser</button>
                         <button type="submit" class="btn btn-submit">
-                            <i class="bi bi-check-lg me-1"></i> Créer le Retour
+                            <i class="bi bi-check-lg me-1"></i> Enregistrer le Retour
                         </button>
                     </div>
                 </div>
@@ -258,39 +354,121 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const commandeSelect = document.getElementById('commande_client_id');
-    const produitSelect = document.getElementById('produit_id');
+    const productsBody = document.getElementById('productsBody');
+    const addRowBtn = document.getElementById('addRow');
+    let productsList = [];
+    let rowCount = {{ count($oldProduits) }};
 
+    // Load products when command changes
     commandeSelect.addEventListener('change', function() {
         const commandeId = this.value;
         if (!commandeId) return;
-
-        // Reset and disable product select
-        produitSelect.innerHTML = '<option value="" selected disabled>Chargement des produits...</option>';
-        produitSelect.disabled = true;
 
         // Fetch products for the selected command
         fetch(`/commandes/${commandeId}/produits`)
             .then(response => response.json())
             .then(data => {
-                produitSelect.innerHTML = '<option value="" selected disabled>Sélectionner un produit</option>';
-                
-                if (data.length === 0) {
-                    produitSelect.innerHTML = '<option value="" selected disabled>Aucun produit trouvé</option>';
-                } else {
-                    data.forEach(produit => {
-                        const option = document.createElement('option');
-                        option.value = produit.id;
-                        option.textContent = produit.nom_produit;
-                        produitSelect.appendChild(option);
-                    });
-                    produitSelect.disabled = false;
-                }
+                productsList = data;
+                updateAllProductSelects();
             })
             .catch(error => {
                 console.error('Error fetching products:', error);
-                produitSelect.innerHTML = '<option value="" selected disabled>Erreur lors du chargement</option>';
             });
     });
+
+    function updateAllProductSelects() {
+        const selects = document.querySelectorAll('.produit-select');
+        selects.forEach(select => {
+            const currentValue = select.getAttribute('data-value') || select.value;
+            select.innerHTML = '<option value="" selected disabled>Sélectionner un produit</option>';
+            
+            if (productsList.length === 0) {
+                select.innerHTML = '<option value="" selected disabled>Aucun produit trouvé</option>';
+                select.disabled = true;
+            } else {
+                productsList.forEach(produit => {
+                    const option = document.createElement('option');
+                    option.value = produit.id;
+                    option.textContent = produit.nom_produit;
+                    if (produit.id == currentValue) option.selected = true;
+                    select.appendChild(option);
+                });
+                select.disabled = false;
+            }
+        });
+    }
+
+    // Add row
+    addRowBtn.addEventListener('click', function() {
+        const newRow = document.createElement('tr');
+        newRow.className = 'product-row';
+        newRow.innerHTML = `
+            <td>
+                <select name="produits[${rowCount}][produit_id]" class="form-select produit-select" required>
+                    <option value="" selected disabled>Sélectionner un produit</option>
+                </select>
+            </td>
+            <td>
+                <input type="number" name="produits[${rowCount}][quantite]" class="form-control" placeholder="0" min="1" required>
+            </td>
+            <td>
+                <select name="produits[${rowCount}][motif]" class="form-select" required>
+                    <option value="" selected disabled>Motif</option>
+                    <option value="Endommagé">Endommagé</option>
+                    <option value="Périmé">Périmé</option>
+                    <option value="Non conforme">Non conforme</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" name="produits[${rowCount}][notes]" class="form-control" placeholder="Notes (opt.)">
+            </td>
+            <td>
+                <button type="button" class="btn-remove-row"><i class="bi bi-trash"></i></button>
+            </td>
+        `;
+        productsBody.appendChild(newRow);
+        
+        // Populate the new select
+        const newSelect = newRow.querySelector('.produit-select');
+        productsList.forEach(produit => {
+            const option = document.createElement('option');
+            option.value = produit.id;
+            option.textContent = produit.nom_produit;
+            newSelect.appendChild(option);
+        });
+        if (productsList.length === 0) newSelect.disabled = true;
+
+        rowCount++;
+        updateRemoveButtons();
+    });
+
+    // Remove row
+    productsBody.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-remove-row')) {
+            e.target.closest('tr').remove();
+            updateRemoveButtons();
+        }
+    });
+
+    function updateRemoveButtons() {
+        const rows = productsBody.querySelectorAll('tr');
+        const removeBtns = productsBody.querySelectorAll('.btn-remove-row');
+        if (rows.length <= 1) {
+            removeBtns[0].style.display = 'none';
+        } else {
+            removeBtns.forEach(btn => btn.style.display = 'flex');
+        }
+    }
+
+    // Handle initial state if validation failed (old input)
+    if (commandeSelect.value) {
+        // Store current values as data attributes for updateAllProductSelects
+        document.querySelectorAll('.produit-select').forEach(select => {
+            if (select.value) select.setAttribute('data-value', select.value);
+        });
+        commandeSelect.dispatchEvent(new Event('change'));
+    }
 });
 </script>
 @endsection

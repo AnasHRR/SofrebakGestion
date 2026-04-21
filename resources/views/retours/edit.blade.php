@@ -253,16 +253,24 @@
                             @error('region_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                         </div>
 
-                        <div class="col-12">
+                        <div class="col-md-6">
                             <label class="form-label">Motif du retour</label>
-                            <textarea name="motif" class="form-control @error('motif') is-invalid @enderror" rows="3"
-                                required>{{ $retour->motif }}</textarea>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-chat-left-dots"></i></span>
+                                <select name="motif" class="form-select @error('motif') is-invalid @enderror" required>
+                                    <option value="" disabled>Choisir un motif</option>
+                                    <option value="Endommagé" {{ (old('motif', $retour->motif) == 'Endommagé') ? 'selected' : '' }}>Endommagé</option>
+                                    <option value="Périmé" {{ (old('motif', $retour->motif) == 'Périmé') ? 'selected' : '' }}>Périmé</option>
+                                    <option value="Non conforme" {{ (old('motif', $retour->motif) == 'Non conforme') ? 'selected' : '' }}>Non conforme</option>
+                                    <option value="Autre" {{ (old('motif', $retour->motif) == 'Autre') ? 'selected' : '' }}>Autre</option>
+                                </select>
+                            </div>
                             @error('motif') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label">Notes internes</label>
-                            <textarea name="notes" class="form-control" rows="2">{{ $retour->notes }}</textarea>
+                            <label class="form-label">Notes internes (Détails additionnels)</label>
+                            <textarea name="notes" class="form-control" rows="2" placeholder="Commentaires additionnels (optionnel)">{{ old('notes', $retour->notes) }}</textarea>
                         </div>
 
                         <div class="col-12 mt-4 text-end">
