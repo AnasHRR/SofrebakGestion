@@ -118,16 +118,15 @@
             align-items: center;
             gap: 0.75rem;
         }
-.nav-logo-icon {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, var(--blue-800), var(--blue-900));
-    border-radius: 13px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 20px rgba(10, 23, 64, 0.3);
-}
+        .nav-logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-900));
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(10, 23, 64, 0.3);
             transition: transform 0.3s ease;
         }
 
@@ -1149,6 +1148,17 @@
             margin-bottom: 1.2rem;
         }
 
+        .footer-brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-900));
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(10, 23, 64, 0.3);
+        }
+
         .nav-logo-icon {
             width: 44px;
             height: 44px;
@@ -1309,6 +1319,10 @@
             transform: translateY(0);
         }
 
+        .mobile-auth-links {
+            display: none;
+        }
+
         /* ═══════════════════════════════
            RESPONSIVE
         ═══════════════════════════════ */
@@ -1356,6 +1370,10 @@
         }
 
         @media (max-width: 768px) {
+            .features, .how-it-works, .why-choose, .testimonials, .products-showcase, .about-sofrebak, .cta {
+                padding: 4rem 0;
+            }
+
             .nav-links {
                 display: none;
             }
@@ -1390,16 +1408,31 @@
                 background: rgba(255, 255, 255, 0.08);
             }
 
-            .nav-actions {
-                gap: 0.5rem;
+            .nav-links.mobile-active .mobile-auth-links {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                margin-top: 2rem;
+                padding-top: 2rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                width: 80%;
+            }
+            
+            .nav-links.mobile-active .mobile-auth-links a {
+                width: 100%;
+                text-align: center;
+                font-size: 1.1rem;
+                padding: 0.8rem;
+                border-radius: 12px;
             }
 
-            .nav-btn-ghost {
+            .nav-actions .nav-btn {
                 display: none;
             }
 
             .hero {
-                padding: 8rem 0 4rem;
+                padding: 6rem 0 3rem;
             }
 
             .hero h1 {
@@ -1410,17 +1443,8 @@
                 font-size: 1rem;
             }
 
-            .preview-body {
+            .hero-preview {
                 display: none;
-            }
-
-            .preview-topbar {
-                justify-content: center;
-            }
-
-            .hero-preview-window {
-                transform: none;
-                min-height: 60px;
             }
 
             .features-grid {
@@ -1929,11 +1953,11 @@
             }
 
             .why-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .testimonials-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -1954,6 +1978,14 @@
                 grid-template-columns: 1fr;
             }
 
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
             .why-header h2 {
                 font-size: 2rem;
             }
@@ -1969,7 +2001,7 @@
             <a href="/" class="nav-logo">
                 <div class="nav-logo-icon">
                     <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo"
-                        style="width: 100%; height: 100%; object-fit: contain;">
+                        style="width: 70%; height: 70%; object-fit: contain;">
                 </div>
                 <span class="nav-logo-text">Sofrebak</span>
             </a>
@@ -1979,6 +2011,14 @@
                 <a href="#how">Comment ça marche</a>
                 <a href="#stats">Statistiques</a>
                 <a href="#contact">Contact</a>
+                <div class="mobile-auth-links">
+                    @auth
+                        <a href="/dashboard" class="btn btn-primary" style="margin-top: 1rem;">Dashboard</a>
+                    @else
+                        <a href="/login" class="btn btn-outline-light" style="margin-top: 1rem;">Se connecter</a>
+                        <a href="/register" class="btn btn-primary">Commencer</a>
+                    @endauth
+                </div>
             </div>
 
             <div class="nav-actions">
@@ -2053,7 +2093,7 @@
                             <div class="preview-sidebar-logo">
                                 <div class="preview-sidebar-logo-box">
                                     <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo"
-                                        style="width: 100%; height: 100%; object-fit: contain;">
+                                        style="width: 70%; height: 70%; object-fit: contain;">
                                 </div>
                                 <span>Sofrebak</span>
                             </div>
@@ -2705,8 +2745,9 @@
                     <div class="footer-brand-text">
                         <div class="footer-brand-icon">
                             <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo"
-                                style="width: 40%; height: 40%; object-fit: contain;">
+                                style="width: 70%; height: 70%; object-fit: contain;">
                         </div>
+                        <span class="footer-brand-name">Sofrebak</span>
                     </div>
                     <p>Plateforme de gestion interne pour <strong
                             style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Sté
