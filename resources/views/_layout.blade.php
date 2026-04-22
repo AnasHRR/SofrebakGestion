@@ -155,12 +155,12 @@
         .brand-logo {
             width: 46px;
             height: 46px;
-            background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-900));
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 24px rgba(29, 78, 216, 0.5);
+            box-shadow: 0 8px 24px rgba(10, 23, 64, 0.4);
             flex-shrink: 0;
         }
 

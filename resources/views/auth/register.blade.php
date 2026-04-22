@@ -67,11 +67,11 @@
 
         .branding-logo {
             width: 80px; height: 80px;
-            background: linear-gradient(135deg, #2563eb, #1e3a8a);
+            background: linear-gradient(135deg, #0e2266, #0a1740);
             border-radius: 22px;
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 1.8rem;
-            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 12px 40px rgba(10, 23, 64, 0.4);
             position: relative;
         }
 

@@ -118,16 +118,16 @@
             align-items: center;
             gap: 0.75rem;
         }
-
-        .nav-logo-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
-            border-radius: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+.nav-logo-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--blue-800), var(--blue-900));
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(10, 23, 64, 0.3);
+}
             transition: transform 0.3s ease;
         }
 
@@ -552,7 +552,7 @@
         .preview-sidebar-logo-box {
             width: 28px;
             height: 28px;
-            background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-900));
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -1149,15 +1149,15 @@
             margin-bottom: 1.2rem;
         }
 
-        .footer-brand-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
-            border-radius: 12px;
+        .nav-logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-900));
+            border-radius: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 6px 20px rgba(10, 23, 64, 0.3);
         }
 
         .footer-brand-icon i {
@@ -1592,10 +1592,10 @@
         .about-image-main {
             width: 100%;
             height: 500px;
-            background: linear-gradient(135deg, var(--blue-100), var(--blue-200));
+            background: linear-gradient(135deg, var(--blue-800), var(--blue-900));
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+            box-shadow: 0 20px 60px rgba(10, 23, 64, 0.3);
             position: relative;
         }
 
@@ -2705,9 +2705,8 @@
                     <div class="footer-brand-text">
                         <div class="footer-brand-icon">
                             <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo"
-                                style="width: 100%; height: 100%; object-fit: contain;">
+                                style="width: 40%; height: 40%; object-fit: contain;">
                         </div>
-                        <span class="footer-brand-name">Sofrebak</span>
                     </div>
                     <p>Plateforme de gestion interne pour <strong
                             style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Sté
