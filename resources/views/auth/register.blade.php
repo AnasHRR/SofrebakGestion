@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un compte — Sofrebak Gestion</title>
-    <link rel="icon" type="image/gif" href="{{ asset('logo_page.gif') }}">
+    <link rel="icon" type="image/png" href="{{ asset('logo_Sofrebak.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -467,7 +467,7 @@
 
         <div class="branding-content">
             <div class="branding-logo">
-                <i class="bi bi-boxes"></i>
+                <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
             </div>
             <div class="branding-title">Sofrebak</div>
             <div class="branding-subtitle">Management System</div>

@@ -102,7 +102,7 @@ class RetoursController extends Controller
 
     public function show(Retours $retour)
     {
-        $retour->load(['commande_client', 'produit', 'comptable', 'region']);
+        $retour->load(['commande_client.client', 'produit', 'comptable', 'region']);
         return view('retours.show', compact('retour'));
     }
 

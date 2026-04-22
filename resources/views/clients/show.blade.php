@@ -431,6 +431,144 @@
             min-width: 100%;
         }
     }
+
+    /* ── Orders Section ── */
+    .orders-section {
+        margin-top: 2rem;
+    }
+
+    .section-title-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding-left: 0.5rem;
+    }
+
+    .section-title-container h3 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .orders-card {
+        background: #ffffff;
+        border: 1px solid #e2eaf8;
+        border-radius: 18px;
+        box-shadow: 0 2px 8px rgba(15,42,110,0.06);
+        overflow: hidden;
+    }
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .orders-table th {
+        background: #f8fafc;
+        padding: 1rem;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        border-bottom: 1.5px solid #edf2f7;
+    }
+
+    .orders-table td {
+        padding: 1rem;
+        font-size: 0.88rem;
+        color: #334155;
+        border-bottom: 1px solid #f1f5fb;
+    }
+
+    .orders-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .badge-statut-small {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .statut-nouvelle { background: #eff6ff; color: #2563eb; }
+    .statut-preparation { background: #fff7ed; color: #ea580c; }
+    .statut-expediee { background: #f5f3ff; color: #7c3aed; }
+    .statut-livree { background: #f0fdf4; color: #16a34a; }
+    .statut-annulee { background: #fef2f2; color: #ef4444; }
+    .statut-retour { background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; }
+
+    /* ── Filter Bar ── */
+    .history-filters {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+        background: #f8fafc;
+        padding: 0.4rem;
+        border-radius: 12px;
+        width: fit-content;
+        border: 1px solid #e2eaf8;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1.2rem;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        background: transparent;
+        color: #64748b;
+    }
+
+    .filter-btn.active {
+        background: #ffffff;
+        color: var(--blue-600);
+        box-shadow: 0 2px 6px rgba(15,42,110,0.08);
+    }
+
+    .filter-btn:hover:not(.active) {
+        background: rgba(255,255,255,0.5);
+        color: #475569;
+    }
+
+    /* Action Buttons */
+    .btn-icon {
+        width: 32px; height: 32px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    .btn-icon-view { 
+        background: #f0fdf4; 
+        color: #16a34a; 
+        border: 1.5px solid #bbf7d0; 
+    }
+    
+    .btn-icon-view:hover { 
+        background: #16a34a; 
+        color: #fff; 
+        border-color: #16a34a; 
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(22, 163, 74, 0.2);
+    }
 </style>
 
 <!-- Page Header -->
@@ -553,17 +691,84 @@
                 </div>
             </div>
 
+            <!-- Total Commandes (Brut) -->
+            <div class="detail-field">
+                <div class="detail-field-icon" style="background: #f8fafc;">
+                    <i class="bi bi-bag-fill" style="color: #64748b;"></i>
+                </div>
+                <div class="detail-field-content">
+                    <div class="detail-field-label">Total Commandes (Brut)</div>
+                    <div class="detail-field-value">
+                        {{ number_format($client->total_brut, 2, ',', ' ') }} DH
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Retours (Valeur) -->
+            <div class="detail-field">
+                <div class="detail-field-icon" style="background: #fff1f2;">
+                    <i class="bi bi-arrow-return-left" style="color: #e11d48;"></i>
+                </div>
+                <div class="detail-field-content">
+                    <div class="detail-field-label">Total Retours</div>
+                    <div class="detail-field-value" style="color: #e11d48;">
+                        - {{ number_format($client->total_retours_valeur, 2, ',', ' ') }} DH
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Achats -->
+            <div class="detail-field">
+                <div class="detail-field-icon" style="background: #fff7ed;">
+                    <i class="bi bi-cart-check-fill" style="color: #ea580c;"></i>
+                </div>
+                <div class="detail-field-content">
+                    <div class="detail-field-label">Total des Achats</div>
+                    <div class="detail-field-value" style="color: #ea580c; font-weight: 800;">
+                        {{ number_format($client->total_ventes, 2, ',', ' ') }} DH
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Paiements -->
+            <div class="detail-field">
+                <div class="detail-field-icon" style="background: #f0fdf4;">
+                    <i class="bi bi-cash" style="color: #16a34a;"></i>
+                </div>
+                <div class="detail-field-content">
+                    <div class="detail-field-label">Total des Paiements</div>
+                    <div class="detail-field-value" style="color: #16a34a; font-weight: 800;">
+                        {{ number_format($client->total_paiements, 2, ',', ' ') }} DH
+                    </div>
+                </div>
+            </div>
+
             <!-- Plafond Crédit -->
-            <div class="detail-field full-width">
+            <div class="detail-field">
                 <div class="detail-field-icon">
-                    <i class="bi bi-cash-stack"></i>
+                    <i class="bi bi-shield-lock"></i>
                 </div>
                 <div class="detail-field-content">
                     <div class="detail-field-label">Plafond de Crédit</div>
                     <div class="detail-field-value">
-                        <span class="credit-badge">
-                            <i class="bi bi-check-circle-fill" style="font-size:0.75rem;"></i>
+                        <span class="credit-badge" style="background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;">
                             {{ number_format($client->plafond_credit, 2, ',', ' ') }} DH
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crédit Actuel -->
+            <div class="detail-field">
+                <div class="detail-field-icon">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+                <div class="detail-field-content">
+                    <div class="detail-field-label">Crédit Actuel (Dette)</div>
+                    <div class="detail-field-value">
+                        <span class="credit-badge" style="background: {{ $client->calculated_credit > $client->plafond_credit ? '#fff1f2' : '#f0fdf4' }}; color: {{ $client->calculated_credit > $client->plafond_credit ? '#e11d48' : '#16a34a' }}; border: 1px solid {{ $client->calculated_credit > $client->plafond_credit ? '#fecdd3' : '#bbf7d0' }};">
+                            <i class="bi {{ $client->calculated_credit > $client->plafond_credit ? 'bi-exclamation-triangle-fill' : 'bi-check-circle-fill' }}" style="font-size:0.75rem;"></i>
+                            {{ number_format($client->calculated_credit, 2, ',', ' ') }} DH
                         </span>
                     </div>
                 </div>
@@ -591,4 +796,175 @@
     </div>
 
 </div>
+
+<!-- History Filters -->
+<div class="history-filters">
+    <button class="filter-btn active" onclick="filterHistory('all', this)">
+        <i class="bi bi-grid-fill me-1"></i> Tout
+    </button>
+    <button class="filter-btn" onclick="filterHistory('commandes', this)">
+        <i class="bi bi-cart-check-fill me-1"></i> Commandes
+    </button>
+    <button class="filter-btn" onclick="filterHistory('retours', this)">
+        <i class="bi bi-arrow-return-left me-1"></i> Retours
+    </button>
+</div>
+
+<!-- Orders Section -->
+<div class="orders-section" id="section-commandes">
+    <div class="section-title-container">
+        <i class="bi bi-cart-check-fill" style="color: var(--blue-600); font-size: 1.2rem;"></i>
+        <h3>Historique des Commandes</h3>
+    </div>
+
+    <div class="orders-card">
+        <div style="overflow-x: auto;">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>N° Commande</th>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th>Paiement</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($client->commandes->sortByDesc('date_commande') as $cmd)
+                        <tr>
+                            <td style="font-weight: 700; color: var(--blue-700);">#{{ $cmd->numero_commande }}</td>
+                            <td>{{ \Carbon\Carbon::parse($cmd->date_commande)->format('d/m/Y') }}</td>
+                            <td style="font-weight: 600;">{{ number_format($cmd->montant_total, 2, ',', ' ') }} DH</td>
+                            <td>
+                                @php
+                                    $sClass = match($cmd->statut) {
+                                        'Nouvelle' => 'statut-nouvelle',
+                                        'En préparation' => 'statut-preparation',
+                                        'Expédiée' => 'statut-expediee',
+                                        'Livrée', 'Livré' => 'statut-livree',
+                                        'Annulée' => 'statut-annulee',
+                                        default => ''
+                                    };
+                                @endphp
+                                <span class="badge-statut-small {{ $sClass }}">
+                                    {{ $cmd->statut }}
+                                </span>
+                            </td>
+                            <td>
+                                @php
+                                    $pClass = match($cmd->statut_paiement) {
+                                        'Payé' => 'statut-livree',
+                                        'Partiellement payé' => 'statut-preparation',
+                                        'Non payé' => 'statut-annulee',
+                                        default => ''
+                                    };
+                                @endphp
+                                <span class="badge-statut-small {{ $pClass }}">
+                                    {{ $cmd->statut_paiement }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ route('commandes.show', $cmd->id) }}" class="btn-icon btn-icon-view" title="Détails">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem; color: #94a3b8;">
+                                <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                                Aucune commande trouvée pour ce client.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Returns Section -->
+<div class="orders-section" id="section-retours">
+    <div class="section-title-container">
+        <i class="bi bi-arrow-return-left" style="color: #e11d48; font-size: 1.2rem;"></i>
+        <h3>Historique des Retours</h3>
+    </div>
+
+    <div class="orders-card">
+        <div style="overflow-x: auto;">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Montant</th>
+                        <th>Motif</th>
+                        <th>Commande</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($client->retours->sortByDesc('date_retour') as $retour)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($retour->date_retour)->format('d/m/Y') }}</td>
+                            <td style="font-weight: 700;">{{ $retour->produit->nom_produit ?? '—' }}</td>
+                            <td style="font-weight: 600;">{{ $retour->quantite }}</td>
+                            <td style="font-weight: 700; color: #e11d48;">
+                                {{ number_format($retour->valeur, 2, ',', ' ') }} DH
+                            </td>
+                            <td>
+                                <span class="badge-statut-small statut-retour">
+                                    {{ $retour->motif }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ route('commandes.show', $retour->commande_client_id) }}" style="color: var(--blue-600); text-decoration: none; font-weight: 600;">
+                                    #{{ $retour->commande_client->numero_commande ?? $retour->commande_client_id }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ route('retours.show', $retour->id) }}" class="btn-icon btn-icon-view" title="Détails" style="background: #fff1f2; color: #e11d48; border-color: #fecdd3;">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem; color: #94a3b8;">
+                                <i class="bi bi-box-arrow-in-left" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                                Aucun retour enregistré pour ce client.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterHistory(type, btn) {
+    // Update buttons
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show/Hide sections
+    const sectionCommandes = document.getElementById('section-commandes');
+    const sectionRetours = document.getElementById('section-retours');
+
+    if (type === 'all') {
+        sectionCommandes.style.display = 'block';
+        sectionRetours.style.display = 'block';
+    } else if (type === 'commandes') {
+        sectionCommandes.style.display = 'block';
+        sectionRetours.style.display = 'none';
+    } else if (type === 'retours') {
+        sectionCommandes.style.display = 'none';
+        sectionRetours.style.display = 'block';
+    }
+}
+</script>
+
 @endsection

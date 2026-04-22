@@ -39,4 +39,14 @@ class CommandeClient extends Model
     public function expedition(){
         return $this->belongsTo(Expeditions::class, 'expedition_id' , 'id');
     }
+
+    public function getValeurRetoursAttribute()
+    {
+        return $this->retours->sum('valeur');
+    }
+
+    public function getMontantNetAttribute()
+    {
+        return $this->montant_total - $this->valeur_retours;
+    }
 }

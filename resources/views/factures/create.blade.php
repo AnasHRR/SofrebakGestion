@@ -487,8 +487,10 @@
                                     class="custom-select @error('commande_client_id') is-invalid @enderror" required>
                                 <option value="" disabled selected>-- Choisir une commande --</option>
                                 @foreach ($commandes as $commande)
-                                    <option value="{{ $commande->id }}" {{ old('commande_client_id') == $commande->id ? 'selected' : '' }}>
-                                        {{ $commande->numero_commande }} — {{ $commande->client->nom_entreprise ?? 'Client' }} ({{ number_format($commande->montant_total, 2, ',', ' ') }} DH)
+                                    <option value="{{ $commande->id }}" 
+                                            data-montant="{{ $commande->montant_total }}"
+                                            {{ old('commande_client_id') == $commande->id ? 'selected' : '' }}>
+                                        #{{ $commande->numero_commande }} - {{ $commande->client->nom_entreprise ?? 'Client' }} ({{ number_format($commande->montant_total, 2) }} DH)
                                     </option>
                                 @endforeach
                             </select>
@@ -559,6 +561,24 @@
                                    value="{{ old('date_echeance') }}">
                         </div>
                         @error('date_echeance')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Date Règlement -->
+                    <div class="form-group">
+                        <label for="date_reglement">
+                            <i class="bi bi-calendar-check-fill"></i> Date de Règlement
+                        </label>
+                        <div class="custom-input-wrapper">
+                            <div class="custom-input-icon">
+                                <i class="bi bi-calendar-check-fill"></i>
+                            </div>
+                            <input type="date" id="date_reglement" name="date_reglement"
+                                   class="custom-input @error('date_reglement') is-invalid @enderror"
+                                   value="{{ old('date_reglement') }}">
+                        </div>
+                        @error('date_reglement')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -713,11 +733,23 @@
 <script>
     // Auto-calculate TVA (20%), total, and update status based on payment
     document.addEventListener('DOMContentLoaded', function() {
+        const commandeSelect = document.getElementById('commande_client_id');
         const sousTotal = document.getElementById('sous_total');
         const montantTva = document.getElementById('montant_tva');
         const montantTotal = document.getElementById('montant_total');
         const montantPaye = document.getElementById('montant_paye');
         const statutSelect = document.getElementById('statut');
+
+        if (commandeSelect) {
+            commandeSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const montant = selectedOption.getAttribute('data-montant');
+                if (montant) {
+                    sousTotal.value = montant;
+                    updateCalculations();
+                }
+            });
+        }
 
         function updateCalculations() {
             const st = parseFloat(sousTotal.value) || 0;

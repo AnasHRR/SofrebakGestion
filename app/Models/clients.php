@@ -22,4 +22,45 @@ class clients extends Model
     {
         return $this->hasMany(CommandeClient::class, 'client_id');
     }
+
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class, 'client_id');
+    }
+
+    public function retours()
+    {
+        return $this->hasManyThrough(Retours::class, CommandeClient::class, 'client_id', 'commande_client_id');
+    }
+
+    public function getTotalVentesAttribute()
+    {
+        return $this->commandes()->where('statut', '!=', 'Annulée')->sum('montant_total');
+    }
+
+    public function getTotalBrutAttribute()
+    {
+        // Somme des prix_total de tous les détails des commandes non annulées
+        return CommandeClient::where('client_id', $this->id)
+            ->where('statut', '!=', 'Annulée')
+            ->join('details_commandes_clients', 'commandes_clients.id', '=', 'details_commandes_clients.commande_client_id')
+            ->sum('details_commandes_clients.prix_total');
+    }
+
+    public function getTotalRetoursValeurAttribute()
+    {
+        return $this->retours()->whereHas('commande_client', function($query) {
+            $query->where('statut', '!=', 'Annulée');
+        })->get()->sum('valeur');
+    }
+
+    public function getTotalPaiementsAttribute()
+    {
+        return $this->paiements()->sum('montant');
+    }
+
+    public function getCalculatedCreditAttribute()
+    {
+        return $this->total_ventes - $this->total_paiements;
+    }
 }

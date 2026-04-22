@@ -7,7 +7,7 @@
     <title>Sofrebak — Plateforme de Gestion Interne | Sté Sofrebak</title>
     <meta name="description"
         content="Plateforme de gestion interne de Sté Sofrebak — importation et distribution de matériaux de construction. Commandes, stock, factures et clients. Développée par Nexora.">
-    <link rel="icon" type="image/gif" href="{{ asset('logo_page.gif') }}">
+    <link rel="icon" type="image/png" href="{{ asset('logo_Sofrebak.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -1968,7 +1968,8 @@
         <div class="container">
             <a href="/" class="nav-logo">
                 <div class="nav-logo-icon">
-                    <i class="bi bi-boxes"></i>
+                    <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo"
+                        style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
                 <span class="nav-logo-text">Sofrebak</span>
             </a>
@@ -2051,7 +2052,8 @@
                         <div class="preview-sidebar">
                             <div class="preview-sidebar-logo">
                                 <div class="preview-sidebar-logo-box">
-                                    <i class="bi bi-boxes"></i>
+                                    <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo"
+                                        style="width: 100%; height: 100%; object-fit: contain;">
                                 </div>
                                 <span>Sofrebak</span>
                             </div>
@@ -2226,7 +2228,10 @@
                 </div>
 
                 <div class="about-image fade-up" style="transition-delay: 0.2s;">
-                    <div class="about-image-main">
+                    <div class="about-image-main" style="display: flex; align-items: center;
+           justify-content: center; padding: 3rem;">
+                        <img src="{{ asset('logo_Sofrebak.png') }}" alt="Sofrebak Logo" style="max-width: 80%; max-height: 80%; object-fit: contain; filter:
+           drop-shadow(0 20px 40px rgba(0,0,0,0.1));">
                         <div class="about-badge">
                             <div class="about-badge-value">15+</div>
                             <div class="about-badge-label">Années d'expérience</div>
@@ -2699,7 +2704,8 @@
                 <div class="footer-brand">
                     <div class="footer-brand-text">
                         <div class="footer-brand-icon">
-                            <i class="bi bi-boxes"></i>
+                            <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo"
+                                style="width: 100%; height: 100%; object-fit: contain;">
                         </div>
                         <span class="footer-brand-name">Sofrebak</span>
                     </div>
@@ -2707,7 +2713,8 @@
                             style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Sté
                             Sofrebak</strong> — importation et distribution des matériaux de construction au Maroc.
                         Développée par <a href="https://anaslagziri.com"
-                            style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Anas Lagziri</a>.</p>
+                            style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Anas
+                            Lagziri</a>.</p>
                     <div class="footer-socials">
                         <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
                         <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
@@ -2749,7 +2756,8 @@
 
             <div class="footer-bottom">
                 <p>&copy; {{ date('Y') }} Sté Sofrebak — Tous droits réservés. Développé par <a href="#"
-                        style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Anas Lagziri</a></p>
+                        style="color: var(--blue-300); font-weight: 700; transition: color 0.2s ease;">Anas Lagziri</a>
+                </p>
                 <div class="footer-bottom-links">
                     <a href="#">Confidentialité</a>
                     <a href="#">Conditions</a>

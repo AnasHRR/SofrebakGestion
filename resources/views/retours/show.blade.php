@@ -141,11 +141,299 @@
         <a href="{{ route('retours.index') }}" class="btn-action">
             <i class="bi bi-arrow-left me-1"></i> Retour à la liste
         </a>
+        <button onclick="window.print()" class="btn-action">
+            <i class="bi bi-printer-fill me-1"></i> Imprimer
+        </button>
         <a href="{{ route('retours.edit', $retour->id) }}" class="btn-action btn-edit-main">
             <i class="bi bi-pencil-square me-1"></i> Modifier
         </a>
     </div>
 </div>
+
+<!-- ── Section Imprimable (Bon de Retour) ── -->
+<div id="printable-bon-retour" class="d-none d-print-block">
+    <div class="print-container">
+        <!-- Header -->
+        <div class="print-header">
+            <div class="header-left">
+                <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo Sofrebak" class="print-logo">
+                <div class="company-info">
+                    <h3>Sté Sofrebak</h3>
+                    <p>Gestion de Distribution & Ventes</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="doc-title">BON DE RETOUR</div>
+                <div class="doc-number">N° RET-{{ str_pad($retour->id, 5, '0', STR_PAD_LEFT) }}</div>
+                <div class="doc-date">Date: {{ \Carbon\Carbon::parse($retour->date_retour)->format('d/m/Y') }}</div>
+            </div>
+        </div>
+
+        <div class="print-divider"></div>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <div class="info-box">
+                <div class="info-box-title">INFORMATIONS CLIENT</div>
+                <div class="info-box-content">
+                    <strong>{{ $retour->commande_client->client->nom_complet ?? 'N/A' }}</strong><br>
+                    {{ $retour->commande_client->client->adresse ?? '' }}<br>
+                    Tél: {{ $retour->commande_client->client->telephone ?? 'N/A' }}
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-title">RÉFÉRENCES</div>
+                <div class="info-box-content">
+                    <strong>Commande N°:</strong> {{ $retour->commande_client->numero_commande ?? $retour->commande_client_id }}<br>
+                    <strong>Région:</strong> {{ $retour->region->nom ?? 'N/A' }}<br>
+                    <strong>Responsable:</strong> {{ $retour->comptable->nom_complet ?? 'N/A' }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Table -->
+        <table class="print-table">
+            <thead>
+                <tr>
+                    <th>Réf. Produit</th>
+                    <th>Désignation</th>
+                    <th class="text-center">Quantité</th>
+                    <th>Motif du Retour</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#{{ $retour->produit_id }}</td>
+                    <td><strong>{{ $retour->produit->nom_produit ?? 'N/A' }}</strong></td>
+                    <td class="text-center">{{ $retour->quantite }}</td>
+                    <td>{{ $retour->motif }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Notes -->
+        @if($retour->notes)
+        <div class="print-notes">
+            <strong>Notes / Observations:</strong>
+            <p>{{ $retour->notes }}</p>
+        </div>
+        @endif
+
+        <!-- Signatures -->
+        <div class="print-signatures">
+            <div class="signature-box">
+                <p>Signature Client</p>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-box">
+                <p>Signature Responsable</p>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-box">
+                <p>Cachet de l'Entreprise</p>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="print-footer">
+            <p>Sté Sofrebak - Document généré le {{ date('d/m/Y H:i') }}</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ── Styles pour l'impression ── */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #printable-bon-retour, #printable-bon-retour * {
+            visibility: visible;
+        }
+        #printable-bon-retour {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+        .no-print {
+            display: none !important;
+        }
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+    }
+
+    .print-container {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        line-height: 1.5;
+    }
+
+    .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .print-logo {
+        height: 60px;
+        width: auto;
+    }
+
+    .company-info h3 {
+        margin: 0;
+        color: #0f1e4a;
+        font-size: 1.5rem;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .company-info p {
+        margin: 0;
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .header-right {
+        text-align: right;
+    }
+
+    .doc-title {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #1d4ed8; /* Blue-700 */
+        margin-bottom: 5px;
+    }
+
+    .doc-number {
+        font-weight: 700;
+        color: #475569;
+    }
+
+    .doc-date {
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .print-divider {
+        height: 4px;
+        background: #1d4ed8;
+        margin: 20px 0;
+        border-radius: 2px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .info-box {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .info-box-title {
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: #1d4ed8;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 5px;
+    }
+
+    .info-box-content {
+        font-size: 0.9rem;
+    }
+
+    .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+    .print-table th {
+        background: #f8fafc;
+        color: #0f1e4a;
+        text-align: left;
+        padding: 12px 15px;
+        border: 1px solid #e2e8f0;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        font-weight: 800;
+    }
+
+    .print-table td {
+        padding: 12px 15px;
+        border: 1px solid #e2e8f0;
+        font-size: 0.95rem;
+    }
+
+    .print-notes {
+        margin-bottom: 40px;
+        padding: 15px;
+        background: #f1f5f9;
+        border-radius: 8px;
+    }
+
+    .print-notes strong {
+        display: block;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: #475569;
+        margin-bottom: 5px;
+    }
+
+    .print-notes p {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .print-signatures {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+        margin-top: 50px;
+    }
+
+    .signature-box {
+        text-align: center;
+    }
+
+    .signature-box p {
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin-bottom: 60px;
+    }
+
+    .signature-line {
+        border-top: 1px dashed #94a3b8;
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .print-footer {
+        margin-top: 60px;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 15px;
+    }
+</style>
 
 <div class="row g-4">
     <!-- Main Info -->

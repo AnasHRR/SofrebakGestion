@@ -249,7 +249,7 @@
         <div class="stat-chip-icon green"><i class="bi bi-cash-stack"></i></div>
         <div>
             <div class="stat-chip-value">{{ number_format($total_credit ?? 0, 2, ',', ' ') }} DH</div>
-            <div class="stat-chip-label">Plafond crédit cumulé</div>
+            <div class="stat-chip-label">Crédit total</div>
         </div>
     </div>
 </div>
@@ -264,7 +264,7 @@
                     <th><i class="bi bi-building me-1"></i> Entreprise</th>
                     <th><i class="bi bi-telephone me-1"></i> Téléphone</th>
                     <th><i class="bi bi-geo-alt me-1"></i> Adresse</th>
-                    <th><i class="bi bi-cash-stack me-1"></i> Crédit</th>
+                    <th><i class="bi bi-cash-stack me-1"></i> Crédit Actuel</th>
                     <th style="width: 140px; text-align: center;"><i class="bi bi-gear me-1"></i> Actions</th>
                 </tr>
             </thead>
@@ -280,7 +280,7 @@
                         </td>
                         <td>{{ $cl->adresse }}</td>
                         <td>
-                            <span class="badge-credit">{{ $cl->plafond_credit }} DH</span>
+                            <span class="badge-credit">{{ number_format($cl->calculated_credit, 2, ',', ' ') }} DH</span>
                         </td>
                         <td>
                             <div class="action-buttons justify-content-center">

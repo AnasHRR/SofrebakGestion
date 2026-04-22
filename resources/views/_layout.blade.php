@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Sofrebak')</title>
-    {{--
-    <link rel="icon" type="image/gif" href="{{ asset('') }}"> --}}
+    <link rel="icon" type="image/png" href="{{ asset('logo_Sofrebak.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -1074,7 +1073,7 @@
         <div class="brand">
             <a href="/">
                 <div class="brand-logo">
-                    <i class="bi bi-boxes"></i>
+                    <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
                 <div>
                     <div class="brand-name">Sofrebak</div>

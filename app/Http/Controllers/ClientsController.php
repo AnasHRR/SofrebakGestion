@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\clients;
 use App\Models\regions;
+use App\Models\CommandeClient;
+use App\Models\Paiement;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
@@ -29,7 +31,11 @@ class ClientsController extends Controller
         }
 
         $total_clients = clients::count();
-        $total_credit = clients::sum('plafond_credit');
+        
+        $total_commandes = CommandeClient::where('statut', '!=', 'Annulée')->sum('montant_total');
+        $total_paiements = Paiement::sum('montant');
+        $total_credit = $total_commandes - $total_paiements;
+
         $region = regions::all();
         return view('clients.index', compact('clients' , 'region', 'total_clients' , 'total_credit'));
     }
@@ -69,9 +75,10 @@ class ClientsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(clients $client, regions $region)
+    public function show(clients $client)
     {
-        return view('clients.show' , compact('client', 'region'));
+        $client->load(['commandes', 'retours.produit']);
+        return view('clients.show' , compact('client'));
     }
 
     /**
