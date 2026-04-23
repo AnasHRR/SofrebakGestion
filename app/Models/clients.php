@@ -28,6 +28,11 @@ class clients extends Model
         return $this->hasMany(Paiement::class, 'client_id');
     }
 
+    public function factures()
+    {
+        return $this->hasMany(Factures::class, 'client_id');
+    }
+
     public function retours()
     {
         return $this->hasManyThrough(Retours::class, CommandeClient::class, 'client_id', 'commande_client_id');

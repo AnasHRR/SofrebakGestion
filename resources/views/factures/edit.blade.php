@@ -432,35 +432,35 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Section: Commande & Référence -->
+                <!-- Section: Client & Référence -->
                 <div class="form-section">
                     <div class="form-section-title">
-                        <i class="bi bi-link-45deg"></i> Commande & Référence
+                        <i class="bi bi-person-fill"></i> Client & Référence
                     </div>
 
                     <div class="form-row">
-                        <!-- Commande Client -->
+                        <!-- Client -->
                         <div class="form-group">
-                            <label for="commande_client_id">
-                                <i class="bi bi-bag-fill"></i> Commande Client <span class="required">*</span>
+                            <label for="client_id">
+                                <i class="bi bi-person-badge-fill"></i> Client <span class="required">*</span>
                             </label>
                             <div class="custom-input-wrapper">
                                 <div class="custom-input-icon">
-                                    <i class="bi bi-bag"></i>
+                                    <i class="bi bi-person"></i>
                                 </div>
-                                <select name="commande_client_id" id="commande_client_id"
-                                    class="custom-select @error('commande_client_id') is-invalid @enderror" required>
-                                    <option value="" disabled>-- Choisir une commande --</option>
-                                    @foreach ($commandes as $commande)
-                                        <option value="{{ $commande->id }}" {{ old('commande_client_id', $facture->commande_client_id) == $commande->id ? 'selected' : '' }}>
-                                            {{ $commande->numero_commande }} —
-                                            {{ $commande->client->nom_entreprise ?? 'Client' }}
-                                            ({{ number_format($commande->montant_total, 2, ',', ' ') }} DH)
+                                <select name="client_id" id="client_id"
+                                    class="custom-select @error('client_id') is-invalid @enderror" required>
+                                    <option value="" disabled>-- Choisir un client --</option>
+                                    @foreach ($clients as $client)
+                                        <option value="{{ $client->id }}" 
+                                                data-credit="{{ $client->calculated_credit }}"
+                                                {{ old('client_id', $facture->client_id) == $client->id ? 'selected' : '' }}>
+                                            {{ $client->nom_entreprise }} (Crédit: {{ number_format($client->calculated_credit, 2, ',', ' ') }} DH)
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-                            @error('commande_client_id')
+                            @error('client_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -614,7 +614,8 @@
                                 <div class="currency-wrapper">
                                     <input type="number" step="0.01" id="montant_paye" name="montant_paye"
                                         class="custom-input @error('montant_paye') is-invalid @enderror"
-                                        value="{{ old('montant_paye', $facture->montant_paye) }}" placeholder="0.00">
+                                        value="{{ old('montant_paye', $facture->montant_paye) }}" placeholder="0.00"
+                                        max="{{ old('montant_total', $facture->montant_total) }}">
                                     <span class="currency-suffix">DH</span>
                                 </div>
                             </div>
@@ -646,6 +647,7 @@
                                     <option value="Non payée" {{ old('statut', $facture->statut) == 'Non payée' || old('statut', $facture->statut) == 'Impayée' ? 'selected' : '' }}>Non payée</option>
                                     <option value="Partiellement payée" {{ old('statut', $facture->statut) == 'Partiellement payée' ? 'selected' : '' }}>Partiellement payée</option>
                                     <option value="Payée" {{ old('statut', $facture->statut) == 'Payée' ? 'selected' : '' }}>Payée</option>
+                                    <option value="Annulée" {{ old('statut', $facture->statut) == 'Annulée' ? 'selected' : '' }}>Annulée</option>
                                 </select>
                             </div>
                             @error('statut')
@@ -670,22 +672,47 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const clientSelect = document.getElementById('client_id');
             const sousTotal = document.getElementById('sous_total');
             const montantTva = document.getElementById('montant_tva');
             const montantTotal = document.getElementById('montant_total');
             const montantPaye = document.getElementById('montant_paye');
             const statutSelect = document.getElementById('statut');
 
+            if (clientSelect) {
+                clientSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const credit = selectedOption.getAttribute('data-credit');
+                    if (credit !== null && credit !== undefined && credit !== "") {
+                        // Credit is Total TTC
+                        montantTotal.value = parseFloat(credit).toFixed(2);
+                        updateCalculationsFromTotal();
+                    }
+                });
+            }
+
+            function updateCalculationsFromTotal() {
+                const total = parseFloat(montantTotal.value) || 0;
+                const st = total / 1.20;
+                sousTotal.value = st.toFixed(2);
+                const tva = total - st;
+                montantTva.value = tva.toFixed(2);
+
+                // Update max for payment
+                montantPaye.max = total.toFixed(2);
+
+                updateStatus();
+            }
+
             function updateCalculations() {
                 const st = parseFloat(sousTotal.value) || 0;
-                
-                // Calculate 20% TVA
                 const tva = st * 0.20;
                 montantTva.value = tva.toFixed(2);
-                
-                // Calculate Total
                 const total = st + tva;
                 montantTotal.value = total.toFixed(2);
+
+                // Update max for payment
+                montantPaye.max = total.toFixed(2);
 
                 updateStatus();
             }
@@ -693,13 +720,24 @@
             function calcTotal() {
                 const st = parseFloat(sousTotal.value) || 0;
                 const tva = parseFloat(montantTva.value) || 0;
-                montantTotal.value = (st + tva).toFixed(2);
+                const total = st + tva;
+                montantTotal.value = total.toFixed(2);
+
+                // Update max for payment
+                montantPaye.max = total.toFixed(2);
+
                 updateStatus();
             }
 
             function updateStatus() {
                 const total = parseFloat(montantTotal.value) || 0;
-                const paye = parseFloat(montantPaye.value) || 0;
+                let paye = parseFloat(montantPaye.value) || 0;
+
+                // Ensure paye doesn't exceed total
+                if (paye > total) {
+                    paye = total;
+                    montantPaye.value = paye.toFixed(2);
+                }
 
                 if (total === 0) {
                     statutSelect.value = "Non payée";
@@ -719,6 +757,12 @@
                 sousTotal.addEventListener('input', updateCalculations);
                 montantTva.addEventListener('input', calcTotal);
                 montantPaye.addEventListener('input', updateStatus);
+
+                // Also on montantTotal input
+                montantTotal.addEventListener('input', function() {
+                    montantPaye.max = (parseFloat(this.value) || 0).toFixed(2);
+                    updateStatus();
+                });
             }
         });
     </script>

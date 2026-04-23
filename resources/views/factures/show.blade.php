@@ -788,9 +788,9 @@
             <div class="detail-header-info">
                 <div class="detail-name">{{ $facture->numero_facture }}</div>
                 <div class="detail-badges">
-                    @if($facture->commande_client)
+                    @if($facture->client)
                         <span class="detail-badge">
-                            <i class="bi bi-bag-fill"></i> {{ $facture->commande_client->numero_commande }}
+                            <i class="bi bi-person-fill"></i> {{ $facture->client->nom_entreprise }}
                         </span>
                     @endif
                     <span class="detail-badge">
@@ -803,9 +803,9 @@
         <!-- Body -->
         <div class="detail-card-body">
 
-            <!-- Section: Référence & Commande -->
+            <!-- Section: Client & Référence -->
             <div class="section-title">
-                <i class="bi bi-link-45deg"></i> Référence & Commande
+                <i class="bi bi-person-fill"></i> Client & Référence
             </div>
             <div class="detail-grid">
                 <div class="detail-field">
@@ -816,15 +816,12 @@
                     </div>
                 </div>
                 <div class="detail-field">
-                    <div class="detail-field-icon"><i class="bi bi-bag-fill"></i></div>
+                    <div class="detail-field-icon"><i class="bi bi-person-fill"></i></div>
                     <div class="detail-field-content">
-                        <div class="detail-field-label">Commande Associée</div>
+                        <div class="detail-field-label">Client</div>
                         <div class="detail-field-value">
-                            @if($facture->commande_client)
-                                {{ $facture->commande_client->numero_commande }}
-                                @if($facture->commande_client->client)
-                                    — {{ $facture->commande_client->client->nom_entreprise }}
-                                @endif
+                            @if($facture->client)
+                                {{ $facture->client->nom_entreprise }}
                             @else
                                 —
                             @endif
@@ -867,6 +864,15 @@
                             @else
                                 —
                             @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-field">
+                    <div class="detail-field-icon"><i class="bi bi-calendar-check-fill"></i></div>
+                    <div class="detail-field-content">
+                        <div class="detail-field-label">Date de Règlement</div>
+                        <div class="detail-field-value">
+                            {{ $facture->date_reglement ? \Carbon\Carbon::parse($facture->date_reglement)->format('d/m/Y') : '—' }}
                         </div>
                     </div>
                 </div>
@@ -1033,18 +1039,18 @@
         <!-- Client Info -->
         <div class="inv-info-box">
             <div class="inv-info-box-title">Client</div>
-            @if($facture->commande_client && $facture->commande_client->client)
+            @if($facture->client)
                 <div class="inv-info-line">
                     <span class="label">Entreprise :</span>
-                    <span class="value">{{ $facture->commande_client->client->nom_entreprise ?? '—' }}</span>
+                    <span class="value">{{ $facture->client->nom_entreprise ?? '—' }}</span>
                 </div>
                 <div class="inv-info-line">
                     <span class="label">Contact :</span>
-                    <span class="value">{{ $facture->commande_client->client->personne_contact ?? '—' }}</span>
+                    <span class="value">{{ $facture->client->personne_contact ?? '—' }}</span>
                 </div>
                 <div class="inv-info-line">
                     <span class="label">Tél :</span>
-                    <span class="value">{{ $facture->commande_client->client->telephone ?? '—' }}</span>
+                    <span class="value">{{ $facture->client->telephone ?? '—' }}</span>
                 </div>
             @else
                 <div class="inv-info-line">
@@ -1061,12 +1067,6 @@
                 <span class="label">N° Facture :</span>
                 <span class="value">{{ $facture->numero_facture }}</span>
             </div>
-            @if($facture->commande_client)
-                <div class="inv-info-line">
-                    <span class="label">N° Commande :</span>
-                    <span class="value">{{ $facture->commande_client->numero_commande }}</span>
-                </div>
-            @endif
             <div class="inv-info-line">
                 <span class="label">Date Facture :</span>
                 <span class="value">{{ $facture->date_facture ? \Carbon\Carbon::parse($facture->date_facture)->format('d/m/Y') : '—' }}</span>
@@ -1074,6 +1074,10 @@
             <div class="inv-info-line">
                 <span class="label">Échéance :</span>
                 <span class="value">{{ $facture->date_echeance ? \Carbon\Carbon::parse($facture->date_echeance)->format('d/m/Y') : '—' }}</span>
+            </div>
+            <div class="inv-info-line">
+                <span class="label">Date de Règlement :</span>
+                <span class="value">{{ $facture->date_reglement ? \Carbon\Carbon::parse($facture->date_reglement)->format('d/m/Y') : '—' }}</span>
             </div>
         </div>
     </div>
@@ -1088,10 +1092,6 @@
         </thead>
         <tbody>
             <tr>
-                <td>Sous Total HT</td>
-                <td>{{ number_format($facture->sous_total, 2, ',', ' ') }} DH</td>
-            </tr>
-            <tr>
                 <td>TVA 20% :</td>
                 <td>{{ number_format($facture->montant_tva, 2, ',', ' ') }} DH</td>
             </tr>
@@ -1101,10 +1101,6 @@
     <!-- Totals -->
     <div class="inv-totals">
         <div class="inv-totals-box">
-            <div class="inv-total-row">
-                <span class="label">Sous Total</span>
-                <span class="value">{{ number_format($facture->sous_total, 2, ',', ' ') }} DH</span>
-            </div>
             <div class="inv-total-row">
                 <span class="label">TVA 20% :</span>
                 <span class="value">{{ number_format($facture->montant_tva, 2, ',', ' ') }} DH</span>

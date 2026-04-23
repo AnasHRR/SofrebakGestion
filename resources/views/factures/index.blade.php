@@ -522,11 +522,11 @@
             <thead>
                 <tr>
                     <th><i class="bi bi-hash me-1"></i> N° Facture</th>
-                    <th><i class="bi bi-bag me-1"></i> Commande</th>
+                    <th><i class="bi bi-person me-1"></i> Client</th>
                     <th><i class="bi bi-calendar3 me-1"></i> Date Facture</th>
                     <th><i class="bi bi-calendar-check me-1"></i> Échéance</th>
-                    {{-- <th><i class="bi bi-calculator me-1"></i> Sous Total</th> --}}
-                    {{-- <th><i class="bi bi-percent me-1"></i> TVA</th> --}}
+                    {{-- <th><i class="bi bi-calculator me-1"></i> Sous Total</th>
+                    <th><i class="bi bi-percent me-1"></i> TVA</th> --}}
                     <th><i class="bi bi-cash me-1"></i> Total</th>
                     <th><i class="bi bi-wallet2 me-1"></i> Payé</th>
                     <th style="text-align:center;"><i class="bi bi-flag me-1"></i> Statut</th>
@@ -544,13 +544,13 @@
                             </span>
                         </td>
 
-                        <!-- Commande -->
+                        <!-- Client -->
                         <td>
                             <div style="display:flex;align-items:center;gap:0.5rem;">
                                 <div style="width:30px;height:30px;background:#eff6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <i class="bi bi-bag-fill" style="color:var(--blue-600);font-size:0.8rem;"></i>
+                                    <i class="bi bi-person-fill" style="color:var(--blue-600);font-size:0.8rem;"></i>
                                 </div>
-                                <span style="font-weight:600;">{{ $facture->commande_client->numero_commande ?? '—' }}</span>
+                                <span style="font-weight:600;">{{ $facture->client->nom_entreprise ?? '—' }}</span>
                             </div>
                         </td>
 
@@ -579,16 +579,16 @@
                             @endif
                         </td>
 
-                        <!-- Sous Total -->
-                        {{-- <td>
+                        {{-- <!-- Sous Total -->
+                        <td>
                             <span class="badge-montant">
                                 {{ number_format($facture->sous_total, 2, ',', ' ') }}
                                 <span class="currency">DH</span>
                             </span>
-                        </td> --}}
+                        </td>
 
                         <!-- TVA -->
-                        {{-- <td>
+                        <td>
                             <span style="font-weight:600;color:#64748b;">
                                 {{ number_format($facture->montant_tva, 2, ',', ' ') }}
                                 <span style="font-size:0.7rem;font-weight:400;">DH</span>

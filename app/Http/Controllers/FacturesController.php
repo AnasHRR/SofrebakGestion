@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Factures;
-use App\Models\CommandeClient;
+use App\Models\clients;
 use Illuminate\Http\Request;
 
 class FacturesController extends Controller
@@ -13,7 +13,7 @@ class FacturesController extends Controller
      */
     public function index()
     {
-        $factures = Factures::all();
+        $factures = Factures::with('client')->get();
         return view("factures.index", compact("factures"));
     }
 
@@ -22,8 +22,10 @@ class FacturesController extends Controller
      */
     public function create()
     {
-        $commandes = CommandeClient::all();
-        return view("factures.create", compact("commandes"));
+        $clients = clients::all()->filter(function($client) {
+            return $client->calculated_credit > 0;
+        });
+        return view("factures.create", compact("clients"));
     }
 
     /**
@@ -32,7 +34,7 @@ class FacturesController extends Controller
     public function store(Request $req)
     {
         $req->validate([
-            'commande_client_id' => 'required|exists:commandes_clients,id',
+            'client_id' => 'required|exists:clients,id',
             'numero_facture' => 'required|string',
             'date_facture' => 'required|date',
             'date_echeance' => 'nullable|date',
@@ -40,7 +42,7 @@ class FacturesController extends Controller
             'sous_total' => 'required|numeric|min:0',
             'montant_tva' => 'required|numeric|min:0',
             'montant_total' => 'required|numeric|min:0',
-            'montant_paye' => 'nullable|numeric|min:0',
+            'montant_paye' => 'nullable|numeric|min:0|lte:montant_total',
             'statut' => 'required|string',
         ]);
 
@@ -53,7 +55,7 @@ class FacturesController extends Controller
      */
     public function show(string $id)
     {
-        $facture = Factures::findOrFail($id);
+        $facture = Factures::with('client')->findOrFail($id);
         return view("factures.show", compact("facture"));
     }
 
@@ -63,8 +65,8 @@ class FacturesController extends Controller
     public function edit(string $id)
     {
         $facture = Factures::findOrFail($id);
-        $commandes = CommandeClient::all();
-        return view("factures.edit", compact("facture", "commandes"));
+        $clients = clients::all();
+        return view("factures.edit", compact("facture", "clients"));
     }
 
     /**
@@ -73,7 +75,7 @@ class FacturesController extends Controller
     public function update(Request $req, string $id)
     {
         $req->validate([
-            'commande_client_id' => 'required|exists:commandes_clients,id',
+            'client_id' => 'required|exists:clients,id',
             'numero_facture' => 'required|string',
             'date_facture' => 'required|date',
             'date_echeance' => 'nullable|date',
@@ -81,7 +83,7 @@ class FacturesController extends Controller
             'sous_total' => 'required|numeric|min:0',
             'montant_tva' => 'required|numeric|min:0',
             'montant_total' => 'required|numeric|min:0',
-            'montant_paye' => 'nullable|numeric|min:0',
+            'montant_paye' => 'nullable|numeric|min:0|lte:montant_total',
             'statut' => 'required|string',
         ]);
 

@@ -26,11 +26,6 @@ class CommandeClient extends Model
         return $this->belongsTo(employes::class, 'comptable_id' , 'id');
     }
 
-    public function factures()
-    {
-        return $this->hasMany(Factures::class, 'commande_client_id' , 'id');
-    }
-
     public function retours()
     {
         return $this->hasMany(Retours::class, 'commande_client_id' , 'id');
