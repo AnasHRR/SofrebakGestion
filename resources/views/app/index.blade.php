@@ -118,6 +118,7 @@
             align-items: center;
             gap: 0.75rem;
         }
+
         .nav-logo-icon {
             width: 44px;
             height: 44px;
@@ -1370,7 +1371,14 @@
         }
 
         @media (max-width: 768px) {
-            .features, .how-it-works, .why-choose, .testimonials, .products-showcase, .about-sofrebak, .cta {
+
+            .features,
+            .how-it-works,
+            .why-choose,
+            .testimonials,
+            .products-showcase,
+            .about-sofrebak,
+            .cta {
                 padding: 4rem 0;
             }
 
@@ -1418,7 +1426,7 @@
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
                 width: 80%;
             }
-            
+
             .nav-links.mobile-active .mobile-auth-links a {
                 width: 100%;
                 text-align: center;
