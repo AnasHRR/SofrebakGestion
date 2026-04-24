@@ -369,6 +369,64 @@
             transform: translateY(-1px);
         }
 
+        /* Products Table Styles */
+        .products-table-section {
+            margin-top: 2rem;
+            background: #fff;
+            border: 1.5px solid #e2eaf8;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .products-table thead th {
+            background: #f8fafc;
+            padding: 0.8rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+            border-bottom: 2px solid #e2eaf8;
+            text-align: left;
+        }
+
+        .products-table tbody td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #f1f5fb;
+        }
+
+        .table-input {
+            width: 100%;
+            padding: 0.4rem 0.6rem;
+            border: 1.2px solid #e2eaf8;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .btn-auto-fill {
+            background: var(--blue-500);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-auto-fill:hover {
+            background: var(--blue-600);
+            transform: translateY(-1px);
+        }
+
         /* ── Responsive ── */
         @media (max-width: 768px) {
             .page-header {
@@ -614,15 +672,57 @@
                                 <div class="currency-wrapper">
                                     <input type="number" step="0.01" id="montant_paye" name="montant_paye"
                                         class="custom-input @error('montant_paye') is-invalid @enderror"
-                                        value="{{ old('montant_paye', $facture->montant_paye) }}" placeholder="0.00"
-                                        max="{{ old('montant_total', $facture->montant_total) }}">
-                                    <span class="currency-suffix">DH</span>
+                                        value="{{ old('montant_paye', $facture->montant_paye) }}" placeholder="0.00">
+                                    <span class="currency-suffix" style="border-radius:0;">DH</span>
+                                    <button type="button" class="btn-auto-fill" id="btn-generate-products" title="Générer des produits aléatoires" style="border-radius: 0 10px 10px 0; height: 100%;">
+                                        <i class="bi bi-magic"></i>
+                                    </button>
                                 </div>
                             </div>
                             @error('montant_paye')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                    </div>
+                </div>
+
+                <!-- Section: Produits Aléatoires -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="bi bi-box-seam"></i> Produits Suggestion (Visualisation)
+                    </div>
+                    
+                    <div class="products-table-section">
+                        <table class="products-table" id="facture-products-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40%;">Produit</th>
+                                    <th style="width: 20%;">Quantité</th>
+                                    <th style="width: 20%;">Prix Unit. (DH)</th>
+                                    <th style="width: 20%;">Total (DH)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($facture->details as $idx => $detail)
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="table-input" value="{{ $detail->produit->nom_produit }}" readonly>
+                                            <input type="hidden" name="produits[{{ $idx }}][produit_id]" value="{{ $detail->produit_id }}">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="table-input" value="{{ $detail->quantite }}" readonly name="produits[{{ $idx }}][quantite]">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="table-input" value="{{ number_format($detail->prix_unitaire, 2, '.', '') }}" readonly name="produits[{{ $idx }}][prix_unitaire]">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="table-input" value="{{ number_format($detail->total, 2, '.', '') }}" readonly name="produits[{{ $idx }}][total]">
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
                     </div>
                 </div>
 
@@ -671,6 +771,9 @@
     </div>
 
     <script>
+        // Inject products data for auto-fill
+        const availableProduits = @json($produits);
+
         document.addEventListener('DOMContentLoaded', function () {
             const clientSelect = document.getElementById('client_id');
             const sousTotal = document.getElementById('sous_total');
@@ -678,6 +781,13 @@
             const montantTotal = document.getElementById('montant_total');
             const montantPaye = document.getElementById('montant_paye');
             const statutSelect = document.getElementById('statut');
+            
+            const generateBtn = document.getElementById('btn-generate-products');
+            const productsTableBody = document.querySelector('#facture-products-table tbody');
+
+            function formatCurrency(value) {
+                return parseFloat(value).toFixed(2);
+            }
 
             if (clientSelect) {
                 clientSelect.addEventListener('change', function() {
@@ -733,12 +843,6 @@
                 const total = parseFloat(montantTotal.value) || 0;
                 let paye = parseFloat(montantPaye.value) || 0;
 
-                // Ensure paye doesn't exceed total
-                if (paye > total) {
-                    paye = total;
-                    montantPaye.value = paye.toFixed(2);
-                }
-
                 if (total === 0) {
                     statutSelect.value = "Non payée";
                     return;
@@ -753,6 +857,79 @@
                 }
             }
 
+            function addProductRow(produitId, produitName, quantite, prix) {
+                const total = quantite * prix;
+                const rowIdx = productsTableBody.children.length;
+                const row = `
+                    <tr>
+                        <td>
+                            <input type="text" class="table-input" value="${produitName}" readonly>
+                            <input type="hidden" name="produits[${rowIdx}][produit_id]" value="${produitId}">
+                        </td>
+                        <td>
+                            <input type="number" class="table-input" value="${quantite}" readonly name="produits[${rowIdx}][quantite]">
+                        </td>
+                        <td>
+                            <input type="text" class="table-input" value="${formatCurrency(prix)}" readonly name="produits[${rowIdx}][prix_unitaire]">
+                        </td>
+                        <td>
+                            <input type="text" class="table-input" value="${formatCurrency(total)}" readonly name="produits[${rowIdx}][total]">
+                        </td>
+                    </tr>
+                `;
+                productsTableBody.insertAdjacentHTML('beforeend', row);
+            }
+
+            generateBtn.addEventListener('click', function() {
+                const targetAmount = parseFloat(montantPaye.value);
+                if (isNaN(targetAmount) || targetAmount <= 0) {
+                    alert("Veuillez entrer un montant payé valide pour générer des produits.");
+                    return;
+                }
+
+                // Clear table
+                productsTableBody.innerHTML = '';
+
+                let currentTotal = 0;
+                const maxAttempts = 50;
+                let attempts = 0;
+
+                const validProducts = availableProduits.filter(p => p.prix_vente > 0);
+                if (validProducts.length === 0) {
+                    alert("Aucun produit disponible pour la génération.");
+                    return;
+                }
+
+                while (currentTotal < targetAmount && attempts < maxAttempts) {
+                    const remaining = targetAmount - currentTotal;
+                    let possibleProducts = validProducts.filter(p => p.prix_vente <= remaining);
+                    
+                    if (possibleProducts.length === 0) {
+                        const cheapest = validProducts.sort((a,b) => a.prix_vente - b.prix_vente)[0];
+                        if (cheapest) {
+                            addProductRow(cheapest.id, cheapest.nom_produit, 1, cheapest.prix_vente);
+                            currentTotal += cheapest.prix_vente;
+                        }
+                        break;
+                    }
+
+                    const product = possibleProducts[Math.floor(Math.random() * possibleProducts.length)];
+                    let maxQty = Math.floor(remaining / product.prix_vente);
+                    maxQty = Math.min(maxQty, 5);
+                    
+                    const qty = Math.floor(Math.random() * maxQty) + 1;
+                    addProductRow(product.id, product.nom_produit, qty, product.prix_vente);
+                    currentTotal += qty * product.prix_vente;
+                    attempts++;
+                }
+
+                // Sync the products but do NOT change the invoice total fields
+                // montantTotal.value = formatCurrency(currentTotal); // REMOVED
+                // updateCalculationsFromTotal(); // REMOVED
+                // montantPaye.value = formatCurrency(currentTotal); // REMOVED
+                updateStatus();
+            });
+
             if (sousTotal && montantTva && montantTotal && montantPaye && statutSelect) {
                 sousTotal.addEventListener('input', updateCalculations);
                 montantTva.addEventListener('input', calcTotal);
@@ -760,8 +937,7 @@
 
                 // Also on montantTotal input
                 montantTotal.addEventListener('input', function() {
-                    montantPaye.max = (parseFloat(this.value) || 0).toFixed(2);
-                    updateStatus();
+                    updateCalculationsFromTotal();
                 });
             }
         });

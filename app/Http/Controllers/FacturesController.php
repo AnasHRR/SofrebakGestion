@@ -25,7 +25,8 @@ class FacturesController extends Controller
         $clients = clients::all()->filter(function($client) {
             return $client->calculated_credit > 0;
         });
-        return view("factures.create", compact("clients"));
+        $produits = \App\Models\Produits::all();
+        return view("factures.create", compact("clients", "produits"));
     }
 
     /**
@@ -44,9 +45,29 @@ class FacturesController extends Controller
             'montant_total' => 'required|numeric|min:0',
             'montant_paye' => 'nullable|numeric|min:0|lte:montant_total',
             'statut' => 'required|string',
+            'produits' => 'nullable|array',
         ]);
 
-        Factures::create($req->all());
+        \Illuminate\Support\Facades\DB::transaction(function() use ($req) {
+            $data = $req->all();
+            if (empty($data['id'])) {
+                $data['id'] = (string) \Illuminate\Support\Str::uuid();
+            }
+            $facture = Factures::create($data);
+
+            if ($req->has('produits')) {
+                foreach ($req->produits as $item) {
+                    \App\Models\FactureDetail::create([
+                        'facture_id' => $facture->id,
+                        'produit_id' => $item['produit_id'],
+                        'quantite' => $item['quantite'],
+                        'prix_unitaire' => $item['prix_unitaire'],
+                        'total' => $item['total'],
+                    ]);
+                }
+            }
+        });
+
         return to_route('factures.index')->with('success', 'Facture créer avec succès.');
     }
 
@@ -55,7 +76,7 @@ class FacturesController extends Controller
      */
     public function show(string $id)
     {
-        $facture = Factures::with('client')->findOrFail($id);
+        $facture = Factures::with(['client', 'details.produit'])->findOrFail($id);
         return view("factures.show", compact("facture"));
     }
 
@@ -66,7 +87,8 @@ class FacturesController extends Controller
     {
         $facture = Factures::findOrFail($id);
         $clients = clients::all();
-        return view("factures.edit", compact("facture", "clients"));
+        $produits = \App\Models\Produits::all();
+        return view("factures.edit", compact("facture", "clients", "produits"));
     }
 
     /**
@@ -85,10 +107,29 @@ class FacturesController extends Controller
             'montant_total' => 'required|numeric|min:0',
             'montant_paye' => 'nullable|numeric|min:0|lte:montant_total',
             'statut' => 'required|string',
+            'produits' => 'nullable|array',
         ]);
 
         $facture = Factures::findOrFail($id);
-        $facture->update($req->all());
+        
+        \Illuminate\Support\Facades\DB::transaction(function() use ($req, $facture) {
+            $facture->update($req->all());
+
+            // Delete old details
+            $facture->details()->delete();
+
+            if ($req->has('produits')) {
+                foreach ($req->produits as $item) {
+                    \App\Models\FactureDetail::create([
+                        'facture_id' => $facture->id,
+                        'produit_id' => $item['produit_id'],
+                        'quantite' => $item['quantite'],
+                        'prix_unitaire' => $item['prix_unitaire'],
+                        'total' => $item['total'],
+                    ]);
+                }
+            }
+        });
 
         return to_route('factures.index')->with('success', 'Facture modifiée avec succès.');
     }

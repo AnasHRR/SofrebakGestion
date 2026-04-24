@@ -859,7 +859,8 @@
                                 <div class="custom-input-icon">
                                     <i class="bi bi-lock"></i>
                                 </div>
-                                <input type="text" class="custom-input" id="id" value="{{ $commandeClient->id }}" readonly disabled placeholder="ID">
+                                <input type="text" class="custom-input" id="id" value="{{ $commandeClient->id }}" readonly
+                                    disabled placeholder="ID">
                             </div>
                         </div>
 
@@ -874,8 +875,8 @@
                                 </div>
                                 <input type="text" class="custom-input @error('numero_commande') is-invalid @enderror"
                                     id="numero_commande" name="numero_commande"
-                                    value="{{ old('numero_commande', $commandeClient->numero_commande) }}"
-                                    required placeholder="Ex: CMD-2026-001">
+                                    value="{{ old('numero_commande', $commandeClient->numero_commande) }}" required
+                                    placeholder="Ex: CMD-2026-001">
                             </div>
                             @error('numero_commande')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -910,8 +911,7 @@
                                 <div class="custom-input-icon">
                                     <i class="bi bi-truck"></i>
                                 </div>
-                                <input type="date" class="custom-input"
-                                    id="date_livraison" name="date_livraison"
+                                <input type="date" class="custom-input" id="date_livraison" name="date_livraison"
                                     value="{{ old('date_livraison', $commandeClient->date_livraison ? \Carbon\Carbon::parse($commandeClient->date_livraison)->format('Y-m-d') : '') }}">
                             </div>
                         </div>
@@ -934,7 +934,8 @@
                                 <div class="custom-input-icon">
                                     <i class="bi bi-people-fill"></i>
                                 </div>
-                                <select class="custom-select @error('client_id') is-invalid @enderror" id="client_id" name="client_id" required>
+                                <select class="custom-select @error('client_id') is-invalid @enderror" id="client_id"
+                                    name="client_id" required>
                                     <option value="" disabled>-- Sélectionnez un client --</option>
                                     @foreach ($clients as $client)
                                         <option value="{{ $client->id }}" {{ old('client_id', $commandeClient->client_id) == $client->id ? 'selected' : '' }}>
@@ -981,7 +982,8 @@
                                     <option value="">-- Non assignée --</option>
                                     @foreach ($expeditions as $exped)
                                         <option value="{{ $exped->id }}" {{ old('expedition_id', $commandeClient->expedition_id) == $exped->id ? 'selected' : '' }}>
-                                            {{ $exped->employes->nom_complet ?? 'N/A' }} - {{ \Carbon\Carbon::parse($exped->date_expedition)->format('d/m/Y') }}
+                                            {{ $exped->employes->nom_complet ?? 'N/A' }} -
+                                            {{ \Carbon\Carbon::parse($exped->date_expedition)->format('d/m/Y') }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -1027,7 +1029,8 @@
                                 </div>
                                 <select class="custom-select" id="statut_paiement" name="statut_paiement">
                                     <option value="Non payé" {{ old('statut_paiement', $commandeClient->statut_paiement) == 'Non payé' ? 'selected' : '' }}>Non payé</option>
-                                    <option value="Partiellement payé" {{ old('statut_paiement', $commandeClient->statut_paiement) == 'Partiellement payé' ? 'selected' : '' }}>Partiellement payé</option>
+                                    <option value="Partiellement payé" {{ old('statut_paiement', $commandeClient->statut_paiement) == 'Partiellement payé' ? 'selected' : '' }}>
+                                        Partiellement payé</option>
                                     <option value="Payé" {{ old('statut_paiement', $commandeClient->statut_paiement) == 'Payé' ? 'selected' : '' }}>Payé</option>
                                 </select>
                             </div>
@@ -1076,24 +1079,33 @@
                                         @endphp
                                         <tr class="produit-row">
                                             <td>
-                                                <select class="table-select produit-select" name="produits[{{ $index }}][produit_id]" required>
+                                                <select class="table-select produit-select"
+                                                    name="produits[{{ $index }}][produit_id]" required>
                                                     <option value="" data-prix="0">Sélectionnez un produit...</option>
                                                     @foreach ($produits as $produit)
-                                                        <option value="{{ $produit->id }}" data-prix="{{ $produit->prix_vente }}" {{ $produit_id == $produit->id ? 'selected' : '' }}>{{ $produit->nom_produit }}</option>
+                                                        <option value="{{ $produit->id }}" data-prix="{{ $produit->prix_vente }}" {{ $produit_id == $produit->id ? 'selected' : '' }}>
+                                                            {{ $produit->nom_produit }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="number" class="table-input text-center quantite-input" name="produits[{{ $index }}][quantite]" min="1" value="{{ $quantite }}" required>
+                                                <input type="number" class="table-input text-center quantite-input"
+                                                    name="produits[{{ $index }}][quantite]" min="1" value="{{ $quantite }}"
+                                                    required>
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01" class="table-input text-end prix-unitaire-input" name="produits[{{ $index }}][prix_unitaire]" value="{{ $prix_unitaire }}" required readonly>
+                                                <input type="number" step="0.01"
+                                                    class="table-input text-end prix-unitaire-input"
+                                                    name="produits[{{ $index }}][prix_unitaire]" value="{{ $prix_unitaire }}"
+                                                    required readonly>
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01" class="table-input text-center remise-input" name="produits[{{ $index }}][remise]" min="0" value="{{ $remise }}">
+                                                <input type="number" step="0.01" class="table-input text-center remise-input"
+                                                    name="produits[{{ $index }}][remise]" min="0" value="{{ $remise }}">
                                             </td>
                                             <td>
-                                                <div class="total-display prix-total-input">{{ number_format($prix_total, 2, '.', '') }}</div>
+                                                <div class="total-display prix-total-input">
+                                                    {{ number_format($prix_total, 2, '.', '') }}</div>
                                             </td>
                                             <td>
                                                 <button type="button" class="btn-remove remove-row-btn" title="Supprimer" {{ count($oldProduits) <= 1 ? 'disabled' : '' }}>
@@ -1119,29 +1131,38 @@
                                 <div class="product-card-item produit-row-mobile">
                                     <div class="product-card-field full-width">
                                         <label>Produit</label>
-                                        <select class="table-select produit-select-mobile" name="produits_mobile[{{ $index }}][produit_id]" required>
+                                        <select class="table-select produit-select-mobile"
+                                            name="produits_mobile[{{ $index }}][produit_id]" required>
                                             <option value="" data-prix="0">Sélectionnez un produit...</option>
                                             @foreach ($produits as $produit)
-                                                <option value="{{ $produit->id }}" data-prix="{{ $produit->prix_vente }}" {{ $produit_id == $produit->id ? 'selected' : '' }}>{{ $produit->nom_produit }}</option>
+                                                <option value="{{ $produit->id }}" data-prix="{{ $produit->prix_vente }}" {{ $produit_id == $produit->id ? 'selected' : '' }}>{{ $produit->nom_produit }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="product-card-row">
                                         <div class="product-card-field">
                                             <label>Quantité</label>
-                                            <input type="number" class="table-input text-center quantite-input-mobile" name="produits_mobile[{{ $index }}][quantite]" min="1" value="{{ $quantite }}" required>
+                                            <input type="number" class="table-input text-center quantite-input-mobile"
+                                                name="produits_mobile[{{ $index }}][quantite]" min="1" value="{{ $quantite }}"
+                                                required>
                                         </div>
                                         <div class="product-card-field">
                                             <label>Prix Unit. (MAD)</label>
-                                            <input type="number" step="0.01" class="table-input text-end prix-unitaire-input-mobile" name="produits_mobile[{{ $index }}][prix_unitaire]" value="{{ $prix_unitaire }}" required readonly>
+                                            <input type="number" step="0.01"
+                                                class="table-input text-end prix-unitaire-input-mobile"
+                                                name="produits_mobile[{{ $index }}][prix_unitaire]" value="{{ $prix_unitaire }}"
+                                                required readonly>
                                         </div>
                                         <div class="product-card-field">
                                             <label>Remise (%)</label>
-                                            <input type="number" step="0.01" class="table-input text-center remise-input-mobile" name="produits_mobile[{{ $index }}][remise]" min="0" value="{{ $remise }}">
+                                            <input type="number" step="0.01" class="table-input text-center remise-input-mobile"
+                                                name="produits_mobile[{{ $index }}][remise]" min="0" value="{{ $remise }}">
                                         </div>
                                         <div class="product-card-field">
                                             <label>Total (MAD)</label>
-                                            <div class="total-display prix-total-input-mobile" style="padding: 0.5rem 0;">{{ number_format($prix_total, 2, '.', '') }}</div>
+                                            <div class="total-display prix-total-input-mobile" style="padding: 0.5rem 0;">
+                                                {{ number_format($prix_total, 2, '.', '') }}</div>
                                         </div>
                                     </div>
                                     <div class="product-card-actions">
@@ -1157,10 +1178,12 @@
                         <div class="products-footer">
                             <span class="products-footer-label">Montant Total Global :</span>
                             <div class="products-footer-value">
-                                <span id="montant_total_display">{{ number_format(old('montant_total', $commandeClient->montant_total), 2, '.', '') }}</span>
+                                <span
+                                    id="montant_total_display">{{ number_format(old('montant_total', $commandeClient->montant_total), 2, '.', '') }}</span>
                                 <span class="currency">MAD</span>
                             </div>
-                            <input type="hidden" id="montant_total" name="montant_total" value="{{ number_format(old('montant_total', $commandeClient->montant_total), 2, '.', '') }}">
+                            <input type="hidden" id="montant_total" name="montant_total"
+                                value="{{ number_format(old('montant_total', $commandeClient->montant_total), 2, '.', '') }}">
                         </div>
                     </div>
 
@@ -1180,10 +1203,12 @@
                             <i class="bi bi-journal-text"></i> Notes Additionnelles
                         </label>
                         <div class="custom-input-wrapper">
-                            <div class="custom-input-icon" style="border-radius: 10px 0 0 10px; align-self: stretch; height: auto;">
+                            <div class="custom-input-icon"
+                                style="border-radius: 10px 0 0 10px; align-self: stretch; height: auto;">
                                 <i class="bi bi-chat-dots"></i>
                             </div>
-                            <textarea class="custom-textarea" id="notes" name="notes" placeholder="Ajoutez des notes supplémentaires ici...">{{ old('notes', $commandeClient->notes) }}</textarea>
+                            <textarea class="custom-textarea" id="notes" name="notes"
+                                placeholder="Ajoutez des notes supplémentaires ici...">{{ old('notes', $commandeClient->notes) }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -1202,7 +1227,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let rowIdx = document.querySelectorAll('.produit-row').length;
             const tableBody = document.querySelector('#produits-table tbody');
             const montantTotalInput = document.getElementById('montant_total');
@@ -1236,7 +1261,7 @@
                 const remiseInput = row.querySelector('.remise-input');
                 const removeBtn = row.querySelector('.remove-row-btn');
 
-                produitSelect.addEventListener('change', function() {
+                produitSelect.addEventListener('change', function () {
                     const selectedOption = this.options[this.selectedIndex];
                     const prix = selectedOption.getAttribute('data-prix');
                     if (prix !== null) {
@@ -1252,7 +1277,7 @@
                 remiseInput.addEventListener('input', calculateTotals);
 
                 if (removeBtn) {
-                    removeBtn.addEventListener('click', function() {
+                    removeBtn.addEventListener('click', function () {
                         if (document.querySelectorAll('.produit-row').length > 1) {
                             row.remove();
                             calculateTotals();
@@ -1275,7 +1300,7 @@
                 updateRowListeners(row);
             });
 
-            addRowBtn.addEventListener('click', function() {
+            addRowBtn.addEventListener('click', function () {
                 const firstRow = tableBody.querySelector('.produit-row');
                 const newRow = firstRow.cloneNode(true);
 

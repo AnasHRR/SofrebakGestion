@@ -481,11 +481,12 @@
 
     @media print {
         /* Hide everything from the web UI */
-        .sidebar, .top-bar, .page-header, .detail-layout { display: none !important; }
+        .sidebar, .top-bar, .page-header, .detail-layout, .sidebar-card { display: none !important; }
 
         .main-content {
             margin-left: 0 !important;
             background: #fff !important;
+            padding: 0 !important;
         }
 
         .page-content {
@@ -501,7 +502,7 @@
         /* Show print invoice */
         .print-invoice {
             display: block !important;
-            padding: 0;
+            padding: 10mm 15mm !important;
             font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
             font-size: 11px;
             color: #1e293b;
@@ -515,30 +516,36 @@
         .inv-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            padding-bottom: 20px;
+            align-items: center;
+            padding-bottom: 30px;
             border-bottom: 3px solid #1e3a8a;
-            margin-bottom: 24px;
+            margin-bottom: 35px;
+        }
+
+        .inv-logo img {
+            max-height: 110px;
+            width: auto;
         }
 
         .inv-company {
             flex: 1;
+            padding-left: 30px;
         }
 
         .inv-company-name {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
             color: #1e3a8a;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
+            letter-spacing: 1.5px;
+            margin-bottom: 4px;
         }
 
         .inv-company-sub {
-            font-size: 9px;
+            font-size: 10px;
             color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
+            letter-spacing: 3px;
+            font-weight: 700;
         }
 
         .inv-title-box {
@@ -546,213 +553,199 @@
         }
 
         .inv-title {
-            font-size: 28px;
-            font-weight: 800;
+            font-size: 32px;
+            font-weight: 900;
             color: #1e3a8a;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             line-height: 1;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .inv-ref {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 700;
             color: #475569;
         }
 
         .inv-ref strong {
             color: #1e3a8a;
+            font-weight: 800;
         }
 
         /* Info Boxes */
         .inv-info-row {
             display: flex;
-            gap: 24px;
-            margin-bottom: 24px;
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .inv-info-box {
             flex: 1;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 14px 16px;
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px 22px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .inv-info-box-title {
-            font-size: 9px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             color: #1e3a8a;
-            margin-bottom: 8px;
-            padding-bottom: 6px;
-            border-bottom: 1.5px solid #dbeafe;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eff6ff;
         }
 
         .inv-info-line {
             display: flex;
             justify-content: space-between;
-            padding: 3px 0;
-            font-size: 11px;
+            padding: 5px 0;
+            font-size: 11.5px;
         }
 
         .inv-info-line .label {
             color: #64748b;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .inv-info-line .value {
             font-weight: 700;
-            color: #1e293b;
+            color: #0f172a;
             text-align: right;
         }
 
-        /* Amounts Table */
-        .inv-table {
+        /* Items Table */
+        .inv-items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 24px;
+            margin-top: 20px;
         }
 
-        .inv-table thead th {
+        .inv-items-table th {
             background: #1e3a8a !important;
             color: #fff !important;
-            padding: 10px 14px;
+            padding: 8px 12px;
             font-size: 10px;
-            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
             text-align: left;
         }
 
-        .inv-table thead th:last-child {
-            text-align: right;
-        }
-
-        .inv-table tbody td {
-            padding: 10px 14px;
-            border-bottom: 1px solid #e2e8f0;
+        .inv-items-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2eaf8;
             font-size: 11px;
         }
 
-        .inv-table tbody td:last-child {
-            text-align: right;
-            font-weight: 700;
-        }
+        .inv-items-table .text-end { text-align: right; }
+        .inv-items-table .text-center { text-align: center; }
 
-        .inv-table tbody tr:nth-child(even) {
-            background: #f8fafc !important;
-        }
-
-        /* Total Section */
-        .inv-totals {
-            display: flex;
-            justify-content: flex-end;
+        /* Totals Table Requested */
+        .inv-totals-table {
+            width: 100%;
+            margin-top: 50px;
             margin-bottom: 30px;
-        }
-
-        .inv-totals-box {
-            width: 280px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 8px;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1.5px solid #1e3a8a;
+            border-radius: 12px;
             overflow: hidden;
         }
-
-        .inv-total-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 16px;
-            font-size: 11px;
-            border-bottom: 1px solid #f1f5f9;
+        
+        .inv-totals-table td {
+            padding: 12px 20px;
+            border-bottom: 1.5px solid #e2e8f0;
         }
 
-        .inv-total-row .label {
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .inv-total-row .value {
+        .inv-totals-table .label {
             font-weight: 700;
-            color: #1e293b;
+            color: #1e3a8a;
+            width: 70%;
+            text-align: right;
+            background: #f8fafc;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1px;
         }
 
-        .inv-total-row.grand {
-            background: #1e3a8a !important;
+        .inv-totals-table .value {
+            font-weight: 800;
+            color: #0f172a;
+            text-align: right;
+            font-size: 13px;
+        }
+
+        .inv-totals-table tr:last-child td {
             border-bottom: none;
         }
 
-        .inv-total-row.grand .label {
+        .inv-totals-table .total-row td {
+            background: #1e3a8a !important;
             color: #fff !important;
-            font-weight: 700;
-            font-size: 12px;
+            border-color: #1e3a8a;
+            padding: 16px 20px;
         }
-
-        .inv-total-row.grand .value {
+        
+        .inv-totals-table .total-row .label {
+            background: #1e3a8a !important;
             color: #fff !important;
-            font-weight: 800;
-            font-size: 14px;
+            font-size: 13px;
         }
 
-        .inv-total-row.paid .value {
-            color: #16a34a;
-        }
-
-        .inv-total-row.remaining .value {
-            color: #ef4444;
+        .inv-totals-table .total-row .value {
+            color: #fff !important;
+            font-size: 18px;
         }
 
         /* Status */
         .inv-status {
             text-align: center;
-            margin-bottom: 24px;
+            margin: 40px 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
         .inv-status-badge {
             display: inline-block;
-            padding: 6px 24px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 800;
+            padding: 10px 40px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            border: 2px solid;
+            letter-spacing: 3px;
+            border: 3px solid;
+            background: #fff;
         }
 
-        .inv-status-badge.payee       { color: #16a34a; border-color: #16a34a; background: #f0fdf4 !important; }
-        .inv-status-badge.partielle   { color: #ea580c; border-color: #ea580c; background: #fff7ed !important; }
-        .inv-status-badge.non-payee   { color: #ef4444; border-color: #ef4444; background: #fef2f2 !important; }
-        .inv-status-badge.annulee     { color: #64748b; border-color: #94a3b8; background: #f8fafc !important; }
+        .inv-status-badge.payee       { color: #16a34a; border-color: #16a34a; }
+        .inv-status-badge.partielle   { color: #ea580c; border-color: #ea580c; }
+        .inv-status-badge.non-payee   { color: #ef4444; border-color: #ef4444; }
+        .inv-status-badge.annulee     { color: #64748b; border-color: #94a3b8; }
 
         /* Footer */
         .inv-footer {
-            border-top: 2px solid #1e3a8a;
-            padding-top: 12px;
+            border-top: 3px double #1e3a8a;
+            padding-top: 20px;
+            margin-top: 60px;
             text-align: center;
         }
 
-        .inv-footer p {
-            font-size: 9px;
-            color: #94a3b8;
-            margin: 2px 0;
-            letter-spacing: 0.5px;
-        }
-
-        .inv-footer .brand {
-            font-size: 10px;
-            font-weight: 800;
-            color: #1e3a8a;
-            letter-spacing: 2px;
+        .inv-footer-info {
+            font-size: 11px;
+            color: #1e293b;
+            line-height: 1.8;
+            font-weight: 700;
+            max-width: 90%;
+            margin: 0 auto;
         }
 
         @page {
             size: A4;
             margin: 0;
-        }
-
-        .print-invoice {
-            padding: 15mm 18mm !important;
         }
     }
 </style>
@@ -886,7 +879,7 @@
                 <div class="detail-field">
                     <div class="detail-field-icon"><i class="bi bi-calculator"></i></div>
                     <div class="detail-field-content">
-                        <div class="detail-field-label">Sous Total</div>
+                        <div class="detail-field-label">Montant Hors Taxe</div>
                         <div class="detail-field-value" style="font-weight:800;">
                             {{ number_format($facture->sous_total, 2, ',', ' ') }}
                             <span style="font-size:0.72rem;color:#64748b;font-weight:500;">DH</span>
@@ -952,9 +945,39 @@
                     </span>
                 </div>
 
+                <div class="detail-section-title">
+                    <i class="bi bi-box-seam"></i> Produits Associés
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Produit</th>
+                                <th class="text-center">Quantité</th>
+                                <th class="text-end">Prix Unit. (DH)</th>
+                                <th class="text-end">Total (DH)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($facture->details as $detail)
+                                <tr>
+                                    <td>{{ $detail->produit->nom_produit }}</td>
+                                    <td class="text-center">{{ $detail->quantite }}</td>
+                                    <td class="text-end">{{ number_format($detail->prix_unitaire, 2, ',', ' ') }}</td>
+                                    <td class="text-end">{{ number_format($detail->total, 2, ',', ' ') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">Aucun produit associé</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
                 <div class="payment-summary">
                     <div class="payment-row">
-                        <span class="label">Sous Total</span>
+                        <span class="label">Montant Hors Taxe</span>
                         <span class="value">{{ number_format($facture->sous_total, 2, ',', ' ') }} DH</span>
                     </div>
                     <div class="payment-row">
@@ -1024,9 +1047,12 @@
 
     <!-- Invoice Header -->
     <div class="inv-header">
+        <div class="inv-logo">
+            <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo SOFREBAK">
+        </div>
         <div class="inv-company">
-            <div class="inv-company-name">STE SOFREBAK</div>
-            <div class="inv-company-sub">Gestion Commerciale</div>
+            <div class="inv-company-name" style="font-family: Times New Roman, serif; font-weight: 900;">STÉ SOFREBAK</div>
+            <div class="inv-company-sub" style="font-family: Times New Roman, serif;">Gestion Commerciale</div>
         </div>
         <div class="inv-title-box">
             <div class="inv-title">Facture</div>
@@ -1052,6 +1078,10 @@
                     <span class="label">Tél :</span>
                     <span class="value">{{ $facture->client->telephone ?? '—' }}</span>
                 </div>
+                <div class="inv-info-line">
+                    <span class="label">Adresse :</span>
+                    <span class="value">{{ $facture->client->adresse ?? '—' }}</span>
+                </div>
             @else
                 <div class="inv-info-line">
                     <span class="label">Client</span>
@@ -1064,11 +1094,7 @@
         <div class="inv-info-box">
             <div class="inv-info-box-title">Détails Facture</div>
             <div class="inv-info-line">
-                <span class="label">N° Facture :</span>
-                <span class="value">{{ $facture->numero_facture }}</span>
-            </div>
-            <div class="inv-info-line">
-                <span class="label">Date Facture :</span>
+                <span class="label">Date de Facture :</span>
                 <span class="value">{{ $facture->date_facture ? \Carbon\Carbon::parse($facture->date_facture)->format('d/m/Y') : '—' }}</span>
             </div>
             <div class="inv-info-line">
@@ -1076,54 +1102,57 @@
                 <span class="value">{{ $facture->date_echeance ? \Carbon\Carbon::parse($facture->date_echeance)->format('d/m/Y') : '—' }}</span>
             </div>
             <div class="inv-info-line">
-                <span class="label">Date de Règlement :</span>
-                <span class="value">{{ $facture->date_reglement ? \Carbon\Carbon::parse($facture->date_reglement)->format('d/m/Y') : '—' }}</span>
+                <span class="label">Statut :</span>
+                <span class="value">{{ $facture->statut }}</span>
             </div>
         </div>
     </div>
 
-    <!-- Amounts Table -->
-    <table class="inv-table">
+    <!-- Items Table -->
+    <table class="inv-items-table">
         <thead>
             <tr>
-                <th>Description</th>
-                <th>Montant</th>
+                <th style="width: 45%;">Description</th>
+                <th style="width: 15%;" class="text-center">Qté</th>
+                <th style="width: 20%;" class="text-end">P.U (DH)</th>
+                <th style="width: 20%;" class="text-end">Total (DH)</th>
             </tr>
         </thead>
         <tbody>
+            @foreach($facture->details as $item)
+                <tr>
+                    <td>{{ $item->produit->nom_produit }}</td>
+                    <td class="text-center">{{ $item->quantite }}</td>
+                    <td class="text-end">{{ number_format($item->prix_unitaire, 2, ',', ' ') }}</td>
+                    <td class="text-end">{{ number_format($item->total, 2, ',', ' ') }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Totals Table Requested -->
+    <table class="inv-totals-table">
+        <tbody>
             <tr>
-                <td>TVA 20% :</td>
-                <td>{{ number_format($facture->montant_tva, 2, ',', ' ') }} DH</td>
+                <td class="label">Montant Hors Taxe</td>
+                <td class="value">{{ number_format($facture->sous_total, 2, ',', ' ') }} DH</td>
+            </tr>
+            <tr>
+                <td class="label">Taux TVA</td>
+                <td class="value">20 %</td>
+            </tr>
+            <tr>
+                <td class="label">TVA (Montant)</td>
+                <td class="value">{{ number_format($facture->montant_tva, 2, ',', ' ') }} DH</td>
+            </tr>
+            <tr class="total-row">
+                <td class="label">MONTANT TOTAL TTC</td>
+                <td class="value">{{ number_format($facture->montant_total, 2, ',', ' ') }} DH</td>
             </tr>
         </tbody>
     </table>
 
-    <!-- Totals -->
-    <div class="inv-totals">
-        <div class="inv-totals-box">
-            <div class="inv-total-row">
-                <span class="label">TVA 20% :</span>
-                <span class="value">{{ number_format($facture->montant_tva, 2, ',', ' ') }} DH</span>
-            </div>
-            <div class="inv-total-row grand">
-                <span class="label">TOTAL TTC</span>
-                <span class="value">{{ number_format($facture->montant_total, 2, ',', ' ') }} DH</span>
-            </div>
-            <div class="inv-total-row paid">
-                <span class="label">Montant Payé</span>
-                <span class="value">{{ number_format($facture->montant_paye ?? 0, 2, ',', ' ') }} DH</span>
-            </div>
-            @php $restant = ($facture->montant_total ?? 0) - ($facture->montant_paye ?? 0); @endphp
-            @if($restant > 0)
-                <div class="inv-total-row remaining">
-                    <span class="label">Restant à Payer</span>
-                    <span class="value">{{ number_format($restant, 2, ',', ' ') }} DH</span>
-                </div>
-            @endif
-        </div>
-    </div>
-
-    <!-- Status -->
+    <!-- Status Badge Centered -->
     <div class="inv-status">
         @php
             $printStatutClass = match($facture->statut) {
@@ -1139,10 +1168,34 @@
         </span>
     </div>
 
+    {{-- <div style="display: flex; justify-content: flex-end; align-items: flex-start; margin-top: -20px;">
+        <!-- Payment Info if any -->
+        <div style="width: 300px; font-size: 11px; color: #1e293b; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            @if($facture->montant_paye > 0)
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0; padding: 6px 0;">
+                    <span style="font-weight: 600;">Déjà payé :</span>
+                    <span style="font-weight: 800; color: #16a34a;">{{ number_format($facture->montant_paye, 2, ',', ' ') }} DH</span>
+                </div>
+                @php $restant = $facture->montant_total - $facture->montant_paye; @endphp
+                @if($restant > 0)
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+                        <span style="font-weight: 600;">Reste à payer :</span>
+                        <span style="font-weight: 800; color: #ef4444;">{{ number_format($restant, 2, ',', ' ') }} DH</span>
+                    </div>
+                @endif
+            @else
+                <div style="text-align: right; font-weight: 700; color: #ef4444; padding: 6px 0;">
+                    En attente de règlement
+                </div>
+            @endif
+        </div>
+    </div> --}}
+
     <!-- Footer -->
     <div class="inv-footer">
-        <p class="brand">SOFREBAK</p>
-        <p>Facture {{ $facture->numero_facture }}</p>
+        <div class="inv-footer-info" style="font-size: 9pt">
+            Compte Bancaire N° : X201138R651 - banque : Crédit Agricole - RC : 23177 - Patente : 13476298 - IF : 4520596 - N° Cnss : 6546743 - ICE : 000065547000093
+        </div>
     </div>
 </div>
 @endsection

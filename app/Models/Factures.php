@@ -52,4 +52,9 @@ class Factures extends Model
     public function client(){
         return $this->belongsTo(clients::class , 'client_id' , 'id');
     }
+
+    public function details()
+    {
+        return $this->hasMany(FactureDetail::class, 'facture_id', 'id');
+    }
 }
