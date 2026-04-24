@@ -11,6 +11,7 @@ class Paiement extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['id' , 'client_id' , "comptable_id", "montant", 'date_paiement' , 'mode_paiement', 'region_id', 'notes'];
 
+    public $timestamps = false;
     public function client()
     {
         return $this->belongsTo(clients::class, 'client_id' , 'id');
