@@ -646,8 +646,8 @@
         /* Totals Table Requested */
         .inv-totals-table {
             width: 100%;
-            margin-top: 50px;
-            margin-bottom: 30px;
+            margin-top: 25px;
+            margin-bottom: 20px;
             border-collapse: separate;
             border-spacing: 0;
             border: 1.5px solid #1e3a8a;
@@ -656,18 +656,18 @@
         }
         
         .inv-totals-table td {
-            padding: 12px 20px;
-            border-bottom: 1.5px solid #e2e8f0;
+            padding: 8px 15px;
+            border-bottom: 1.2px solid #e2e8f0;
         }
 
         .inv-totals-table .label {
             font-weight: 700;
             color: #1e3a8a;
-            width: 70%;
+            width: 75%;
             text-align: right;
             background: #f8fafc;
             text-transform: uppercase;
-            font-size: 10px;
+            font-size: 9px;
             letter-spacing: 1px;
         }
 
@@ -675,7 +675,7 @@
             font-weight: 800;
             color: #0f172a;
             text-align: right;
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .inv-totals-table tr:last-child td {
@@ -686,24 +686,50 @@
             background: #1e3a8a !important;
             color: #fff !important;
             border-color: #1e3a8a;
-            padding: 16px 20px;
+            padding: 10px 15px;
         }
         
         .inv-totals-table .total-row .label {
             background: #1e3a8a !important;
             color: #fff !important;
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .inv-totals-table .total-row .value {
             color: #fff !important;
-            font-size: 18px;
+            font-size: 14px;
+        }
+
+        .inv-totals-table .payment-row td {
+            background: #f0fdf4;
+        }
+
+        .inv-totals-table .payment-row .label {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .inv-totals-table .payment-row .value {
+            color: #16a34a;
+        }
+
+        .inv-totals-table .remaining-row td {
+            background: #fef2f2;
+        }
+
+        .inv-totals-table .remaining-row .label {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .inv-totals-table .remaining-row .value {
+            color: #ef4444;
         }
 
         /* Status */
         .inv-status {
             text-align: center;
-            margin: 40px 0;
+            margin: 15px 0;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -711,13 +737,13 @@
 
         .inv-status-badge {
             display: inline-block;
-            padding: 10px 40px;
+            padding: 6px 30px;
             border-radius: 50px;
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            border: 3px solid;
+            letter-spacing: 2px;
+            border: 2px solid;
             background: #fff;
         }
 
@@ -728,18 +754,18 @@
 
         /* Footer */
         .inv-footer {
-            border-top: 3px double #1e3a8a;
-            padding-top: 20px;
-            margin-top: 60px;
+            border-top: 2px double #1e3a8a;
+            padding-top: 15px;
+            margin-top: 30px;
             text-align: center;
         }
 
         .inv-footer-info {
-            font-size: 11px;
+            font-size: 9px;
             color: #1e293b;
-            line-height: 1.8;
+            line-height: 1.5;
             font-weight: 700;
-            max-width: 90%;
+            max-width: 95%;
             margin: 0 auto;
         }
 
@@ -1138,17 +1164,26 @@
                 <td class="value">{{ number_format($facture->sous_total, 2, ',', ' ') }} DH</td>
             </tr>
             <tr>
-                <td class="label">Taux TVA</td>
-                <td class="value">20 %</td>
-            </tr>
-            <tr>
-                <td class="label">TVA (Montant)</td>
+                <td class="label">TVA (20 %)</td>
                 <td class="value">{{ number_format($facture->montant_tva, 2, ',', ' ') }} DH</td>
             </tr>
             <tr class="total-row">
                 <td class="label">MONTANT TOTAL TTC</td>
                 <td class="value">{{ number_format($facture->montant_total, 2, ',', ' ') }} DH</td>
             </tr>
+            @if($facture->montant_paye > 0)
+                <tr class="payment-row">
+                    <td class="label">Montant Déjà Payé</td>
+                    <td class="value">{{ number_format($facture->montant_paye, 2, ',', ' ') }} DH</td>
+                </tr>
+                @php $restant = $facture->montant_total - $facture->montant_paye; @endphp
+                @if($restant > 0)
+                    <tr class="remaining-row">
+                        <td class="label">Reste à Payer</td>
+                        <td class="value">{{ number_format($restant, 2, ',', ' ') }} DH</td>
+                    </tr>
+                @endif
+            @endif
         </tbody>
     </table>
 
@@ -1167,29 +1202,6 @@
             {{ $facture->statut ?? 'Non défini' }}
         </span>
     </div>
-
-    {{-- <div style="display: flex; justify-content: flex-end; align-items: flex-start; margin-top: -20px;">
-        <!-- Payment Info if any -->
-        <div style="width: 300px; font-size: 11px; color: #1e293b; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            @if($facture->montant_paye > 0)
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0; padding: 6px 0;">
-                    <span style="font-weight: 600;">Déjà payé :</span>
-                    <span style="font-weight: 800; color: #16a34a;">{{ number_format($facture->montant_paye, 2, ',', ' ') }} DH</span>
-                </div>
-                @php $restant = $facture->montant_total - $facture->montant_paye; @endphp
-                @if($restant > 0)
-                    <div style="display: flex; justify-content: space-between; padding: 6px 0;">
-                        <span style="font-weight: 600;">Reste à payer :</span>
-                        <span style="font-weight: 800; color: #ef4444;">{{ number_format($restant, 2, ',', ' ') }} DH</span>
-                    </div>
-                @endif
-            @else
-                <div style="text-align: right; font-weight: 700; color: #ef4444; padding: 6px 0;">
-                    En attente de règlement
-                </div>
-            @endif
-        </div>
-    </div> --}}
 
     <!-- Footer -->
     <div class="inv-footer">

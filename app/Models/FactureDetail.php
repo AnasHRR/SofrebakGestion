@@ -13,14 +13,7 @@ class FactureDetail extends Model
     protected $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = [
-        'id',
-        'facture_id',
-        'produit_id',
-        'quantite',
-        'prix_unitaire',
-        'total'
-    ];
+    protected $fillable = ['id', 'facture_id', 'produit_id', 'quantite', 'prix_unitaire', 'total'];
 
     protected static function boot()
     {

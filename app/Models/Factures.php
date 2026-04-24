@@ -8,6 +8,7 @@ class Factures extends Model
 {
     public $timestamps = false;
     public $incrementing = false;
+    protected $keyType = 'string';
     
     protected $fillable = ['id' , 'client_id', 'numero_facture' , 'date_facture' , 'date_echeance' ,'date_reglement', 'sous_total' , 'montant_tva' , 'montant_total' , 'montant_paye' , 'statut'];
     protected $primaryKey = 'id';

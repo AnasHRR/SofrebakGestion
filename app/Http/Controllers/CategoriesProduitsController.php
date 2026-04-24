@@ -57,7 +57,7 @@ class CategoriesProduitsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(categories_produits $categories_produit)
+    public function show()
     {
         return to_route('categories.index');
     }
@@ -74,17 +74,17 @@ class CategoriesProduitsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
-        $request->validate([
+        $req->validate([
             'nom' => 'required',
             'description' => 'required'
         ]);
 
         $categorie = categories_produits::findOrFail($id);
         $categorie->update([
-            'nom' => $request->nom,
-            'description' => $request->description
+            'nom' => $req->nom,
+            'description' => $req->description
         ]);
 
         return to_route('categories.index')->with('success', 'Catégorie modifiée avec succès.');

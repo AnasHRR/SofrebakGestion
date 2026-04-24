@@ -469,23 +469,53 @@
     }
 
     .btn-auto-fill {
-        background: var(--blue-500);
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
         color: white;
         border: none;
-        border-radius: 8px;
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
+        border-radius: 0 10px 10px 0;
+        padding: 0 1.2rem;
+        font-size: 1.1rem;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        justify-content: center;
+        height: 100%;
+        box-shadow: inset -2px 0 8px rgba(0,0,0,0.1);
     }
 
     .btn-auto-fill:hover {
-        background: var(--blue-600);
-        transform: translateY(-1px);
+        background: linear-gradient(135deg, #4f46e5, #4338ca);
+        padding: 0 1.4rem;
+        filter: brightness(1.1);
+    }
+
+    .btn-auto-fill:active {
+        transform: scaleX(0.95);
+    }
+
+    .btn-auto-fill i {
+        transition: transform 0.4s ease;
+    }
+
+    .btn-auto-fill:hover i {
+        transform: rotate(360deg) scale(1.2);
+    }
+
+    .btn-auto-fill::after {
+        content: 'Auto';
+        font-size: 0.65rem;
+        position: absolute;
+        bottom: 2px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .btn-auto-fill:hover::after {
+        opacity: 1;
     }
 </style>
 
@@ -730,8 +760,8 @@
                                        value="{{ old('montant_paye', 0) }}"
                                        placeholder="0.00">
                                 <span class="currency-suffix" style="border-radius:0;">DH</span>
-                                <button type="button" class="btn-auto-fill" id="btn-generate-products" title="Générer des produits aléatoires" style="border-radius: 0 10px 10px 0; height: 100%;">
-                                    <i class="bi bi-magic"></i>
+                                <button type="button" class="btn-auto-fill" id="btn-generate-products" title="Générer des produits aléatoires" style="position: relative;">
+                                    <i class="bi bi-dice-5-fill"></i>
                                 </button>
                             </div>
                         </div>

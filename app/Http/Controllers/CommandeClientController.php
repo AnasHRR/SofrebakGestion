@@ -19,7 +19,7 @@ class CommandeClientController extends Controller
      */
     public function index(Request $request)
     {
-        $query = CommandeClient::query();
+        $query = CommandeClient::with(['client', 'expedition']);
 
         if ($request->filled('numero_commande')) {
             $query->where('numero_commande', 'like', '%' . $request->numero_commande . '%');
@@ -29,7 +29,7 @@ class CommandeClientController extends Controller
             $query->whereDate('date_commande', $request->date_commande);
         }
 
-        // ── Calcul des stats avant de masquer les livrées ──
+        // Calcul des stats avant de masquer les livrées
         $allResultsForStats = $query->get();
         $stats = [
             'total' => $allResultsForStats->count(),
@@ -128,8 +128,7 @@ class CommandeClientController extends Controller
 
             foreach ($validatedData['produits'] as $produit) {
                 $remise = $produit['remise'] ?? 0;
-                detailsCommandeClients::create([
-                    'commande_client_id' => $commande->id,
+                $commande->details()->create([
                     'produit_id' => $produit['produit_id'],
                     'quantite' => $produit['quantite'],
                     'prix_unitaire' => $produit['prix_unitaire'],
@@ -144,7 +143,7 @@ class CommandeClientController extends Controller
             return back()->withInput()->withErrors(['error' => 'Erreur lors de l\'enregistrement de la commande: ' . $e->getMessage()]);
         }
 
-        return redirect()->route('commandes.index')->with('success', 'Commande créée avec succès.');
+        return to_route('commandes.index')->with('success', 'Commande créée avec succès.');
     }
 
     /**
