@@ -89,8 +89,8 @@ class RetoursController extends Controller
                 ]);
             }
 
-            // Update command total amount
-            $this->updateCommandeTotal($req->commande_client_id);
+            // No longer updating command total amount as requested
+            // $this->updateCommandeTotal($req->commande_client_id);
 
             DB::commit();
             return to_route('retours.index')->with('success', 'Retours enregistrés et stock mis à jour avec succès');
@@ -150,9 +150,6 @@ class RetoursController extends Controller
 
             $retour->update($req->all());
             
-            // Update command total
-            $this->updateCommandeTotal($retour->commande_client_id);
-
             DB::commit();
             return to_route('retours.index')->with('success', 'Retour modifié avec succès');
         } catch (\Exception $e) {
@@ -173,11 +170,7 @@ class RetoursController extends Controller
                 ->where('date_mouvement', $retour->date_retour)
                 ->delete();
 
-            $commandeId = $retour->commande_client_id;
             $retour->delete();
-
-            // Update command total
-            $this->updateCommandeTotal($commandeId);
 
             DB::commit();
             return to_route('retours.index')->with('success', 'Retour supprimé avec succès');
@@ -202,30 +195,5 @@ class RetoursController extends Controller
         });
 
         return response()->json($produits);
-    }
-
-    /**
-     * Helper to update the total amount of a command based on its details and returns.
-     */
-    private function updateCommandeTotal($commandeId)
-    {
-        $commande = CommandeClient::with('details')->find($commandeId);
-        if (!$commande) return;
-
-        $totalOriginal = $commande->details->sum('prix_total');
-        
-        $totalRetours = 0;
-        $allRetours = Retours::where('commande_client_id', $commandeId)->get();
-        
-        foreach ($allRetours as $r) {
-            $detail = $commande->details->where('produit_id', $r->produit_id)->first();
-            if ($detail) {
-                $prixUnitaireNet = $detail->prix_unitaire * (1 - ($detail->remise ?? 0) / 100);
-                $totalRetours += $r->quantite * $prixUnitaireNet;
-            }
-        }
-
-        $commande->montant_total = $totalOriginal - $totalRetours;
-        $commande->save();
     }
 }
