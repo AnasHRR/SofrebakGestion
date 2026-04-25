@@ -175,8 +175,11 @@
 
                 <div class="col-md-6">
                     <label for="numero_camion" class="form-label">Numéro du Camion</label>
-                    <input type="text" name="numero_camion" id="numero_camion" class="form-control" 
-                           placeholder="Ex: 21872|A|15" value="{{ old('numero_camion') }}" required>
+                    <select name="numero_camion" id="numero_camion" class="form-select" required>
+                        <option value="" selected disabled>Sélectionner un camion...</option>
+                        <option value="21872|A|15" {{ old('numero_camion') == '21872|A|15' ? 'selected' : '' }}>21872|A|15</option>
+                        <option value="64521|B|18" {{ old('numero_camion') == '64521|B|18' ? 'selected' : '' }}>64521|B|18</option>
+                    </select>
                 </div>
 
                 <div class="col-md-6">

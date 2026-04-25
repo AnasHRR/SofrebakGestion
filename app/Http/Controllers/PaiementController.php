@@ -35,7 +35,7 @@ class PaiementController extends Controller
      */
     public function store(Request $req, Paiement $paiement)
     {
-        $req->validate([
+        $rules = [
             'client_id' => 'required',
             'comptable_id' => 'required',
             'montant' => 'required',
@@ -43,7 +43,13 @@ class PaiementController extends Controller
             'mode_paiement' => 'required',
             'region_id' => 'required',
             'notes' => 'required',
-        ]);
+        ];
+
+        if ($req->mode_paiement === 'Chèque') {
+            $rules['numero_cheque'] = 'required';
+        }
+
+        $req->validate($rules);
 
         $paiement->create($req->all());
 
@@ -75,7 +81,7 @@ class PaiementController extends Controller
      */
     public function update(Request $req, Paiement $paiement)
     {
-        $req->validate([
+        $rules = [
             'client_id' => 'required',
             'comptable_id' => 'required',
             'montant' => 'required',
@@ -83,7 +89,13 @@ class PaiementController extends Controller
             'mode_paiement' => 'required',
             'region_id' => 'required',
             'notes' => 'required',
-        ]);
+        ];
+
+        if ($req->mode_paiement === 'Chèque') {
+            $rules['numero_cheque'] = 'required';
+        }
+
+        $req->validate($rules);
 
         $paiement->update($req->all());
 

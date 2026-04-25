@@ -71,6 +71,6 @@ class clients extends Model
 
     public function getCalculatedCreditAttribute()
     {
-        return $this->total_ventes - $this->total_paiements;
+        return $this->total_achats - $this->total_paiements;
     }
 }

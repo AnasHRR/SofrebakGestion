@@ -8,7 +8,7 @@ class Paiement extends Model
 {
     protected $table = 'paiements';
     protected $primaryKey = 'id';
-    protected $fillable = ['id' , 'client_id' , "comptable_id", "montant", 'date_paiement' , 'mode_paiement', 'region_id', 'notes'];
+    protected $fillable = ['id' , 'client_id' , "comptable_id", "montant", 'date_paiement' , 'mode_paiement', 'numero_cheque', 'region_id', 'notes'];
 
     public $timestamps = false;
     public function client()

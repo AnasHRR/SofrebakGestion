@@ -34,7 +34,13 @@ class ClientsController extends Controller
         
         $total_commandes = CommandeClient::where('statut', '!=', 'Annulée')->sum('montant_total');
         $total_paiements = Paiement::sum('montant');
-        $total_credit = $total_commandes - $total_paiements;
+        
+        // Calcul du total des retours pour les commandes non annulées
+        $total_retours = \App\Models\Retours::whereHas('commande_client', function($q) {
+            $q->where('statut', '!=', 'Annulée');
+        })->get()->sum('valeur');
+
+        $total_credit = ($total_commandes - $total_retours) - $total_paiements;
 
         $region = regions::all();
         return view('clients.index', compact('clients' , 'region', 'total_clients' , 'total_credit'));

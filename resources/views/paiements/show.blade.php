@@ -211,6 +211,12 @@
                             <span class="badge-mode-show {{ $modeClass }}">
                                 <i class="bi bi-credit-card me-1"></i>{{ $paiement->mode_paiement }}
                             </span>
+                            @if($paiement->numero_cheque)
+                                <div class="mt-2">
+                                    <span class="info-label">N° de Chèque</span>
+                                    <span class="fw-bold text-dark"><i class="bi bi-hash me-1"></i>{{ $paiement->numero_cheque }}</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

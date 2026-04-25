@@ -190,7 +190,7 @@
                         <label class="form-label">Mode de Paiement</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
-                            <select name="mode_paiement" class="form-select @error('mode_paiement') is-invalid @enderror" required>
+                            <select name="mode_paiement" id="mode_paiement" class="form-select @error('mode_paiement') is-invalid @enderror" required>
                                 <option value="" selected disabled>Choisir le mode</option>
                                 <option value="Espèces" {{ old('mode_paiement') == 'Espèces' ? 'selected' : '' }}>Espèces</option>
                                 <option value="Chèque" {{ old('mode_paiement') == 'Chèque' ? 'selected' : '' }}>Chèque</option>
@@ -199,6 +199,15 @@
                             </select>
                         </div>
                         @error('mode_paiement') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6" id="cheque_field" style="display: none;">
+                        <label class="form-label">Numéro de Chèque</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-hash"></i></span>
+                            <input type="text" name="numero_cheque" id="numero_cheque" class="form-control @error('numero_cheque') is-invalid @enderror" placeholder="Entrez le numéro du chèque" value="{{ old('numero_cheque') }}">
+                        </div>
+                        @error('numero_cheque') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                     </div>
 
                     <!-- Logistique & Responsable -->
@@ -253,4 +262,29 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modePaiement = document.getElementById('mode_paiement');
+        const chequeField = document.getElementById('cheque_field');
+        const numeroCheque = document.getElementById('numero_cheque');
+
+        function toggleChequeField() {
+            if (modePaiement.value === 'Chèque') {
+                chequeField.style.display = 'block';
+                numeroCheque.setAttribute('required', 'required');
+            } else {
+                chequeField.style.display = 'none';
+                numeroCheque.removeAttribute('required');
+            }
+        }
+
+        modePaiement.addEventListener('change', toggleChequeField);
+        
+        // Run on load in case of validation error or old input
+        toggleChequeField();
+    });
+</script>
 @endsection
