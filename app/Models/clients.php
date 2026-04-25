@@ -59,6 +59,11 @@ class clients extends Model
         })->get()->sum('valeur');
     }
 
+    public function getTotalAchatsAttribute()
+    {
+        return $this->total_ventes - $this->total_retours_valeur;
+    }
+
     public function getTotalPaiementsAttribute()
     {
         return $this->paiements()->sum('montant');

@@ -725,7 +725,7 @@
                 <div class="detail-field-content">
                     <div class="detail-field-label">Total des Achats</div>
                     <div class="detail-field-value" style="color: #ea580c; font-weight: 800;">
-                        {{ number_format($client->total_ventes, 2, ',', ' ') }} DH
+                        {{ number_format($client->total_achats, 2, ',', ' ') }} DH
                     </div>
                 </div>
             </div>

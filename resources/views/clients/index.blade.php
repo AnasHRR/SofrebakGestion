@@ -264,6 +264,7 @@
                     <th><i class="bi bi-building me-1"></i> Entreprise</th>
                     <th><i class="bi bi-telephone me-1"></i> Téléphone</th>
                     <th><i class="bi bi-geo-alt me-1"></i> Adresse</th>
+                    <th><i class="bi bi-cart-check me-1"></i> Total Achats</th>
                     <th><i class="bi bi-cash-stack me-1"></i> Crédit Actuel</th>
                     <th style="width: 140px; text-align: center;"><i class="bi bi-gear me-1"></i> Actions</th>
                 </tr>
@@ -279,6 +280,7 @@
                             </a>
                         </td>
                         <td>{{ $cl->adresse }}</td>
+                        <td style="font-weight: 700;">{{ number_format($cl->total_achats, 2, ',', ' ') }} DH</td>
                         <td>
                             <span class="badge-credit">{{ number_format($cl->calculated_credit, 2, ',', ' ') }} DH</span>
                         </td>
