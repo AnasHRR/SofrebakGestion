@@ -185,7 +185,7 @@
     </div>
 
     <div class="form-card-body">
-        <form action="{{ route('categories.update', $categories->id) }}" method="POST">
+        <form action="{{ route('categories.update', $categories->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
             @csrf
             @method('PUT')
 

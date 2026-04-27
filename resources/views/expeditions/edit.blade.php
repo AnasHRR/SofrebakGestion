@@ -152,7 +152,7 @@
     @endif
 
     <div class="form-card">
-        <form action="{{ route('expeditions.update', $expedition->id) }}" method="POST">
+        <form action="{{ route('expeditions.update', $expedition->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
             @csrf
             @method('PUT')
             

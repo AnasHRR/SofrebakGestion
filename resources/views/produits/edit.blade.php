@@ -1027,7 +1027,7 @@
 
                     <!-- Left: Form -->
                     <div class="col-lg-8 anim-up delay-4">
-                        <form action="{{ route('produits.update', $produit->id) }}" method="POST" id="editForm">
+                        <form action="{{ route('produits.update', $produit->id) }}" method="POST" id="editForm" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
                             @csrf
                             @method('PUT')
 

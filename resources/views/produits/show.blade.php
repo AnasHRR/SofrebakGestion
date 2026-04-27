@@ -1067,10 +1067,9 @@
                                 <i class="bi bi-pencil-square"></i>
                                 <span class="d-none d-sm-inline">Modifier</span>
                             </a>
-                            <form action="{{ route('produits.destroy', $produit->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('produits.destroy', $produit->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="btn-glass btn-glass-danger"
-                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
+                                <button type="submit" class="btn-glass btn-glass-danger">
                                     <i class="bi bi-trash3"></i>
                                     <span class="d-none d-sm-inline">Supprimer</span>
                                 </button>

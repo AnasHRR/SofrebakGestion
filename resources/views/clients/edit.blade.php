@@ -427,7 +427,7 @@
 
     <!-- Body -->
     <div class="form-card-body">
-        <form action="{{ route('clients.update', $client->id) }}" method="POST" id="editClientForm">
+        <form action="{{ route('clients.update', $client->id) }}" method="POST" id="editClientForm" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
             @csrf
             @method('PUT')
 

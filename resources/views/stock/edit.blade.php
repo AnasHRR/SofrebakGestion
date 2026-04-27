@@ -23,7 +23,7 @@
             <!-- Form Card -->
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-4 p-md-5">
-                    <form action="{{ route('stock.update', $stock->id) }}" method="POST">
+                    <form action="{{ route('stock.update', $stock->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
                         @csrf
                         @method('PUT')
                         <div class="row g-4">

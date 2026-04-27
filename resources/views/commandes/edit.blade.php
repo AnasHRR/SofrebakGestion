@@ -839,7 +839,7 @@
 
         <!-- Body -->
         <div class="form-card-body">
-            <form action="{{ route('commandes.update', $commandeClient->id) }}" method="POST" id="editCommandeForm">
+            <form action="{{ route('commandes.update', $commandeClient->id) }}" method="POST" id="editCommandeForm" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
                 @csrf
                 @method('PUT')
 

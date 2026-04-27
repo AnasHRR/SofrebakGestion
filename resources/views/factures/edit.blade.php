@@ -486,7 +486,7 @@
 
         <!-- Body -->
         <div class="form-card-body">
-            <form action="{{ route('factures.update', $facture->id) }}" method="POST" id="editFactureForm">
+            <form action="{{ route('factures.update', $facture->id) }}" method="POST" id="editFactureForm" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
                 @csrf
                 @method('PUT')
 
@@ -914,11 +914,16 @@
                     }
 
                     const product = possibleProducts[Math.floor(Math.random() * possibleProducts.length)];
-                    let maxQty = Math.floor(remaining / product.prix_vente);
-                    maxQty = Math.min(maxQty, 5);
-                    
-                    const qty = Math.floor(Math.random() * maxQty) + 1;
-                    addProductRow(product.id, product.nom_produit, qty, product.prix_vente);
+                    let maxPossible = Math.floor(remaining / product.prix_vente);
+
+                    // Target quantity between 10 and 15, but don't exceed what's possible with remaining budget
+                    let minQty = Math.min(10, maxPossible);
+                    let maxQty = Math.min(15, maxPossible);
+
+                    if (minQty === 0) minQty = 1;
+                    if (maxQty === 0) maxQty = 1;
+
+                    const qty = Math.floor(Math.random() * (maxQty - minQty + 1)) + minQty;                    addProductRow(product.id, product.nom_produit, qty, product.prix_vente);
                     currentTotal += qty * product.prix_vente;
                     attempts++;
                 }

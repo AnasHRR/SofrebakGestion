@@ -146,7 +146,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="form-card">
-                <form action="{{ route('retours.update', $retour->id) }}" method="POST">
+                <form action="{{ route('retours.update', $retour->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
                     @csrf
                     @method('PUT')
 

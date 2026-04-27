@@ -105,7 +105,7 @@
         </div>
     @endif
 
-    <form action="{{ route('commandesFournisseurs.update', $commandesFournisseur->id) }}" method="POST">
+    <form action="{{ route('commandesFournisseurs.update', $commandesFournisseur->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
         @csrf
         @method('PUT')
         

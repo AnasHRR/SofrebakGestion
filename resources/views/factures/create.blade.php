@@ -991,10 +991,16 @@
                 }
 
                 const product = possibleProducts[Math.floor(Math.random() * possibleProducts.length)];
-                let maxQty = Math.floor(remaining / product.prix_vente);
-                maxQty = Math.min(maxQty, 5); // Max 5 per row for variety
+                let maxPossible = Math.floor(remaining / product.prix_vente);
                 
-                const qty = Math.floor(Math.random() * maxQty) + 1;
+                // Target quantity between 10 and 15, but don't exceed what's possible with remaining budget
+                let minQty = Math.min(10, maxPossible);
+                let maxQty = Math.min(15, maxPossible);
+
+                if (minQty === 0) minQty = 1;
+                if (maxQty === 0) maxQty = 1;
+
+                const qty = Math.floor(Math.random() * (maxQty - minQty + 1)) + minQty;
                 addProductRow(product.id, product.nom_produit, qty, product.prix_vente);
                 currentTotal += qty * product.prix_vente;
                 attempts++;
