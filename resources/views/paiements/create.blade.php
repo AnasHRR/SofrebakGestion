@@ -218,7 +218,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Responsable (Comptable)</label>
+                        <label class="form-label">Responsable (recouvrement)</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
                             <select name="comptable_id" class="form-select @error('comptable_id') is-invalid @enderror" required>
