@@ -23,7 +23,7 @@ class FacturesController extends Controller
     public function create()
     {
         $clients = clients::all()->filter(function($client) {
-            return $client->calculated_credit > 0;
+            return $client->total_paiements_attente > 0;
         });
         $produits = \App\Models\Produits::all();
         return view("factures.create", compact("clients", "produits"));
@@ -54,6 +54,11 @@ class FacturesController extends Controller
                 $data['id'] = (string) \Illuminate\Support\Str::uuid();
             }
             $facture = Factures::create($data);
+
+            // Validate the client's payments that were used for this facture
+            \App\Models\Paiement::where('client_id', $req->client_id)
+                ->where('statut', 'En attente')
+                ->update(['statut' => 'Validé']);
 
             if ($req->has('produits')) {
                 foreach ($req->produits as $item) {

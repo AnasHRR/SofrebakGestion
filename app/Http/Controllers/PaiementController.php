@@ -81,6 +81,10 @@ class PaiementController extends Controller
      */
     public function update(Request $req, Paiement $paiement)
     {
+        if ($paiement->statut === 'Validé') {
+            return back()->with('error', 'Impossible de modifier un paiement déjà validé.');
+        }
+
         $rules = [
             'client_id' => 'required',
             'comptable_id' => 'required',
@@ -107,6 +111,10 @@ class PaiementController extends Controller
      */
     public function destroy(Paiement $paiement)
     {
+        if ($paiement->statut === 'Validé') {
+            return back()->with('error', 'Impossible de supprimer un paiement déjà validé.');
+        }
+
         $paiement->delete();
         return to_route('paiements.index')->with('success', 'Paiement supprimé avec succès');
     }

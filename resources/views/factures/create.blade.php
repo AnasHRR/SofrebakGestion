@@ -576,8 +576,9 @@
                                 @foreach ($clients as $client)
                                     <option value="{{ $client->id }}" 
                                             data-credit="{{ $client->calculated_credit }}"
+                                            data-total-paiements="{{ $client->total_paiements_attente }}"
                                             {{ old('client_id') == $client->id ? 'selected' : '' }}>
-                                        {{ $client->nom_entreprise }} (Crédit: {{ number_format($client->calculated_credit, 2, ',', ' ') }} DH)
+                                        {{ $client->nom_entreprise }} (Paiements en attente: {{ number_format($client->total_paiements_attente, 2, ',', ' ') }} DH)
                                     </option>
                                 @endforeach
                             </select>
@@ -866,10 +867,11 @@
         if (clientSelect) {
             clientSelect.addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
-                const credit = selectedOption.getAttribute('data-credit');
-                if (credit) {
-                    // Credit is Total TTC
-                    montantTotal.value = parseFloat(credit).toFixed(2);
+                const totalPaiements = selectedOption.getAttribute('data-total-paiements');
+                if (totalPaiements) {
+                    // Set both total and paid amount to the total payments of the client
+                    montantTotal.value = parseFloat(totalPaiements).toFixed(2);
+                    montantPaye.value = parseFloat(totalPaiements).toFixed(2);
                     updateCalculationsFromTotal();
                 }
             });

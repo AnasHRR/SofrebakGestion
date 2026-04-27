@@ -123,7 +123,12 @@ class ClientsController extends Controller
      */
     public function destroy(clients $client)
     {
+        // Check for dependencies (commandes, paiements, factures)
+        if ($client->commandes()->exists() || $client->paiements()->exists() || $client->factures()->exists()) {
+            return to_route('clients.index')->with('error', 'Impossible de supprimer ce client car il possède des commandes, des paiements ou des factures associés.');
+        }
+
         $client->delete();
-        return to_route('clients.index')->with('success','Supprimer avec success');
+        return to_route('clients.index')->with('success','Client supprimé avec succès');
     }
 }

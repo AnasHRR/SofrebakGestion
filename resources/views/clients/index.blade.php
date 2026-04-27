@@ -236,6 +236,13 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div class="alert-success" style="background: #fff5f5; border-color: #fecaca; color: #ef4444;">
+        <i class="bi bi-exclamation-octagon-fill"></i>
+        {{ session('error') }}
+    </div>
+@endif
+
 <!-- Stats -->
 <div class="stats-bar">
     <div class="stat-chip">

@@ -69,6 +69,11 @@ class clients extends Model
         return $this->paiements()->sum('montant');
     }
 
+    public function getTotalPaiementsAttenteAttribute()
+    {
+        return $this->paiements()->where('statut', 'En attente')->sum('montant');
+    }
+
     public function getCalculatedCreditAttribute()
     {
         return $this->total_achats - $this->total_paiements;

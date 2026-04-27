@@ -196,6 +196,13 @@
         </div>
     @endif
 
+    @if (session('error'))
+        <div class="alert-success" style="background: #fef2f2; border-color: #fecaca; color: #b91c1c;">
+            <i class="bi bi-exclamation-octagon-fill"></i>
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="table-card">
         <div style="overflow-x: auto;">
             <table class="custom-table">
@@ -205,6 +212,7 @@
                         <th><i class="bi bi-currency-dollar me-1"></i> Montant</th>
                         <th><i class="bi bi-calendar-date me-1"></i> Date</th>
                         <th><i class="bi bi-credit-card me-1"></i> Mode</th>
+                        <th><i class="bi bi-flag me-1"></i> Statut</th>
                         <th><i class="bi bi-person-badge me-1"></i> Comptable</th>
                         <th><i class="bi bi-geo-alt me-1"></i> Région</th>
                         <th style="width: 130px; text-align: center;"><i class="bi bi-gear me-1"></i> Actions</th>
@@ -230,6 +238,13 @@
                                 @endphp
                                 <span class="badge-mode {{ $modeClass }}">{{ $paiement->mode_paiement }}</span>
                             </td>
+                            <td>
+                                @if($paiement->statut === 'Validé')
+                                    <span class="badge-mode" style="background: #dcfce7; color: #166534;"><i class="bi bi-check-all"></i> Validé</span>
+                                @else
+                                    <span class="badge-mode" style="background: #f1f5f9; color: #475569;"><i class="bi bi-clock"></i> En attente</span>
+                                @endif
+                            </td>
                             <td>{{ $paiement->comptable->nom_complet}}</td>
                             <td>
                                 <span style="font-size: 0.75rem; font-weight: 700; color: var(--blue-700); background: var(--blue-50); padding: 0.2rem 0.5rem; border-radius: 6px;">
@@ -242,19 +257,26 @@
                                         title="Détails">
                                         <i class="bi bi-eye-fill"></i>
                                     </a>
-                                    <a href="{{ route('paiements.edit', $paiement->id) }}" class="btn-icon btn-icon-edit"
-                                        title="Modifier">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a>
-                                    <form action="{{ route('paiements.destroy', $paiement->id) }}" method="POST"
-                                        onsubmit="return confirm('Voulez-vous vraiment supprimer ce paiement ?');"
-                                        style="margin:0;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-icon btn-icon-delete" title="Supprimer">
-                                            <i class="bi bi-trash-fill"></i>
+                                    
+                                    @if($paiement->statut !== 'Validé')
+                                        <a href="{{ route('paiements.edit', $paiement->id) }}" class="btn-icon btn-icon-edit"
+                                            title="Modifier">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <form action="{{ route('paiements.destroy', $paiement->id) }}" method="POST"
+                                            onsubmit="return confirm('Voulez-vous vraiment supprimer ce paiement ?');"
+                                            style="margin:0;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-icon btn-icon-delete" title="Supprimer">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button class="btn-icon" style="background: #f8fafc; color: #cbd5e1; border: 1.5px solid #e2eaf8; cursor: not-allowed;" title="Vérouillé" disabled>
+                                            <i class="bi bi-lock-fill"></i>
                                         </button>
-                                    </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

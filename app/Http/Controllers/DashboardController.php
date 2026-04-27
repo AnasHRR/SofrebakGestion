@@ -30,11 +30,11 @@ class DashboardController extends Controller
         $maxBar = max($totalCA, $totalDepenses, 1);
 
         // Sales per month for the current year
-        $salesPerMonth = CommandeClient::select(
+        $salesPerMonth = Factures::select(
             DB::raw('sum(montant_total) as total'),
-            DB::raw("DATE_FORMAT(date_commande, '%m') as month")
+            DB::raw("DATE_FORMAT(date_facture, '%m') as month")
         )
-            ->whereYear('date_commande', date('Y'))
+            ->whereYear('date_facture', date('Y'))
             ->groupBy('month')
             ->orderBy('month')
             ->get()
