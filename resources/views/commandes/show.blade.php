@@ -469,6 +469,8 @@
             box-sizing: border-box;
             background: #fff;
             margin-left: 0; /* Ensures it is aligned left */
+            position: relative;
+            min-height: 190mm; /* Approximately the height of A4 landscape printable area */
         }
 
         @page { size: A4 landscape; margin: 0; }
@@ -476,62 +478,95 @@
         .po-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            padding-bottom: 12px;
-            border-bottom: 3px solid #1e3a8a;
-            margin-bottom: 15px;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 3px double #1e3a8a;
         }
 
-        .po-company { font-size: 22px; font-weight: 900; color: #1e3a8a; letter-spacing: 0.5px; }
-        .po-title { font-size: 16px; font-weight: 800; color: #1e3a8a; text-align: right; text-transform: uppercase; }
-        .po-ref { font-size: 13px; font-weight: 700; color: #475569; text-align: right; margin-top: 2px; }
+        .po-company img { 
+            height: 120px; 
+        }
+
+        .po-header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .po-title { 
+            font-size: 16pt; 
+            font-weight: 900; 
+            color: #1e3a8a; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px;
+        }
+        
+        .po-ref { 
+            font-size: 14px; 
+            font-weight: 800; 
+            color: #1e3a8a;
+            background: #f0f7ff;
+            padding: 4px 12px;
+            border-radius: 5px;
+            border: 1px solid #1e3a8a;
+        }
 
         .po-info-row {
             display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
+            gap: 25px;
+            margin-bottom: 25px;
         }
 
         .po-info-box {
             flex: 1;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 12px 14px;
-            background: #fafbff;
+            border: none;
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
         }
 
         .po-info-box-title {
-            font-size: 10px;
-            font-weight: 800;
+            font-size: 9px;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             color: #1e3a8a;
-            margin-bottom: 8px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #dbeafe;
+            margin: 0 0 5px 0;
+            padding: 0 0 3px 0;
+            border-bottom: 2px solid #1e3a8a;
+            border-radius: 0;
         }
 
         .po-info-line {
             display: flex;
             justify-content: space-between;
-            padding: 3px 0;
-            font-size: 12px;
+            padding: 2px 0;
+            font-size: 10px;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        .po-info-line .label { color: #64748b; font-weight: 600; }
-        .po-info-line .value { font-weight: 800; color: #0f1e4a; text-transform: uppercase; }
+        .po-info-line:last-child { border-bottom: none; }
+
+        .po-info-line .label { color: #64748b; font-weight: 700; }
+        .po-info-line .value { font-weight: 800; color: #1e3a8a; text-transform: uppercase; }
 
         /* Products Table */
         .po-table {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 25px;
+            border: 1px solid #1e3a8a;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         .po-table thead th {
             background: #1e3a8a !important;
             color: #fff !important;
-            padding: 8px 10px;
+            padding: 10px;
             font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
@@ -543,30 +578,30 @@
         .po-table thead th:last-child { text-align: right; }
 
         .po-table tbody td {
-            padding: 6px 10px;
-            border-bottom: 1.5px solid #e2e8f0;
-            font-size: 12px;
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 11px;
+            color: #0f172a;
         }
 
         .po-table tbody td:nth-child(n+2) { text-align: center; }
-        .po-table tbody td:last-child { text-align: right; font-weight: 800; color: #0f1e4a; }
+        .po-table tbody td:last-child { text-align: right; font-weight: 800; color: #1e3a8a; }
 
-        .po-table tbody tr:nth-child(even) { background: #f8fafc !important; }
+        .po-table tbody tr:last-child td { border-bottom: none; }
+        .po-table tbody tr:nth-child(even) { background: #f8fbff !important; }
 
         .po-table tfoot td {
-            padding: 8px 10px;
-            border-top: 3px solid #1e3a8a;
-            font-size: 12px;
+            padding: 12px 10px;
+            background: #f0f7ff;
+            font-size: 13px;
+            border-top: 2px solid #1e3a8a;
         }
 
         /* Footer */
         .po-footer {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 20px;
-            padding-top: 12px;
-            border-top: 2px solid #1e3a8a;
+            justify-content: center;
+            margin-top: 40px;
         }
 
         .po-footer-brand {
@@ -854,12 +889,14 @@
 </div>
 
 <!-- ══════════════════════════════════════ -->
-<!-- PRINT-ONLY: Bon de Livraison (A5 LR) -->
+<!-- PRINT-ONLY: Bon de Livraison (A4 LR) -->
 <!-- ══════════════════════════════════════ -->
 <div class="print-order" style="margin-left:-50px">
-    <div class="po-header" >
-        <div class="po-company">STE SOFREBAK</div>
-        <div>
+    <div class="po-header">
+        <div class="po-company">
+            <img src="{{ asset('logo_Sofrebak.png') }}" alt="Logo SOFREBAK">
+        </div>
+        <div class="po-header-right">
             <div class="po-title">BON DE LIVRAISON</div>
             <div class="po-ref">N° : {{ $commandeClient->numero_commande }}</div>
         </div>
@@ -884,10 +921,6 @@
             <div class="po-info-line">
                 <span class="label">Date :</span>
                 <span class="value">{{ $commandeClient->date_livraison ? \Carbon\Carbon::parse($commandeClient->date_livraison)->format('d/m/Y') : \Carbon\Carbon::parse($commandeClient->date_commande)->format('d/m/Y') }}</span>
-            </div>
-            <div class="po-info-line">
-                <span class="label">Représentant :</span>
-                <span class="value">{{ $commandeClient->comptable ? $commandeClient->comptable->nom_complet : 'Non assigné' }}</span>
             </div>
             <div class="po-info-line">
                 <span class="label">Livreur :</span>
@@ -926,14 +959,13 @@
         </tfoot>
     </table>
 
-    <div class="po-footer">
-        <div class="po-footer-brand">STE SOFREBAK</div>
-        <div class="po-signature">
-            <div class="po-signature-line">Signature Client</div>
+    <div class="po-footer" style="justify-content: center; margin-top: 50px;">
+        <div class="po-signature" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+            <div class="po-signature-line" style="width: 200px; border-top: 1.5px solid #94a3b8; padding-top: 8px;">Signature Client</div>
         </div>
     </div>
 
-    <div style="display: fixed; margin-top: 32%; text-align: center; border-top: 1px dashed #cbd5e1; padding-top: 10px; font-size: 11pt; color: #475569; font-weight: 600; width: 100%;">
+    <div style="display: flex; justify-content: center; text-align:center; border-top: 1px dashed #cbd5e1; font-size: 9pt; color: #475569; margin-top:20px; font-weight: 600;">
         Veuillez contrôler vos marchandises avec le livreur
         <br>Aucune réclamation ne sera acceptée après 24h de la date de livraison
     </div>
