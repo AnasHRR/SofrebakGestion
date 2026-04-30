@@ -311,8 +311,12 @@
                     <tr>
                         <td style="font-weight: 700;">
                             <div style="display: flex; align-items: center; gap: 0.8rem;">
-                                <div style="width: 38px; height: 38px; background: #eff6ff; display: flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0;">
-                                    <i class="bi bi-box-seam" style="color: var(--blue-600); font-size: 1.1rem;"></i>
+                                <div style="width: 38px; height: 38px; background: #eff6ff; display: flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0; overflow: hidden;">
+                                    @if($pr->img_pr)
+                                        <img src="{{ asset($pr->img_pr) }}" alt="{{ $pr->nom_produit }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    @else
+                                        <i class="bi bi-box-seam" style="color: var(--blue-600); font-size: 1.1rem;"></i>
+                                    @endif
                                 </div>
                                 {{ $pr->nom_produit }}
                             </div>

@@ -83,13 +83,22 @@ class ProduitsController extends Controller
             'stock_minimum'=> 'required|numeric',
             'stock_initial' => 'required|numeric',
             'date_expiration' => 'required|date',
+            'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $imagePath = null;
+        if ($req->hasFile('img_pr')) {
+            $imageName = time().'.'.$req->img_pr->extension();
+            $req->img_pr->move(public_path('images/produits'), $imageName);
+            $imagePath = 'images/produits/' . $imageName;
+        }
     
         // Create the product
         Produits::create([
             'nom_produit' => $req->nom_produit,   
             'categorie_id'    => $req->categorie_id,
             'fournisseur_id'  => $req->fournisseur_id,
+            'img_pr'          => $imagePath,
             'unite'           => $req->unite,
             'prix_achat'      => $req->prix_achat,
             'prix_vente'      => $req->prix_vente,
@@ -133,12 +142,26 @@ class ProduitsController extends Controller
             'prix_vente' => 'required',
             'stock_minimum' => 'required',
             'stock_initial' => 'required',
+            'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $imagePath = $produit->img_pr;
+        if ($req->hasFile('img_pr')) {
+            // Delete old image if exists
+            if ($imagePath && file_exists(public_path($imagePath))) {
+                unlink(public_path($imagePath));
+            }
+            
+            $imageName = time().'.'.$req->img_pr->extension();
+            $req->img_pr->move(public_path('images/produits'), $imageName);
+            $imagePath = 'images/produits/' . $imageName;
+        }
 
         $produit->update([
             'nom_produit' => $req->nom_produit,
             'categorie_id' => $req->categorie_id,
             'fournisseur_id' => $req->fournisseur_id,
+            'img_pr' => $imagePath,
             'unite' => $req->unite,
             'prix_achat' => $req->prix_achat,
             'prix_vente' => $req->prix_vente,

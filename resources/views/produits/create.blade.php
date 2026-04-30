@@ -23,7 +23,7 @@
             <!-- Form Card -->
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-4 p-md-5">
-                    <form action="{{ route('produits.store') }}" method="POST">
+                    <form action="{{ route('produits.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row g-4">
 
@@ -32,6 +32,22 @@
                                 <h6 class="text-primary text-uppercase fw-bold small mb-3 border-bottom pb-2">
                                     <i class="bi bi-info-circle me-2"></i>Informations Générales
                                 </h6>
+                            </div>
+
+                            <!-- Image du Produit -->
+                            <div class="col-12">
+                                <label for="img_pr" class="form-label fw-semibold">Image du Produit</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted">
+                                        <i class="bi bi-image"></i>
+                                    </span>
+                                    <input type="file" name="img_pr" id="img_pr" 
+                                        class="form-control border-start-0 @error('img_pr') is-invalid @enderror" 
+                                        accept="image/*">
+                                </div>
+                                @error('img_pr')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- Nom du Produit -->

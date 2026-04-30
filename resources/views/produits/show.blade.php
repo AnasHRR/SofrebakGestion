@@ -43,7 +43,7 @@
     }
 
     .hero-bg {
-        background: linear-gradient(160deg, #0f172a 0%, #1e1b4b 30%, #312e81 60%, #4338ca 100%);
+        background: linear-gradient(160deg, var(--blue-900) 0%, var(--blue-800) 30%, var(--blue-700) 60%, var(--blue-600) 100%);
         padding: 2.5rem 0 6rem;
         position: relative;
     }
@@ -53,9 +53,9 @@
         position: absolute;
         inset: 0;
         background:
-            radial-gradient(ellipse 600px 400px at 80% 20%, rgba(99,102,241,0.25), transparent),
-            radial-gradient(ellipse 400px 300px at 20% 80%, rgba(139,92,246,0.2), transparent),
-            radial-gradient(ellipse 300px 300px at 50% 50%, rgba(6,182,212,0.1), transparent);
+            radial-gradient(ellipse 600px 400px at 80% 20%, rgba(59, 130, 246, 0.25), transparent),
+            radial-gradient(ellipse 400px 300px at 20% 80%, rgba(37, 99, 235, 0.2), transparent),
+            radial-gradient(ellipse 300px 300px at 50% 50%, rgba(96, 165, 250, 0.1), transparent);
     }
 
     .hero-bg::after {
@@ -84,21 +84,21 @@
 
     .orb-1 {
         width: 300px; height: 300px;
-        background: rgba(99,102,241,0.15);
+        background: rgba(59, 130, 246, 0.15);
         top: -100px; right: -50px;
         animation-delay: 0s;
     }
 
     .orb-2 {
         width: 200px; height: 200px;
-        background: rgba(236,72,153,0.1);
+        background: rgba(96, 165, 250, 0.1);
         bottom: -50px; left: 10%;
         animation-delay: 3s;
     }
 
     .orb-3 {
         width: 150px; height: 150px;
-        background: rgba(6,182,212,0.12);
+        background: rgba(191, 219, 254, 0.12);
         top: 20%; left: 60%;
         animation-delay: 5s;
     }
@@ -146,13 +146,13 @@
     }
 
     .btn-glass-primary {
-        background: rgba(99,102,241,0.3);
-        border-color: rgba(99,102,241,0.4);
+        background: rgba(37, 99, 235, 0.3);
+        border-color: rgba(37, 99, 235, 0.4);
     }
 
     .btn-glass-primary:hover {
-        background: rgba(99,102,241,0.5);
-        border-color: rgba(99,102,241,0.6);
+        background: rgba(37, 99, 235, 0.5);
+        border-color: rgba(37, 99, 235, 0.6);
     }
 
     .btn-glass-danger {
@@ -203,9 +203,9 @@
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
-        background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.3));
-        border: 1px solid rgba(99,102,241,0.3);
-        color: #c7d2fe;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(59, 130, 246, 0.3));
+        border: 1px solid rgba(37, 99, 235, 0.3);
+        color: var(--blue-100);
         border-radius: 50px;
         padding: 0.3rem 0.85rem;
         font-size: 0.68rem;
@@ -290,7 +290,7 @@
         left: 20%;
         right: 20%;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent);
+        background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.4), transparent);
     }
 
     .price-label {
@@ -305,7 +305,7 @@
     .price-value {
         font-size: 3.2rem;
         font-weight: 900;
-        background: linear-gradient(135deg, #fff 0%, #c7d2fe 50%, #a5b4fc 100%);
+        background: linear-gradient(135deg, #fff 0%, var(--blue-100) 50%, var(--blue-300) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -384,9 +384,9 @@
 
     .metric-card:hover::before { opacity: 1; }
 
-    .metric-card.v-blue::before { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+    .metric-card.v-blue::before { background: linear-gradient(90deg, var(--blue-500), var(--blue-700)); }
     .metric-card.v-green::before { background: linear-gradient(90deg, #10b981, #06b6d4); }
-    .metric-card.v-dark::before { background: linear-gradient(90deg, #1e1b4b, #6366f1); }
+    .metric-card.v-dark::before { background: linear-gradient(90deg, var(--blue-900), var(--blue-500)); }
     .metric-card.v-orange::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
 
     .metric-top {
@@ -416,10 +416,10 @@
     }
 
     .metric-icon-wrap.blue {
-        background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-        color: #6366f1;
+        background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
+        color: var(--blue-600);
     }
-    .metric-icon-wrap.blue::after { background: #6366f1; }
+    .metric-icon-wrap.blue::after { background: var(--blue-600); }
 
     .metric-icon-wrap.green {
         background: linear-gradient(135deg, #ecfdf5, #d1fae5);
@@ -502,9 +502,9 @@
         transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .metric-bar-fill.blue { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+    .metric-bar-fill.blue { background: linear-gradient(90deg, var(--blue-500), var(--blue-400)); }
     .metric-bar-fill.green { background: linear-gradient(90deg, #10b981, #06b6d4); }
-    .metric-bar-fill.dark { background: linear-gradient(90deg, #334155, #6366f1); }
+    .metric-bar-fill.dark { background: linear-gradient(90deg, var(--blue-800), var(--blue-500)); }
     .metric-bar-fill.orange { background: linear-gradient(90deg, #f59e0b, #ef4444); }
 
     /* ═══════════════════════════════════
@@ -545,8 +545,8 @@
     }
 
     .section-header-icon.purple {
-        background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-        color: #6366f1;
+        background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
+        color: var(--blue-600);
     }
 
     .section-header-icon.amber {
@@ -601,8 +601,8 @@
     }
 
     .info-row:hover .info-row-icon {
-        background: #eef2ff;
-        color: #6366f1;
+        background: var(--blue-50);
+        color: var(--blue-600);
     }
 
     .info-row-content { flex: 1; min-width: 0; }
@@ -638,7 +638,7 @@
         font-weight: 600;
     }
 
-    .value-badge.purple { background: #eef2ff; color: #6366f1; }
+    .value-badge.purple { background: var(--blue-50); color: var(--blue-600); }
     .value-badge.green { background: #ecfdf5; color: #059669; }
     .value-badge.blue { background: #ecfeff; color: #0891b2; }
     .value-badge.orange { background: #fff7ed; color: #ea580c; }
@@ -1080,27 +1080,41 @@
                     <!-- Hero Content -->
                     <div class="hero-content">
                         <div class="row align-items-center">
-                            <div class="col-lg-7">
-                                <div class="anim-fade-up anim-delay-1">
+                            <div class="col-lg-3 col-md-4 mb-4 mb-md-0 text-center text-md-start">
+                                <div class="anim-scale-in anim-delay-1 d-inline-block position-relative">
+                                    @if($produit->img_pr)
+                                        <img src="{{ asset($produit->img_pr) }}" alt="{{ $produit->nom_produit }}" class="img-fluid rounded-4 shadow-lg border border-white border-2" style="max-height: 220px; width: 100%; object-fit: cover; aspect-ratio: 1/1;">
+                                    @else
+                                        <div class="rounded-4 shadow-lg border border-white border-2 bg-white bg-opacity-10 d-flex align-items-center justify-content-center mx-auto" style="height: 180px; width: 180px;">
+                                            <i class="bi bi-box-seam text-white opacity-50" style="font-size: 4rem;"></i>
+                                        </div>
+                                    @endif
+                                    
+                                    <!-- Mobile Price Badge -->
+                                    <div class="d-md-none position-absolute bottom-0 end-0 mb-2 me-2">
+                                        <span class="badge bg-success shadow-sm p-2 rounded-3">
+                                            {{ number_format($produit->prix_vente, 2) }} DH
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-8">
+                                <div class="anim-fade-up anim-delay-1 text-center text-md-start">
                                     <span class="product-badge">
                                         <i class="bi bi-hash"></i>
                                         PRD-{{ str_pad($produit->id, 4, '0', STR_PAD_LEFT) }}
                                     </span>
                                 </div>
-                                <div class="anim-fade-up anim-delay-2">
+                                <div class="anim-fade-up anim-delay-2 text-center text-md-start">
                                     <h1 class="product-name">{{ $produit->nom_produit }}</h1>
-                                    <p class="product-subtitle">
+                                    <p class="product-subtitle mb-0">
                                         Géré par <strong style="color:rgba(255,255,255,0.7);">{{ $produit->fournisseur->nom }}</strong>
                                     </p>
                                 </div>
-                                <div class="tag-row anim-fade-up anim-delay-3">
+                                <div class="tag-row anim-fade-up anim-delay-3 justify-content-center justify-content-md-start">
                                     <span class="hero-tag">
                                         <i class="bi bi-grid-fill"></i>
                                         {{ $produit->categorie->nom }}
-                                    </span>
-                                    <span class="hero-tag">
-                                        <i class="bi bi-building"></i>
-                                        {{ $produit->fournisseur->nom }}
                                     </span>
                                     <span class="hero-tag">
                                         <i class="bi bi-rulers"></i>
@@ -1124,7 +1138,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-5 mt-4 mt-lg-0">
+                            <div class="col-lg-3 d-none d-lg-block">
                                 <div class="anim-scale-in anim-delay-3 text-lg-end">
                                     <div class="price-card d-inline-block">
                                         <div class="price-label">Prix de vente</div>
@@ -1137,9 +1151,6 @@
                                                 <div class="price-margin-value">
                                                     <i class="bi bi-arrow-up-short"></i>
                                                     +{{ number_format($marge, 2) }} MAD
-                                                    <span style="opacity:0.6;font-size:0.75rem;">
-                                                        ({{ number_format(($marge / $produit->prix_achat) * 100, 1) }}%)
-                                                    </span>
                                                 </div>
                                             </div>
                                         @endif
@@ -1170,7 +1181,7 @@
                         $stockPercent = min(($produit->stock_actuel / $maxStock) * 100, 100);
                     @endphp
 
-                    <div class="col-6 col-md-3 anim-fade-up anim-delay-1">
+                    <div class="col-6 col-lg-3 anim-fade-up anim-delay-1">
                         <div class="metric-card v-blue">
                             <div class="metric-top">
                                 <div class="metric-icon-wrap blue">
@@ -1180,7 +1191,7 @@
                             <div class="metric-label">Prix d'achat</div>
                             <div class="metric-val">
                                 {{ number_format($produit->prix_achat, 2) }}
-                                <span class="currency">DH</span>
+                                <span class="currency d-none d-sm-inline">DH</span>
                             </div>
                             <div class="metric-bar">
                                 <div class="metric-bar-fill blue" style="width: {{ min(($produit->prix_achat / max($produit->prix_vente, 1)) * 100, 100) }}%;"></div>
@@ -1188,21 +1199,17 @@
                         </div>
                     </div>
 
-                    <div class="col-6 col-md-3 anim-fade-up anim-delay-2">
+                    <div class="col-6 col-lg-3 anim-fade-up anim-delay-2">
                         <div class="metric-card v-green">
                             <div class="metric-top">
                                 <div class="metric-icon-wrap green">
                                     <i class="bi bi-cash-stack"></i>
                                 </div>
-                                <span class="metric-trend up">
-                                    <i class="bi bi-arrow-up-short"></i>
-                                    {{ number_format($margePercent, 0) }}%
-                                </span>
                             </div>
                             <div class="metric-label">Prix de vente</div>
                             <div class="metric-val">
                                 {{ number_format($produit->prix_vente, 2) }}
-                                <span class="currency">DH</span>
+                                <span class="currency d-none d-sm-inline">DH</span>
                             </div>
                             <div class="metric-bar">
                                 <div class="metric-bar-fill green" style="width: 100%;"></div>
@@ -1210,21 +1217,17 @@
                         </div>
                     </div>
 
-                    <div class="col-6 col-md-3 anim-fade-up anim-delay-3">
+                    <div class="col-6 col-lg-3 anim-fade-up anim-delay-3">
                         <div class="metric-card v-dark">
                             <div class="metric-top">
                                 <div class="metric-icon-wrap dark">
                                     <i class="bi bi-graph-up-arrow"></i>
                                 </div>
-                                <span class="metric-trend {{ $marge >= 0 ? 'up' : 'neutral' }}">
-                                    <i class="bi bi-{{ $marge >= 0 ? 'arrow-up' : 'arrow-down' }}-short"></i>
-                                    {{ number_format(abs($margePercent), 0) }}%
-                                </span>
                             </div>
                             <div class="metric-label">Marge bénéf.</div>
                             <div class="metric-val {{ $marge >= 0 ? 'positive' : 'negative' }}">
                                 {{ $marge >= 0 ? '+' : '' }}{{ number_format($marge, 2) }}
-                                <span class="currency">DH</span>
+                                <span class="currency d-none d-sm-inline">DH</span>
                             </div>
                             <div class="metric-bar">
                                 <div class="metric-bar-fill dark" style="width: {{ min(abs($margePercent), 100) }}%;"></div>
@@ -1232,7 +1235,7 @@
                         </div>
                     </div>
 
-                    <div class="col-6 col-md-3 anim-fade-up anim-delay-4">
+                    <div class="col-6 col-lg-3 anim-fade-up anim-delay-4">
                         <div class="metric-card v-orange">
                             <div class="metric-top">
                                 <div class="metric-icon-wrap orange">
@@ -1242,7 +1245,7 @@
                             <div class="metric-label">Stock actuel</div>
                             <div class="metric-val {{ $produit->stock_actuel > 10 ? '' : ($produit->stock_actuel > 0 ? 'warning-val' : 'danger-val') }}">
                                 {{ $produit->stock_actuel }}
-                                <span class="currency">{{ $produit->unite }}</span>
+                                <span class="currency d-none d-sm-inline">{{ $produit->unite }}</span>
                             </div>
                             <div class="metric-bar">
                                 <div class="metric-bar-fill orange" style="width: {{ $stockPercent }}%;"></div>

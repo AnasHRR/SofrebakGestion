@@ -16,6 +16,7 @@ class Produits extends Model
         'nom_produit',
         'categorie_id',
         'fournisseur_id',
+        'img_pr',
         'unite',
         'prix_achat',
         'prix_vente',

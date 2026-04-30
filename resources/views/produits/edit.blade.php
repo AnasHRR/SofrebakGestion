@@ -38,7 +38,7 @@
        HERO HEADER
     ═══════════════════════════════ */
     .edit-hero {
-        background: linear-gradient(160deg, #0f172a 0%, #1e1b4b 35%, #312e81 65%, #4338ca 100%);
+        background: linear-gradient(160deg, var(--blue-900) 0%, var(--blue-800) 35%, var(--blue-700) 65%, var(--blue-600) 100%);
         padding: 2rem 0 5rem;
         position: relative;
         overflow: hidden;
@@ -49,9 +49,9 @@
         position: absolute;
         inset: 0;
         background:
-            radial-gradient(ellipse 500px 350px at 75% 20%, rgba(99,102,241,0.2), transparent),
-            radial-gradient(ellipse 350px 250px at 25% 75%, rgba(139,92,246,0.15), transparent),
-            radial-gradient(ellipse 250px 250px at 50% 50%, rgba(6,182,212,0.08), transparent);
+            radial-gradient(ellipse 500px 350px at 75% 20%, rgba(59, 130, 246, 0.2), transparent),
+            radial-gradient(ellipse 350px 250px at 25% 75%, rgba(37, 99, 235, 0.15), transparent),
+            radial-gradient(ellipse 250px 250px at 50% 50%, rgba(96, 165, 250, 0.08), transparent);
     }
 
     .edit-hero::after {
@@ -78,7 +78,7 @@
 
     .orb-1 {
         width: 280px; height: 280px;
-        background: rgba(99,102,241,0.12);
+        background: rgba(59, 130, 246, 0.12);
         top: -80px; right: -40px;
     }
 
@@ -91,7 +91,7 @@
 
     .orb-3 {
         width: 120px; height: 120px;
-        background: rgba(6,182,212,0.1);
+        background: rgba(96, 165, 250, 0.1);
         top: 30%; left: 55%;
         animation-delay: 7s;
     }
@@ -165,9 +165,9 @@
         display: inline-flex;
         align-items: center;
         gap: 0.3rem;
-        background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
-        border: 1px solid rgba(99,102,241,0.3);
-        color: #c7d2fe;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(59, 130, 246, 0.25));
+        border: 1px solid rgba(37, 99, 235, 0.3);
+        color: var(--blue-100);
         border-radius: 50px;
         padding: 0.25rem 0.8rem;
         font-size: 0.65rem;
@@ -268,8 +268,8 @@
     }
 
     .section-icon.purple {
-        background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-        color: #6366f1;
+        background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
+        color: var(--blue-600);
     }
 
     .section-icon.green {
@@ -278,8 +278,8 @@
     }
 
     .section-icon.blue {
-        background: linear-gradient(135deg, #ecfeff, #cffafe);
-        color: #06b6d4;
+        background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
+        color: var(--blue-500);
     }
 
     .section-icon.orange {
@@ -360,9 +360,9 @@
     }
 
     .custom-input:focus {
-        border-color: var(--accent);
-        background: var(--input-focus);
-        box-shadow: 0 0 0 4px rgba(99,102,241,0.08);
+        border-color: var(--blue-500);
+        background: var(--blue-50);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
     }
 
     .custom-input::placeholder {
@@ -403,9 +403,9 @@
     }
 
     .custom-select:focus {
-        border-color: var(--accent);
-        background-color: var(--input-focus);
-        box-shadow: 0 0 0 4px rgba(99,102,241,0.08);
+        border-color: var(--blue-500);
+        background-color: var(--blue-50);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
     }
 
     /* Input with Suffix */
@@ -425,7 +425,7 @@
         display: flex;
         align-items: center;
         padding: 0 0.85rem;
-        background: linear-gradient(135deg, #1e1b4b, #312e81);
+        background: linear-gradient(135deg, var(--blue-900), var(--blue-700));
         color: rgba(255,255,255,0.85);
         font-size: 0.72rem;
         font-weight: 700;
@@ -457,7 +457,7 @@
     }
 
     .input-icon-wrap:focus-within .input-icon {
-        color: var(--accent);
+        color: var(--blue-600);
     }
 
     /* Readonly badge */
@@ -480,8 +480,8 @@
        LIVE PREVIEW CARD
     ═══════════════════════════════ */
     .live-preview {
-        background: linear-gradient(135deg, #fafaff, #f5f3ff);
-        border: 1px solid #e9e5ff;
+        background: linear-gradient(135deg, var(--blue-50), #f5f3ff);
+        border: 1px solid var(--blue-100);
         border-radius: var(--radius-md);
         padding: 1.25rem;
         margin-top: 0.5rem;
@@ -498,7 +498,7 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: var(--accent);
+        background: var(--blue-600);
         animation: previewPulse 2s ease infinite;
     }
 
@@ -512,7 +512,7 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 2px;
-        color: var(--accent);
+        color: var(--blue-600);
     }
 
     .preview-grid {
@@ -526,7 +526,7 @@
         padding: 0.65rem;
         background: var(--bg-white);
         border-radius: var(--radius-sm);
-        border: 1px solid #e9e5ff;
+        border: 1px solid var(--blue-100);
     }
 
     .preview-item-label {
@@ -545,7 +545,7 @@
     }
 
     .preview-item-value.green { color: var(--green); }
-    .preview-item-value.accent { color: var(--accent); }
+    .preview-item-value.accent { color: var(--blue-600); }
 
     /* ═══════════════════════════════
        ERROR STATES
@@ -614,7 +614,7 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.7rem 2rem;
-        background: linear-gradient(135deg, #4338ca, #6366f1);
+        background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
         border: none;
         border-radius: var(--radius-sm);
         color: #fff;
@@ -622,7 +622,7 @@
         font-weight: 700;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-        box-shadow: 0 4px 15px rgba(99,102,241,0.3);
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         position: relative;
         overflow: hidden;
     }
@@ -638,14 +638,14 @@
 
     .btn-submit:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 30px rgba(99,102,241,0.4);
+        box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
     }
 
     .btn-submit:hover::before { opacity: 1; }
 
     .btn-submit:active {
         transform: translateY(-1px);
-        box-shadow: 0 4px 15px rgba(99,102,241,0.3);
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
     }
 
     .btn-submit .btn-shine {
@@ -711,8 +711,8 @@
         width: 34px;
         height: 34px;
         border-radius: 10px;
-        background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-        color: var(--accent);
+        background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
+        color: var(--blue-600);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -757,6 +757,10 @@
         font-size: 0.82rem;
         font-weight: 700;
         color: var(--text-primary);
+    }
+
+    .summary-item-value[style*="var(--accent)"] {
+        color: var(--blue-600) !important;
     }
 
     .summary-divider {
@@ -1027,7 +1031,7 @@
 
                     <!-- Left: Form -->
                     <div class="col-lg-8 anim-up delay-4">
-                        <form action="{{ route('produits.update', $produit->id) }}" method="POST" id="editForm" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
+                        <form action="{{ route('produits.update', $produit->id) }}" method="POST" id="editForm" enctype="multipart/form-data" onsubmit="return confirm('Êtes-vous sûr de vouloir enregistrer les modifications ?');">
                             @csrf
                             @method('PUT')
 
@@ -1041,9 +1045,64 @@
                                         </div>
                                         <div>
                                             <h6 class="section-title">Informations de base</h6>
-                                            <p class="section-desc">Nom, catégorie et fournisseur du produit</p>
+                                            <p class="section-desc">Nom, catégorie, fournisseur et image du produit</p>
                                         </div>
                                     </div>
+
+                                    <!-- Product Image -->
+                                    <div class="field-group">
+                                        <label class="field-label">
+                                            <i class="bi bi-image"></i>
+                                            Image du produit
+                                        </label>
+                                        <div class="row align-items-center g-3">
+                                            <div class="col-auto">
+                                                <div class="image-preview-wrapper position-relative">
+                                                    @if($produit->img_pr)
+                                                        <img src="{{ asset($produit->img_pr) }}" id="currentImg" alt="{{ $produit->nom_produit }}" class="rounded-3 shadow-sm" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid var(--border);">
+                                                    @else
+                                                        <div id="imgPlaceholder" class="rounded-3 shadow-sm bg-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; border: 2px dashed var(--border);">
+                                                            <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="custom-file-upload">
+                                                    <input type="file" name="img_pr" id="imgInput" class="custom-input @error('img_pr') is-invalid @enderror" accept="image/*" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                                                    <div class="field-hint mt-1">Laissez vide pour conserver l'image actuelle. Max 2Mo.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @error('img_pr')
+                                            <div class="error-text"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+<script>
+    document.getElementById('imgInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                let img = document.getElementById('currentImg');
+                if (!img) {
+                    const placeholder = document.getElementById('imgPlaceholder');
+                    img = document.createElement('img');
+                    img.id = 'currentImg';
+                    img.className = 'rounded-3 shadow-sm';
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+                    img.style.objectFit = 'cover';
+                    img.style.border = '2px solid var(--border)';
+                    placeholder.parentNode.replaceChild(img, placeholder);
+                }
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 
                                     <!-- Product Name -->
                                     <div class="field-group">
