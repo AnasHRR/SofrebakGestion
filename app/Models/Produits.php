@@ -11,19 +11,7 @@ class Produits extends Model
     public $timestamps = false;
     public $incrementing = false;
     
-    protected $fillable = [
-        'id',
-        'nom_produit',
-        'categorie_id',
-        'fournisseur_id',
-        'img_pr',
-        'unite',
-        'prix_achat',
-        'prix_vente',
-        'stock_minimum',
-        'stock_initial',
-        'date_expiration'
-    ];
+    protected $fillable = ['id', 'nom_produit', 'categorie_id', 'fournisseur_id', 'img_pr', 'unite', 'prix_achat', 'prix_vente', 'stock_minimum', 'stock_initial', 'date_expiration'];
 
     protected $appends = ['stock_actuel'];
 
