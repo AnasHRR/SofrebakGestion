@@ -83,14 +83,15 @@ class ProduitsController extends Controller
             'stock_minimum'=> 'required|numeric',
             'stock_initial' => 'required|numeric',
             'date_expiration' => 'required|date',
-            'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $imagePath = null;
+        $base64Image = null;
         if ($req->hasFile('img_pr')) {
-            $imageName = time().'.'.$req->img_pr->extension();
-            $req->img_pr->move(public_path('images/produits'), $imageName);
-            $imagePath = 'images/produits/' . $imageName;
+            $file = $req->file('img_pr');
+            $type = $file->getClientOriginalExtension();
+            $data = file_get_contents($file->getRealPath());
+            $base64Image = 'data:image/' . $type . ';base64,' . base64_encode($data);
         }
     
         // Create the product
@@ -98,7 +99,7 @@ class ProduitsController extends Controller
             'nom_produit' => $req->nom_produit,   
             'categorie_id'    => $req->categorie_id,
             'fournisseur_id'  => $req->fournisseur_id,
-            'img_pr'          => $imagePath,
+            'img_pr'          => $base64Image,
             'unite'           => $req->unite,
             'prix_achat'      => $req->prix_achat,
             'prix_vente'      => $req->prix_vente,
@@ -142,26 +143,22 @@ class ProduitsController extends Controller
             'prix_vente' => 'required',
             'stock_minimum' => 'required',
             'stock_initial' => 'required',
-            'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $imagePath = $produit->img_pr;
+        $base64Image = $produit->getRawOriginal('img_pr');
         if ($req->hasFile('img_pr')) {
-            // Delete old image if exists
-            if ($imagePath && file_exists(public_path($imagePath))) {
-                unlink(public_path($imagePath));
-            }
-            
-            $imageName = time().'.'.$req->img_pr->extension();
-            $req->img_pr->move(public_path('images/produits'), $imageName);
-            $imagePath = 'images/produits/' . $imageName;
+            $file = $req->file('img_pr');
+            $type = $file->getClientOriginalExtension();
+            $data = file_get_contents($file->getRealPath());
+            $base64Image = 'data:image/' . $type . ';base64,' . base64_encode($data);
         }
 
         $produit->update([
             'nom_produit' => $req->nom_produit,
             'categorie_id' => $req->categorie_id,
             'fournisseur_id' => $req->fournisseur_id,
-            'img_pr' => $imagePath,
+            'img_pr' => $base64Image,
             'unite' => $req->unite,
             'prix_achat' => $req->prix_achat,
             'prix_vente' => $req->prix_vente,

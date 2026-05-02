@@ -1083,7 +1083,7 @@
                             <div class="col-lg-3 col-md-4 mb-4 mb-md-0 text-center text-md-start">
                                 <div class="anim-scale-in anim-delay-1 d-inline-block position-relative">
                                     @if($produit->img_pr)
-                                        <img src="{{ asset($produit->img_pr) }}" alt="{{ $produit->nom_produit }}" class="img-fluid rounded-4 shadow-lg border border-white border-2" style="max-height: 220px; width: 100%; object-fit: cover; aspect-ratio: 1/1;">
+                                        <img src="{{ str_starts_with($produit->img_pr, 'data:') ? $produit->img_pr : asset($produit->img_pr) }}" alt="{{ $produit->nom_produit }}" class="img-fluid rounded-4 shadow-lg border border-white border-2" style="max-height: 220px; width: 100%; object-fit: cover; aspect-ratio: 1/1;">
                                     @else
                                         <div class="rounded-4 shadow-lg border border-white border-2 bg-white bg-opacity-10 d-flex align-items-center justify-content-center mx-auto" style="height: 180px; width: 180px;">
                                             <i class="bi bi-box-seam text-white opacity-50" style="font-size: 4rem;"></i>

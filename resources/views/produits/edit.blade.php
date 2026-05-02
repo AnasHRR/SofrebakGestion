@@ -1059,7 +1059,7 @@
                                             <div class="col-auto">
                                                 <div class="image-preview-wrapper position-relative">
                                                     @if($produit->img_pr)
-                                                        <img src="{{ asset($produit->img_pr) }}" id="currentImg" alt="{{ $produit->nom_produit }}" class="rounded-3 shadow-sm" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid var(--border);">
+                                                        <img src="{{ str_starts_with($produit->img_pr, 'data:') ? $produit->img_pr : asset($produit->img_pr) }}" id="currentImg" alt="{{ $produit->nom_produit }}" class="rounded-3 shadow-sm" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid var(--border);">
                                                     @else
                                                         <div id="imgPlaceholder" class="rounded-3 shadow-sm bg-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; border: 2px dashed var(--border);">
                                                             <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>

@@ -47,6 +47,20 @@ class Produits extends Model
     }
 
     /**
+     * Accessor: Handle image display.
+     * The value is now stored as a Base64 data URI string.
+     */
+    public function getImgPrAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        // If it's a data URI (new format) or a legacy file path
+        return $value;
+    }
+
+    /**
      * Accessor: compute stock dynamically.
      *
      * Formula: stock = stock_initial
