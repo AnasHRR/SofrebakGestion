@@ -126,10 +126,10 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="form-label">Fournisseur</label>
-                    <select name="fournisseurs_id" class="form-control" required>
+                    <select name="fournisseur_id" class="form-control" required>
                         <option value="">Sélectionnez un fournisseur</option>
                         @foreach($fournisseurs as $fournisseur)
-                            <option value="{{ $fournisseur->id }}" {{ old('fournisseurs_id') == $fournisseur->id ? 'selected' : '' }}>
+                            <option value="{{ $fournisseur->id }}" {{ old('fournisseur_id') == $fournisseur->id ? 'selected' : '' }}>
                                 {{ $fournisseur->nom }}
                             </option>
                         @endforeach

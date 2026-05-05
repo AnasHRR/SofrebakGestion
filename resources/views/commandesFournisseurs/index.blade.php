@@ -177,7 +177,7 @@
         <table class="custom-table">
             <thead>
                 <tr>
-                    <th><i class="bi bi-hash me-1"></i> ID</th>
+                    {{-- <th><i class="bi bi-hash me-1"></i> ID</th> --}}
                     <th><i class="bi bi-calendar me-1"></i> Date</th>
                     <th><i class="bi bi-truck me-1"></i> Fournisseur</th>
                     <th><i class="bi bi-person me-1"></i> Employé (Responsable)</th>
@@ -189,7 +189,7 @@
             <tbody>
                 @forelse ($commandes as $commande)
                     <tr>
-                        <td style="font-weight: 700; color: #64748b;">#{{ $commande->id }}</td>
+                        {{-- <td style="font-weight: 700; color: #64748b;">#{{ $commande->id }}</td> --}}
                         <td>{{ \Carbon\Carbon::parse($commande->date_commande)->format('d/m/Y') }}</td>
                         <td style="font-weight: 700;">
                             {{ $commande->fournisseur ? $commande->fournisseur->nom : 'N/A' }}

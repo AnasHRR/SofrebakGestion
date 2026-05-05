@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class commandesFournisseurs extends Model
 {
     protected $table = 'commandes_fournisseurs';
-    protected $fillable = ['id' , 'date_commande' , 'fournisseurs_id' , 'employe_id' , 'statut' , 'montant_total' , 'notes'];
+    protected $fillable = ['id' , 'date_commande' , 'fournisseur_id' , 'employe_id' , 'statut' , 'montant_total' , 'notes'];
     protected $primarykey = 'id';
     public $incrementing = true;
     public $timestamps = false;
@@ -17,6 +17,6 @@ class commandesFournisseurs extends Model
     }
 
     public function fournisseur(){
-        return $this->belongsTo(fournisseurs::class , 'fournisseurs_id' , 'id');
+        return $this->belongsTo(fournisseurs::class , 'fournisseur_id' , 'id');
     }
 }

@@ -35,7 +35,7 @@ class CommandesFournisseursController extends Controller
     {
         $req->validate([
             'date_commande' => 'required|date',
-            'fournisseurs_id' => 'required|exists:fournisseurs,id',
+            'fournisseur_id' => 'required|exists:fournisseurs,id',
             'employe_id' => 'required|exists:employes,id',
             'statut' => 'required',
             'montant_total' => 'required|numeric',
@@ -75,7 +75,7 @@ class CommandesFournisseursController extends Controller
         $commandesFournisseur = commandesFournisseurs::findOrFail($id);
         $req->validate([
             'date_commande' => 'required|date',
-            'fournisseurs_id' => 'required|exists:fournisseurs,id',
+            'fournisseur_id' => 'required|exists:fournisseurs,id',
             'employe_id' => 'required|exists:employes,id',
             'statut' => 'required',
             'montant_total' => 'required|numeric',
