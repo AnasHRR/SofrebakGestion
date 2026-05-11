@@ -35,7 +35,7 @@ class ProduitsController extends Controller
             });
         }
 
-        $produits = $query->orderBy('id')->cursorPaginate(5);
+        $produits = $query->orderBy('id')->cursorPaginate(10);
 
         // ── Stats (computed from the accessor) ──
         $allProduits = Produits::all();
@@ -83,7 +83,7 @@ class ProduitsController extends Controller
             'stock_minimum'=> 'required|numeric',
             'stock_initial' => 'required|numeric',
             'date_expiration' => 'required|date',
-            'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
         ]);
 
         $base64Image = null;
@@ -115,9 +115,9 @@ class ProduitsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Produits $produit , fournisseurs $fournisseur , categories_produits $categorie)
+    public function show(Produits $produit)
     {
-        return view('produits.show', compact('produit' ,'fournisseur','categorie'));
+        return view('produits.show', compact('produit'));
     }
 
     /**
@@ -136,13 +136,15 @@ class ProduitsController extends Controller
     public function update(Request $req, Produits $produit)
     {
         $req->validate([
+            'nom_produit' => 'required',
             'categorie_id' => 'required',
             'fournisseur_id' => 'required',
             'unite' => 'required',
-            'prix_achat' => 'required',
-            'prix_vente' => 'required',
-            'stock_minimum' => 'required',
-            'stock_initial' => 'required',
+            'prix_achat' => 'required|numeric',
+            'prix_vente' => 'required|numeric',
+            'stock_minimum' => 'required|numeric',
+            'stock_initial' => 'required|numeric',
+            'date_expiration' => 'required|date',
             'img_pr' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -172,13 +174,13 @@ class ProduitsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Produits $produit)
+    public function destroy(Request $req, Produits $produit)
     {
         // stock_actuel is now computed via the accessor
         if ($produit->stock_actuel > 0) {
             return to_route('produits.index')->with('alert', 'Échouée de supprimer un produit en stock');
         } else {
-            $produit->delete();
+            $produit->delete($req->all());
             return to_route('produits.index')->with('success', 'Produit supprimé avec succès');
         }
     }
